@@ -3,141 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Название Сервера | Официальный сайт</title>
+    <title>Sakura Minecraft Server</title>
     <style>
-        /* Базовые настройки */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { height: 100%; }
         
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #0f1115; 
-            color: #fff; 
+            background: #f5f3ef; 
+            color: #333; 
             display: flex; 
             flex-direction: column;
-            overflow-x: hidden; /* Чтобы овца не вызывала горизонтальный скролл на супер-маленьких экранах */
+            overflow-x: hidden;
         }
 
-        /* 1. ШАПКА - ПАРЯЩИЙ ОСТРОВ */
+        /* 1. ШАПКА С САКУРОЙ */
         header {
             position: relative;
-            height: 180px; /* Увеличили высоту */
-            background: linear-gradient(180deg, #0b0d10 0%, #161a22 100%);
-            overflow: visible;
+            height: 180px; 
+            background: linear-gradient(180deg, #ffeef2 0%, #ffd6e0 100%);
+            overflow: hidden; 
             margin-bottom: 25px;
             display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
-            border-bottom: 3px solid #2f3136;
+            border-bottom: 4px solid #e0b0bc;
         }
 
-        /* Объемный изометрический блок травы (повторяется) */
-        .mc-grass-island {
-            position: absolute;
-            bottom: -32px; /* Половина блока вылезает снизу */
-            left: 0;
-            width: 100%;
-            height: 64px;
-            background: url('https://w7.pngwing.com/pngs/423/913/png-transparent-minecraft-pe-minecraft-pocket-edition-isometric-block-crafting-table-minecraft-minecraft-pocket-edition-isometric-block.png') repeat-x;
-            background-size: 64px 64px;
-            z-index: 5;
-            image-rendering: pixelated;
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.7)); /* Красивая тень под островом */
-        }
-
-        /* Заголовок (парит над островом) */
         header h1 { 
             position: relative;
             z-index: 20; 
-            font-size: 26px; 
+            font-size: 28px; 
             letter-spacing: 3px; 
             text-transform: uppercase; 
-            margin-top: 35px;
-            text-align: center;
-            color: #fff;
-            text-shadow: 2px 2px 0px #000, 4px 4px 0px rgba(114, 137, 218, 0.4);
+            color: #ffffff;
+            text-shadow: 2px 2px 0px #bc7a8c, 4px 4px 0px rgba(0, 0, 0, 0.1);
         }
 
-        /* КОНТЕЙНЕР ДЛЯ ПОПРАВЛЕННОГО ДЕКОРА */
-        .mc-decor-fix {
+        .sakura-container {
             position: absolute;
-            bottom: 0;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 100px;
-            z-index: 10;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px; /* Уменьшили отступы */
-            align-items: flex-end;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
         }
 
-        /* Овечка (надежный источник) */
-        .mc-sheep {
-            height: 60px; /* Чуть поменьше */
-            width: auto;
-            transform: translateY(10px); /* Слегка вдавили в траву */
+        .petal {
+            position: absolute;
+            background: #ffb7c5;
+            border-radius: 150% 0 150% 150%; 
+            opacity: 0.8;
+            animation: fall linear infinite;
+            top: -20px;
         }
 
-        /* Алмазный блок (надежный источник) */
-        .mc-diamond {
-            height: 60px; /* Чуть поменьше */
-            width: auto;
-            transform: translateY(10px); /* Слегка вдавили в траву */
+        .petal:nth-child(1) { left: 10%; width: 10px; height: 14px; animation-duration: 4s; animation-delay: 0s; }
+        .petal:nth-child(2) { left: 25%; width: 6px; height: 9px; animation-duration: 6s; animation-delay: 1s; opacity: 0.5; }
+        .petal:nth-child(3) { left: 40%; width: 12px; height: 16px; animation-duration: 5s; animation-delay: 2s; }
+        .petal:nth-child(4) { left: 55%; width: 8px; height: 11px; animation-duration: 7s; animation-delay: 0.5s; }
+        .petal:nth-child(5) { left: 70%; width: 10px; height: 14px; animation-duration: 4.5s; animation-delay: 3s; }
+        .petal:nth-child(6) { left: 85%; width: 7px; height: 10px; animation-duration: 5.5s; animation-delay: 1.5s; }
+
+        @keyframes fall {
+            0% { top: -20px; transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(40px) rotate(180deg); }
+            100% { top: 200px; transform: translateX(-20px) rotate(360deg); }
         }
 
-        /* ... Остальное описание и подвал без изменений ... */
+        /* 2. ОПИСАНИЕ */
         .description-section {
             text-align: center;
             padding: 5px 20px;
             max-width: 800px;
             margin: 0 auto 15px auto;
         }
-        .description-section p { font-size: 14px; color: #b9bbbe; line-height: 1.4; }
-        .map-container { flex: 1; margin: 0 20px 20px 20px; background: #16191f; border: 2px solid #2f3136; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .map-container iframe { width: 100%; height: 100%; border: none; }
-        footer { background: #111214; border-top: 2px solid #2f3136; padding: 25px 20px; text-align: center; }
-        .footer-content h3 { font-size: 16px; margin-bottom: 12px; color: #fff; }
+        .description-section p { font-size: 15px; color: #6b5e62; line-height: 1.5; }
+
+        /* 3. КОНТЕЙНЕР ДЛЯ КАРТЫ С НАВИСАЮЩИМИ БЛОКАМИ */
+        .map-container {
+            flex: 1; 
+            margin: 0 20px 20px 20px;
+            background: #ffffff;
+            border: 2px solid #e6dfd5;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            
+            /* ВАЖНО: делаем контейнер относительным, чтобы блоки встали по бокам */
+            position: relative; 
+        }
+        
+        .map-container iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none;
+            position: relative;
+            z-index: 1; /* Карта находится на нижнем слое */
+        }
+
+        /* Общие стили для боковых блоков */
+        .map-side-blocks {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 36px; /* Ширина нависания блоков */
+            /* Текстура вишневых досок, повторяющаяся по вертикали */
+            background: url('https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/1.20/assets/minecraft/textures/block/cherry_planks.png') repeat-y;
+            background-size: 36px 36px; /* Квадратные пиксельные блоки */
+            z-index: 10; /* Поднимаем блоки НАД картой */
+            image-rendering: pixelated; /* Четкие пиксели Майнкрафта */
+        }
+
+        /* Левый блок и его тень, падающая вправо на карту */
+        .map-side-blocks.left {
+            left: 0;
+            border-right: 2px solid rgba(0, 0, 0, 0.2);
+            box-shadow: 6px 0 15px rgba(0, 0, 0, 0.4); 
+        }
+
+        /* Правый блок и его тень, падающая влево на карту */
+        .map-side-blocks.right {
+            right: 0;
+            border-left: 2px solid rgba(0, 0, 0, 0.2);
+            box-shadow: -6px 0 15px rgba(0, 0, 0, 0.4); 
+        }
+
+        /* 4. ПОДВАЛ */
+        footer {
+            background: #eae4da;
+            border-top: 2px solid #deb887; 
+            padding: 25px 20px;
+            text-align: center;
+        }
+        .footer-content h3 { font-size: 16px; margin-bottom: 12px; color: #4a3b32; }
         .feedback-links { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
-        .feedback-link { color: #7289da; text-decoration: none; font-weight: bold; font-size: 15px; transition: color 0.2s, transform 0.2s; }
-        .feedback-link:hover { color: #fff; transform: translateY(-2px); }
-        .copyright { color: #4f545c; font-size: 11px; margin-top: 15px; }
+        .feedback-link { color: #bc7a8c; text-decoration: none; font-weight: bold; font-size: 15px; }
+        .feedback-link:hover { color: #4a3b32; }
+        .copyright { color: #8a7a71; font-size: 11px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="mc-grass-island"></div>
-        
-        <div class="mc-decor-fix">
-            <img src="https://minecraft-pe-wiki.ru/uploads/posts/2014-06/1402868019_skachat-tekstury-kot-v-minecraft-0.9.0-3.png" alt="Овечка" class="mc-sheep">
-            <img src="https://minecraft-wiki.ru/w/images/1/1a/Block_of_Diamond_%28texture%29.png" alt="Алмазный блок" class="mc-diamond">
+        <div class="sakura-container">
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
         </div>
-
-        <h1>MINECRAFT SERVER</h1>
+        <h1>SAKURA WORLD</h1>
     </header>
 
     <div class="description-section">
-        <p>Приватный ванильный сервер для друзей. Играем в удовольствие, строим города и создаем свою историю.</p>
+        <p>Добро пожаловать на ламповый сервер. Уютная атмосфера, цветущие сакуры и верные друзья уже ждут тебя. Проводи время с удовольствием!</p>
     </div>
 
     <div class="map-container">
-        <p style="color: #4f545c; font-size: 16px; font-weight: bold; text-align: center; padding: 20px;">
+        
+        <div class="map-side-blocks left"></div>
+        <div class="map-side-blocks right"></div>
+        
+        <p style="color: #bfaea3; font-size: 16px; font-weight: bold; text-align: center; padding: 20px 50px; position: relative; z-index: 1;">
             [ Здесь будет отображаться трехмерная карта BlueMap после запуска сервера ]
         </p>
     </div>
 
     <footer>
         <div class="footer-content">
-            <h3>Обратная связь и поддержка</h3>
+            <h3>Присоединяйся к нашему комьюнити</h3>
             <div class="feedback-links">
-                <a href="https://discord.gg/" target="_blank" class="feedback-link">Наш Discord</a>
-                <a href="mailto:support@yourserver.com" class="feedback-link">Написать на Email</a>
-                <a href="#" class="feedback-link">Группа VK / Telegram</a>
+                <a href="#" class="feedback-link">Discord</a>
+                <a href="#" class="feedback-link">Telegram</a>
+                <a href="#" class="feedback-link">Группа VK</a>
             </div>
             <div class="copyright">
-                &copy; 2026 MINECRAFT SERVER. Разработано с телефона специально для друзей.
+                &copy; 2026 SAKURA MINECRAFT. Атмосферное выживание для друзей.
             </div>
         </div>
     </footer>

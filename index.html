@@ -3,191 +3,377 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sakura Minecraft Server</title>
+    <title>SAKURA REALM — Игровой портал</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { height: 100%; }
-        
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #f5f3ef; 
-            color: #333; 
-            display: flex; 
+        /* ПОДКЛЮЧЕНИЕ ШРИФТА С ПРОСТЫМ НАЗВАНИЕМ ФАЙЛА */
+        @font-face {
+            font-family: 'MinecraftTitleCyrillic';
+            src: url('minecraft.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'MinecraftTitleCyrillic', sans-serif;
+            border-radius: 0 !important;
+            image-rendering: pixelated; /* Защита пикселей от размытия */
+        }
+
+        body {
+            background-color: #222225; /* Чистый строгий серый фон */
+            color: #E0E0E0;
+            min-height: 100vh;
+            display: flex;
             flex-direction: column;
             overflow-x: hidden;
-        }
-
-        /* 1. ШАПКА С САКУРОЙ */
-        header {
             position: relative;
-            height: 180px; 
-            background: linear-gradient(180deg, #ffeef2 0%, #ffd6e0 100%);
-            overflow: hidden; 
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 4px solid #e0b0bc;
         }
 
-        header h1 { 
-            position: relative;
-            z-index: 20; 
-            font-size: 28px; 
-            letter-spacing: 3px; 
-            text-transform: uppercase; 
-            color: #ffffff;
-            text-shadow: 2px 2px 0px #bc7a8c, 4px 4px 0px rgba(0, 0, 0, 0.1);
-        }
-
-        .sakura-container {
+        /* МЯГКИЕ ПИКСЕЛЬНЫЕ ЛЕПЕСТКИ САКУРЫ НА ФОНЕ */
+        .sakura-particles {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
+            top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
         }
 
-        .petal {
+        .sakura-petal {
             position: absolute;
-            background: #ffb7c5;
-            border-radius: 150% 0 150% 150%; 
-            opacity: 0.8;
+            background-color: #FFB7C5;
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+            opacity: 0.5;
             animation: fall linear infinite;
-            top: -20px;
         }
-
-        .petal:nth-child(1) { left: 10%; width: 10px; height: 14px; animation-duration: 4s; animation-delay: 0s; }
-        .petal:nth-child(2) { left: 25%; width: 6px; height: 9px; animation-duration: 6s; animation-delay: 1s; opacity: 0.5; }
-        .petal:nth-child(3) { left: 40%; width: 12px; height: 16px; animation-duration: 5s; animation-delay: 2s; }
-        .petal:nth-child(4) { left: 55%; width: 8px; height: 11px; animation-duration: 7s; animation-delay: 0.5s; }
-        .petal:nth-child(5) { left: 70%; width: 10px; height: 14px; animation-duration: 4.5s; animation-delay: 3s; }
-        .petal:nth-child(6) { left: 85%; width: 7px; height: 10px; animation-duration: 5.5s; animation-delay: 1.5s; }
 
         @keyframes fall {
-            0% { top: -20px; transform: translateX(0) rotate(0deg); }
-            50% { transform: translateX(40px) rotate(180deg); }
-            100% { top: 200px; transform: translateX(-20px) rotate(360deg); }
+            0% { transform: translateY(-20px) translateX(0) rotate(0deg); }
+            50% { transform: translateY(50vh) translateX(35px) rotate(180deg); }
+            100% { transform: translateY(105vh) translateX(-15px) rotate(360deg); }
         }
 
-        /* 2. ОПИСАНИЕ */
-        .description-section {
-            text-align: center;
-            padding: 5px 20px;
-            max-width: 800px;
-            margin: 0 auto 15px auto;
+        /* --- ВЫСОКАЯ ШАПКА --- */
+        .header-premium {
+            background-color: #2D2D32; 
+            border-bottom: 5px solid #18181A;
+            padding: 35px 50px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 100;
         }
-        .description-section p { font-size: 15px; color: #6b5e62; line-height: 1.5; }
 
-        /* 3. КОНТЕЙНЕР ДЛЯ КАРТЫ С НАВИСАЮЩИМИ БЛОКАМИ */
-        .map-container {
-            flex: 1; 
-            margin: 0 20px 20px 20px;
-            background: #ffffff;
-            border: 2px solid #e6dfd5;
-            border-radius: 16px;
+        /* ВЕРТИКАЛЬНЫЙ БЛОК НАВИГАЦИИ */
+        .nav-vertical-left {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* КНОПКИ С ВЫЕЗДОМ ВПРАВО */
+        .mc-nav-button {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            text-decoration: none;
+            background-color: #4A4A4A;
+            border: 3px solid #000000;
+            /* Игровая объемная фаска */
+            box-shadow: inset -3px -3px 0 #2D2D32, inset 3px 3px 0 #777777;
+            cursor: pointer;
+            width: 54px; /* Базовый свернутый размер */
+            height: 54px;
+            padding: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            
-            /* ВАЖНО: делаем контейнер относительным, чтобы блоки встали по бокам */
-            position: relative; 
-        }
-        
-        .map-container iframe { 
-            width: 100%; 
-            height: 100%; 
-            border: none;
+            /* Плавный выезд строго вправо */
+            transition: width 0.28s cubic-bezier(0.1, 0.8, 0.3, 1), background-color 0.15s;
             position: relative;
-            z-index: 1; /* Карта находится на нижнем слое */
         }
 
-        /* Общие стили для боковых блоков */
-        .map-side-blocks {
+        .nav-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        /* ТЕКСТ ТЕПЕРЬ АБСОЛЮТЕН — ОН НЕ СЖИМАЕТСЯ И НЕ ПРЫГАЕТ */
+        .nav-text {
+            font-size: 14px;
+            color: #FFFFFF;
             position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 36px; /* Ширина нависания блоков */
-            /* Текстура вишневых досок, повторяющаяся по вертикали */
-            background: url('https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/1.20/assets/minecraft/textures/block/cherry_planks.png') repeat-y;
-            background-size: 36px 36px; /* Квадратные пиксельные блоки */
-            z-index: 10; /* Поднимаем блоки НАД картой */
-            image-rendering: pixelated; /* Четкие пиксели Майнкрафта */
+            left: 58px; /* Четкая позиция справа от иконки */
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            letter-spacing: 1px;
+            z-index: 1;
         }
 
-        /* Левый блок и его тень, падающая вправо на карту */
-        .map-side-blocks.left {
-            left: 0;
-            border-right: 2px solid rgba(0, 0, 0, 0.2);
-            box-shadow: 6px 0 15px rgba(0, 0, 0, 0.4); 
+        /* Ховер-эффект: Раздвижение до 260px, чтобы влез любой текст */
+        .mc-nav-button:hover {
+            width: 260px; 
+            background-color: #5C5C5C;
         }
 
-        /* Правый блок и его тень, падающая влево на карту */
-        .map-side-blocks.right {
-            right: 0;
-            border-left: 2px solid rgba(0, 0, 0, 0.2);
-            box-shadow: -6px 0 15px rgba(0, 0, 0, 0.4); 
+        /* Текст проявляется чуть позже начала анимации раскрытия */
+        .mc-nav-button:hover .nav-text {
+            opacity: 1;
+            transition: opacity 0.15s ease 0.08s;
         }
 
-        /* 4. ПОДВАЛ */
-        footer {
-            background: #eae4da;
-            border-top: 2px solid #deb887; 
-            padding: 25px 20px;
+        /* Кастомизация кнопки ДОНАТ */
+        .btn-donate-emerald {
+            background-color: #2E7D32;
+            box-shadow: inset -3px -3px 0 #1B5E20, inset 3px 3px 0 #4CAF50;
+        }
+        .btn-donate-emerald:hover {
+            background-color: #388E3C;
+        }
+
+        /* КЛИК СРАБАТЫВАЕТ СТРОГО ПОСЛЕ ПОЛНОГО ВЫЕЗДА КНОПКИ */
+        .mc-nav-button.fully-expanded:active {
+            box-shadow: inset 4px 4px 0 #000000, inset -2px -2px 0 #555555;
+            background-color: #3F3F3F;
+        }
+        .btn-donate-emerald.fully-expanded:active {
+            box-shadow: inset 4px 4px 0 #000000, inset -2px -2px 0 #2E7D32;
+            background-color: #256328;
+        }
+
+        /* --- НАЗВАНИЕ СЕРВЕРА --- */
+        .server-title-clean {
+            font-size: 36px;
+            font-weight: normal;
+            color: #FFFFFF;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- КОНТЕЙНЕР ДЛЯ МОНИТОРИНГА КАРТЫ --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .map-container-clean {
+            width: 100%;
+            max-width: 1150px;
+            height: 72vh;
+            background-color: #2D2D32;
+            border: 5px solid #000000;
+            box-shadow: inset -4px -4px 0 #18181A, inset 4px 4px 0 #55555A, 0 15px 35px rgba(0,0,0,0.4);
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .map-top-bar {
+            background-color: #18181A;
+            padding: 14px;
             text-align: center;
+            font-size: 16px;
+            color: #FFFFFF;
+            border: 3px solid #000000;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
         }
-        .footer-content h3 { font-size: 16px; margin-bottom: 12px; color: #4a3b32; }
-        .feedback-links { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
-        .feedback-link { color: #bc7a8c; text-decoration: none; font-weight: bold; font-size: 15px; }
-        .feedback-link:hover { color: #4a3b32; }
-        .copyright { color: #8a7a71; font-size: 11px; margin-top: 15px; }
+
+        .map-iframe-holder {
+            flex-grow: 1;
+            background-color: #000000;
+            border: 3px solid #000000;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* --- СТРОГИЙ ТЕМНЫЙ ПОДВАЛ (ФУТЕР) --- */
+        .footer-premium {
+            background-color: #18181A;
+            border-top: 5px solid #000000;
+            padding: 50px 60px 30px 60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 50px;
+            border-bottom: 3px solid #2D2D32;
+            padding-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 18px;
+            color: #FFFFFF; 
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+
+        .footer-col p {
+            font-size: 14px;
+            color: #88FFFF; 
+            line-height: 1.8;
+        }
+
+        .footer-links-list {
+            list-style: none;
+        }
+
+        .footer-links-list li {
+            margin-bottom: 12px;
+        }
+
+        .footer-url {
+            font-size: 16px;
+            color: #88FFFF; 
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.15s;
+        }
+
+        .footer-url:hover {
+            color: #FFFFFF;
+            transform: translateX(4px);
+        }
+
+        .footer-bottom-bar {
+            max-width: 1200px;
+            margin: 25px auto 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #55555A;
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="sakura-container">
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
-            <div class="petal"></div>
-        </div>
-        <h1>SAKURA WORLD</h1>
+    <div class="sakura-particles" id="sakura-container"></div>
+
+    <header class="header-premium">
+        
+        <nav class="nav-vertical-left">
+            <a href="#" class="mc-nav-button">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg>
+                <span class="nav-text">ГЛАВНАЯ</span>
+            </a>
+            <a href="#" class="mc-nav-button">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/><rect fill="#FF8888" x="7" y="7" width="10" height="10"/></svg>
+                <span class="nav-text">ГАЛЕРЕЯ МИРА</span>
+            </a>
+            <a href="#" class="mc-nav-button btn-donate-emerald">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M14 6V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/><rect fill="#FFCC00" x="6" y="9" width="12" height="9"/></svg>
+                <span class="nav-text">ДОНАТ ПОРТАЛ</span>
+            </a>
+        </nav>
+
+        <div class="server-title-clean">SAKURA REALM</div>
     </header>
 
-    <div class="description-section">
-        <p>Добро пожаловать на ламповый сервер. Уютная атмосфера, цветущие сакуры и верные друзья уже ждут тебя. Проводи время с удовольствием!</p>
-    </div>
-
-    <div class="map-container">
-        
-        <div class="map-side-blocks left"></div>
-        <div class="map-side-blocks right"></div>
-        
-        <p style="color: #bfaea3; font-size: 16px; font-weight: bold; text-align: center; padding: 20px 50px; position: relative; z-index: 1;">
-            [ Здесь будет отображаться трехмерная карта BlueMap после запуска сервера ]
-        </p>
-    </div>
-
-    <footer>
-        <div class="footer-content">
-            <h3>Присоединяйся к нашему комьюнити</h3>
-            <div class="feedback-links">
-                <a href="#" class="feedback-link">Discord</a>
-                <a href="#" class="feedback-link">Telegram</a>
-                <a href="#" class="feedback-link">Группа VK</a>
+    <main class="main-content">
+        <div class="map-container-clean">
+            <div class="map-top-bar">❖ СЕТЕВАЯ ОНЛАЙН-КАРТА МИРА ❖</div>
+            <div class="map-iframe-holder">
+                <iframe src="https://bluecolo.red/map/#world:21:0:0:1500:0:0:0:0:perspective" title="BlueMap"></iframe>
             </div>
-            <div class="copyright">
-                &copy; 2026 SAKURA MINECRAFT. Атмосферное выживание для друзей.
+        </div>
+    </main>
+
+    <footer class="footer-premium">
+        <div class="footer-grid">
+            
+            <div class="footer-col">
+                <h3>❖ О НАШЕМ МИРЕ</h3>
+                <p>Sakura Realm — это приватный технический сервер без вайпов и ограничений. Мы объединяем взрослых игроков для создания масштабных построек, автоматизированных ферм и уютной атмосферы.</p>
             </div>
+
+            <div class="footer-col">
+                <h3>❖ НАВИГАЦИЯ</h3>
+                <ul class="footer-links-list">
+                    <li><a href="#" class="footer-url">Правила сервера</a></li>
+                    <li><a href="#" class="footer-url">Инструкция по входу</a></li>
+                    <li><a href="#" class="footer-url">Галерея миров</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>❖ СООБЩЕСТВО</h3>
+                <ul class="footer-links-list">
+                    <li><a href="#" class="footer-url">Наш Discord</a></li>
+                    <li><a href="#" class="footer-url">Группа ВКонтакте</a></li>
+                    <li><a href="#" class="footer-url">Связаться с админом</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom-bar">
+            <div>© 2026 SAKURA REALM. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</div>
+            <div>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG.</div>
         </div>
     </footer>
 
+    <script>
+        // ИДЕАЛЬНОЕ УПРАВЛЕНИЕ КЛИКОМ НА КНОПКАХ
+        document.querySelectorAll('.mc-nav-button').forEach(button => {
+            button.addEventListener('transitionend', (event) => {
+                if (event.propertyName === 'width') {
+                    if (button.offsetWidth > 200) { 
+                        button.classList.add('fully-expanded');
+                    } else {
+                        button.classList.remove('fully-expanded');
+                    }
+                }
+            });
+
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('fully-expanded');
+            });
+        });
+
+        // СКРИПТ ЛЕПЕСТКОВ САКУРЫ
+        function createPetal() {
+            const container = document.getElementById('sakura-container');
+            if (!container) return;
+
+            const petal = document.createElement('div');
+            petal.classList.add('sakura-petal');
+
+            const size = Math.random() < 0.6 ? 6 : 10;
+            petal.style.width = `${size}px`;
+            petal.style.height = `${size}px`;
+            petal.style.left = `${Math.random() * 100}vw`;
+            
+            const duration = Math.random() * 5 + 5;
+            petal.style.animationDuration = `${duration}s`;
+
+            container.appendChild(petal);
+
+            setTimeout(() => {
+                petal.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createPetal, 600);
+    </script>
 </body>
 </html>
+

@@ -72,10 +72,10 @@
         .nav-vertical-left {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px; /* Чуть увеличили зазор для 3D анимации подъема */
         }
 
-        /* ОБЕРТКА ЭЛЕМЕНТА (ДЛЯ ХОВЕРА) */
+        /* ОБЩАЯ ОБЕРТКА КАЖДОГО ПУНКТА */
         .nav-item-wrapper {
             display: flex;
             align-items: center;
@@ -83,56 +83,46 @@
             height: 54px;
         }
 
-        /* КНОПКА-ИКОНКА (ТЕПЕРЬ ВСЕГДА СТАБИЛЬНЫЙ КВАДРАТ) */
-        .mc-nav-button {
+        /* БЛОК ИКОНКИ (МЕХАНИЗМ-ВЫТАЛКИВАТЕЛЬ, НЕ ССЫЛКА) */
+        .nav-icon-block {
             display: flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
             background-color: #4A4A4A;
             border: 3px solid #000000;
             box-shadow: inset -3px -3px 0 #2D2D32, inset 3px 3px 0 #777777;
-            cursor: pointer;
             width: 54px;
             height: 54px;
             padding: 8px;
-            z-index: 3; /* Поверх выезжающей плашки */
-            transition: background-color 0.15s;
+            z-index: 3; /* Поверх выезжающей панели */
+            transition: transform 0.2s cubic-bezier(0.1, 0.8, 0.3, 1), background-color 0.15s, box-shadow 0.2s;
         }
 
         .nav-icon {
             width: 32px;
             height: 32px;
             flex-shrink: 0;
+            transition: transform 0.2s ease;
         }
 
-        .mc-nav-button:hover {
+        /* --- ДРУГАЯ АНИМАЦИЯ ДЛЯ ИКОНКИ ПРИ НАВЕДЕНИИ НА ОБЕРТКУ --- */
+        .nav-item-wrapper:hover .nav-icon-block {
             background-color: #5C5C5C;
+            transform: translateY(-4px); /* Иконка красиво взлетает вверх */
+            /* Снизу добавляется темная 3D-граница под выросший блок */
+            box-shadow: inset -3px -3px 0 #2D2D32, inset 3px 3px 0 #777777, 0 4px 0 #000000; 
         }
 
-        /* ЧИСТЫЙ МГНОВЕННЫЙ КЛИК БЕЗ БАГОВ ГЕОМЕТРИИ */
-        .mc-nav-button:active {
-            box-shadow: inset 4px 4px 0 #000000, inset -2px -2px 0 #555555;
-            background-color: #3F3F3F;
+        /* Сама картинка внутри иконки прикольно наклоняется */
+        .nav-item-wrapper:hover .nav-icon {
+            transform: scale(1.1) rotate(8deg);
         }
 
-        /* СТИЛИ ДЛЯ ДОНАТА */
-        .btn-donate-emerald {
-            background-color: #2E7D32;
-            box-shadow: inset -3px -3px 0 #1B5E20, inset 3px 3px 0 #4CAF50;
-        }
-        .btn-donate-emerald:hover {
-            background-color: #388E3C;
-        }
-        .btn-donate-emerald:active {
-            box-shadow: inset 4px 4px 0 #000000, inset -2px -2px 0 #2E7D32;
-            background-color: #256328;
-        }
 
-        /* ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ С ТЕКСТОМ ("ЯЩИК") */
-        .nav-text-drawer {
+        /* --- ВЫЕЗЖАЮЩАЯ КНОПКА (ТЕПЕРЬ ЭТО ССЫЛКА С КЛИКОМ) --- */
+        .mc-nav-drawer-btn {
             position: absolute;
-            left: 51px; /* Прячется прямо за правую рамку кнопки */
+            left: 51px; /* Стыковка с иконкой */
             height: 54px;
             background-color: #4A4A4A;
             border: 3px solid #000000;
@@ -140,35 +130,69 @@
             box-shadow: inset -3px -3px 0 #2D2D32, inset 0px 3px 0 #777777;
             display: flex;
             align-items: center;
-            width: 0; /* Изначально скрыта */
+            width: 0; /* Скрыта по умолчанию */
             opacity: 0;
             overflow: hidden;
             z-index: 2;
-            /* Плавный выезд */
-            transition: width 0.25s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.15s;
+            text-decoration: none;
+            /* Выезжает плавно вправо */
+            transition: width 0.25s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.15s, background-color 0.15s;
         }
 
-        /* Цвет выезжающей панели для доната */
-        .wrapper-donate .nav-text-drawer {
-            background-color: #2E7D32;
-            box-shadow: inset -3px -3px 0 #1B5E20, inset 0px 3px 0 #4CAF50;
-        }
-
-        /* АКТИВАЦИЯ АНИМАЦИИ ПРИ НАВЕДЕНИИ НА ОБЕРТКУ */
-        .nav-item-wrapper:hover .nav-text-drawer {
-            width: 200px; /* Ширина раскрытия */
+        /* Активация выезда плашки */
+        .nav-item-wrapper:hover .mc-nav-drawer-btn {
+            width: 200px;
             opacity: 1;
         }
 
-        /* Сам текст внутри панели (зафиксирован, чтобы не сжимался) */
+        /* Подсветка выехавшей кнопки при наведении на неё */
+        .mc-nav-drawer-btn:hover {
+            background-color: #5C5C5C;
+        }
+
         .nav-text {
             font-size: 14px;
             color: #FFFFFF;
             position: absolute;
-            left: 20px; /* Отступ от края кнопки */
+            left: 20px;
             white-space: nowrap;
             letter-spacing: 1px;
+            transition: transform 0.05s;
         }
+
+        /* СТАБИЛЬНЫЙ КЛИК: НАЖИМАЕТСЯ ТОЛЬКО ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ */
+        .mc-nav-drawer-btn:active {
+            box-shadow: inset 0px 4px 0 #000000, inset -2px -2px 0 #555555;
+            background-color: #3F3F3F;
+        }
+        /* Текст проседает внутрь при клике */
+        .mc-nav-drawer-btn:active .nav-text {
+            transform: translate(2px, 2px);
+        }
+
+
+        /* --- ХАРАКТЕРИСТИКИ ДЛЯ ИЗУМРУДНОГО ДОНАТА --- */
+        .wrapper-donate .nav-icon-block {
+            background-color: #2E7D32;
+            box-shadow: inset -3px -3px 0 #1B5E20, inset 3px 3px 0 #4CAF50;
+        }
+        .wrapper-donate:hover .nav-icon-block {
+            background-color: #388E3C;
+            box-shadow: inset -3px -3px 0 #1B5E20, inset 3px 3px 0 #4CAF50, 0 4px 0 #000000;
+        }
+
+        .btn-donate-drawer {
+            background-color: #2E7D32;
+            box-shadow: inset -3px -3px 0 #1B5E20, inset 0px 3px 0 #4CAF50;
+        }
+        .btn-donate-drawer:hover {
+            background-color: #388E3C;
+        }
+        .btn-donate-drawer:active {
+            box-shadow: inset 0px 4px 0 #000000, inset -2px -2px 0 #2E7D32;
+            background-color: #256328;
+        }
+
 
         /* --- НАЗВАНИЕ СЕРВЕРА --- */
         .server-title-clean {
@@ -297,30 +321,30 @@
         <nav class="nav-vertical-left">
             
             <div class="nav-item-wrapper">
-                <a href="#" class="mc-nav-button">
+                <div class="nav-icon-block">
                     <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg>
-                </a>
-                <div class="nav-text-drawer">
-                    <span class="nav-text">ГЛАВНАЯ</span>
                 </div>
+                <a href="#" class="mc-nav-drawer-btn">
+                    <span class="nav-text">ГЛАВНАЯ</span>
+                </a>
             </div>
 
             <div class="nav-item-wrapper">
-                <a href="#" class="mc-nav-button">
+                <div class="nav-icon-block">
                     <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/><rect fill="#FF8888" x="7" y="7" width="10" height="10"/></svg>
-                </a>
-                <div class="nav-text-drawer">
-                    <span class="nav-text">ГАЛЕРЕЯ МИРА</span>
                 </div>
+                <a href="#" class="mc-nav-drawer-btn">
+                    <span class="nav-text">ГАЛЕРЕЯ МИРА</span>
+                </a>
             </div>
 
             <div class="nav-item-wrapper wrapper-donate">
-                <a href="#" class="mc-nav-button btn-donate-emerald">
+                <div class="nav-icon-block">
                     <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M14 6V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/><rect fill="#FFCC00" x="6" y="9" width="12" height="9"/></svg>
-                </a>
-                <div class="nav-text-drawer">
-                    <span class="nav-text">ДОНАТ ПОРТАЛ</span>
                 </div>
+                <a href="#" class="mc-nav-drawer-btn btn-donate-drawer">
+                    <span class="nav-text">ДОНАТ ПОРТАЛ</span>
+                </a>
             </div>
 
         </nav>
@@ -390,3 +414,4 @@
     </script>
 </body>
 </html>
+

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAKURA REALM — Игровой портал</title>
     <style>
-        /* ПОДКЛЮЧЕНИЕ ШРИФТА С ПРОСТЫМ НАЗВАНИЕМ ФАЙЛА */
+        /* ПОДКЛЮЧЕНИЕ ШРИФТА (Файл должен называться minecraft.ttf) */
         @font-face {
             font-family: 'MinecraftTitleCyrillic';
             src: url('minecraft.ttf') format('truetype');
@@ -19,11 +19,11 @@
             box-sizing: border-box;
             font-family: 'MinecraftTitleCyrillic', sans-serif;
             border-radius: 0 !important;
-            image-rendering: pixelated; /* Защита пикселей от размытия */
+            image-rendering: pixelated;
         }
 
         body {
-            background-color: #222225; /* Чистый строгий серый фон */
+            background-color: #222225;
             color: #E0E0E0;
             min-height: 100vh;
             display: flex;
@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* МЯГКИЕ ПИКСЕЛЬНЫЕ ЛЕПЕСТКИ САКУРЫ НА ФОНЕ */
+        /* ЛЕПЕСТКИ САКУРЫ НА ФОНЕ */
         .sakura-particles {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -55,7 +55,7 @@
             100% { transform: translateY(105vh) translateX(-15px) rotate(360deg); }
         }
 
-        /* --- ВЫСОКАЯ ШАПКА --- */
+        /* --- ШАПКА --- */
         .header-premium {
             background-color: #2D2D32; 
             border-bottom: 5px solid #18181A;
@@ -68,66 +68,55 @@
             z-index: 100;
         }
 
-        /* ВЕРТИКАЛЬНЫЙ БЛОК НАВИГАЦИИ */
+        /* КОНТЕЙНЕР ДЛЯ СТОЛБИКА НАВИГАЦИИ */
         .nav-vertical-left {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        /* КНОПКИ С ВЫЕЗДОМ ВПРАВО */
+        /* ОБЕРТКА ЭЛЕМЕНТА (ДЛЯ ХОВЕРА) */
+        .nav-item-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+            height: 54px;
+        }
+
+        /* КНОПКА-ИКОНКА (ТЕПЕРЬ ВСЕГДА СТАБИЛЬНЫЙ КВАДРАТ) */
         .mc-nav-button {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             text-decoration: none;
             background-color: #4A4A4A;
             border: 3px solid #000000;
-            /* Игровая объемная фаска */
             box-shadow: inset -3px -3px 0 #2D2D32, inset 3px 3px 0 #777777;
             cursor: pointer;
-            width: 54px; /* Базовый свернутый размер */
+            width: 54px;
             height: 54px;
             padding: 8px;
-            overflow: hidden;
-            /* Плавный выезд строго вправо */
-            transition: width 0.28s cubic-bezier(0.1, 0.8, 0.3, 1), background-color 0.15s;
-            position: relative;
+            z-index: 3; /* Поверх выезжающей плашки */
+            transition: background-color 0.15s;
         }
 
         .nav-icon {
             width: 32px;
             height: 32px;
             flex-shrink: 0;
-            z-index: 2;
         }
 
-        /* ТЕКСТ ТЕПЕРЬ АБСОЛЮТЕН — ОН НЕ СЖИМАЕТСЯ И НЕ ПРЫГАЕТ */
-        .nav-text {
-            font-size: 14px;
-            color: #FFFFFF;
-            position: absolute;
-            left: 58px; /* Четкая позиция справа от иконки */
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.15s ease;
-            letter-spacing: 1px;
-            z-index: 1;
-        }
-
-        /* Ховер-эффект: Раздвижение до 260px, чтобы влез любой текст */
         .mc-nav-button:hover {
-            width: 260px; 
             background-color: #5C5C5C;
         }
 
-        /* Текст проявляется чуть позже начала анимации раскрытия */
-        .mc-nav-button:hover .nav-text {
-            opacity: 1;
-            transition: opacity 0.15s ease 0.08s;
+        /* ЧИСТЫЙ МГНОВЕННЫЙ КЛИК БЕЗ БАГОВ ГЕОМЕТРИИ */
+        .mc-nav-button:active {
+            box-shadow: inset 4px 4px 0 #000000, inset -2px -2px 0 #555555;
+            background-color: #3F3F3F;
         }
 
-        /* Кастомизация кнопки ДОНАТ */
+        /* СТИЛИ ДЛЯ ДОНАТА */
         .btn-donate-emerald {
             background-color: #2E7D32;
             box-shadow: inset -3px -3px 0 #1B5E20, inset 3px 3px 0 #4CAF50;
@@ -135,15 +124,50 @@
         .btn-donate-emerald:hover {
             background-color: #388E3C;
         }
-
-        /* КЛИК СРАБАТЫВАЕТ СТРОГО ПОСЛЕ ПОЛНОГО ВЫЕЗДА КНОПКИ */
-        .mc-nav-button.fully-expanded:active {
-            box-shadow: inset 4px 4px 0 #000000, inset -2px -2px 0 #555555;
-            background-color: #3F3F3F;
-        }
-        .btn-donate-emerald.fully-expanded:active {
+        .btn-donate-emerald:active {
             box-shadow: inset 4px 4px 0 #000000, inset -2px -2px 0 #2E7D32;
             background-color: #256328;
+        }
+
+        /* ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ С ТЕКСТОМ ("ЯЩИК") */
+        .nav-text-drawer {
+            position: absolute;
+            left: 51px; /* Прячется прямо за правую рамку кнопки */
+            height: 54px;
+            background-color: #4A4A4A;
+            border: 3px solid #000000;
+            border-left: none; /* Убираем двойную рамку на стыке */
+            box-shadow: inset -3px -3px 0 #2D2D32, inset 0px 3px 0 #777777;
+            display: flex;
+            align-items: center;
+            width: 0; /* Изначально скрыта */
+            opacity: 0;
+            overflow: hidden;
+            z-index: 2;
+            /* Плавный выезд */
+            transition: width 0.25s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.15s;
+        }
+
+        /* Цвет выезжающей панели для доната */
+        .wrapper-donate .nav-text-drawer {
+            background-color: #2E7D32;
+            box-shadow: inset -3px -3px 0 #1B5E20, inset 0px 3px 0 #4CAF50;
+        }
+
+        /* АКТИВАЦИЯ АНИМАЦИИ ПРИ НАВЕДЕНИИ НА ОБЕРТКУ */
+        .nav-item-wrapper:hover .nav-text-drawer {
+            width: 200px; /* Ширина раскрытия */
+            opacity: 1;
+        }
+
+        /* Сам текст внутри панели (зафиксирован, чтобы не сжимался) */
+        .nav-text {
+            font-size: 14px;
+            color: #FFFFFF;
+            position: absolute;
+            left: 20px; /* Отступ от края кнопки */
+            white-space: nowrap;
+            letter-spacing: 1px;
         }
 
         /* --- НАЗВАНИЕ СЕРВЕРА --- */
@@ -155,7 +179,7 @@
             text-transform: uppercase;
         }
 
-        /* --- КОНТЕЙНЕР ДЛЯ МОНИТОРИНГА КАРТЫ --- */
+        /* --- КОНТЕЙНЕР КАРТЫ --- */
         .main-content {
             flex-grow: 1;
             padding: 40px 20px;
@@ -200,7 +224,7 @@
             border: none;
         }
 
-        /* --- СТРОГИЙ ТЕМНЫЙ ПОДВАЛ (ФУТЕР) --- */
+        /* --- ПОДВАЛ --- */
         .footer-premium {
             background-color: #18181A;
             border-top: 5px solid #000000;
@@ -271,18 +295,34 @@
     <header class="header-premium">
         
         <nav class="nav-vertical-left">
-            <a href="#" class="mc-nav-button">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg>
-                <span class="nav-text">ГЛАВНАЯ</span>
-            </a>
-            <a href="#" class="mc-nav-button">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/><rect fill="#FF8888" x="7" y="7" width="10" height="10"/></svg>
-                <span class="nav-text">ГАЛЕРЕЯ МИРА</span>
-            </a>
-            <a href="#" class="mc-nav-button btn-donate-emerald">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M14 6V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/><rect fill="#FFCC00" x="6" y="9" width="12" height="9"/></svg>
-                <span class="nav-text">ДОНАТ ПОРТАЛ</span>
-            </a>
+            
+            <div class="nav-item-wrapper">
+                <a href="#" class="mc-nav-button">
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg>
+                </a>
+                <div class="nav-text-drawer">
+                    <span class="nav-text">ГЛАВНАЯ</span>
+                </div>
+            </div>
+
+            <div class="nav-item-wrapper">
+                <a href="#" class="mc-nav-button">
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/><rect fill="#FF8888" x="7" y="7" width="10" height="10"/></svg>
+                </a>
+                <div class="nav-text-drawer">
+                    <span class="nav-text">ГАЛЕРЕЯ МИРА</span>
+                </div>
+            </div>
+
+            <div class="nav-item-wrapper wrapper-donate">
+                <a href="#" class="mc-nav-button btn-donate-emerald">
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M14 6V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/><rect fill="#FFCC00" x="6" y="9" width="12" height="9"/></svg>
+                </a>
+                <div class="nav-text-drawer">
+                    <span class="nav-text">ДОНАТ ПОРТАЛ</span>
+                </div>
+            </div>
+
         </nav>
 
         <div class="server-title-clean">SAKURA REALM</div>
@@ -299,12 +339,10 @@
 
     <footer class="footer-premium">
         <div class="footer-grid">
-            
             <div class="footer-col">
                 <h3>❖ О НАШЕМ МИРЕ</h3>
                 <p>Sakura Realm — это приватный технический сервер без вайпов и ограничений. Мы объединяем взрослых игроков для создания масштабных построек, автоматизированных ферм и уютной атмосферы.</p>
             </div>
-
             <div class="footer-col">
                 <h3>❖ НАВИГАЦИЯ</h3>
                 <ul class="footer-links-list">
@@ -313,7 +351,6 @@
                     <li><a href="#" class="footer-url">Галерея миров</a></li>
                 </ul>
             </div>
-
             <div class="footer-col">
                 <h3>❖ СООБЩЕСТВО</h3>
                 <ul class="footer-links-list">
@@ -322,9 +359,7 @@
                     <li><a href="#" class="footer-url">Связаться с админом</a></li>
                 </ul>
             </div>
-
         </div>
-
         <div class="footer-bottom-bar">
             <div>© 2026 SAKURA REALM. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</div>
             <div>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG.</div>
@@ -332,24 +367,6 @@
     </footer>
 
     <script>
-        // ИДЕАЛЬНОЕ УПРАВЛЕНИЕ КЛИКОМ НА КНОПКАХ
-        document.querySelectorAll('.mc-nav-button').forEach(button => {
-            button.addEventListener('transitionend', (event) => {
-                if (event.propertyName === 'width') {
-                    if (button.offsetWidth > 200) { 
-                        button.classList.add('fully-expanded');
-                    } else {
-                        button.classList.remove('fully-expanded');
-                    }
-                }
-            });
-
-            button.addEventListener('mouseleave', () => {
-                button.classList.remove('fully-expanded');
-            });
-        });
-
-        // СКРИПТ ЛЕПЕСТКОВ САКУРЫ
         function createPetal() {
             const container = document.getElementById('sakura-container');
             if (!container) return;
@@ -367,13 +384,9 @@
 
             container.appendChild(petal);
 
-            setTimeout(() => {
-                petal.remove();
-            }, duration * 1000);
+            setTimeout(() => { petal.remove(); }, duration * 1000);
         }
-
         setInterval(createPetal, 600);
     </script>
 </body>
 </html>
-

@@ -15,113 +15,89 @@
             color: #fff; 
             display: flex; 
             flex-direction: column;
+            overflow-x: hidden; /* Чтобы овца не вызывала горизонтальный скролл на супер-маленьких экранах */
         }
 
-        /* 1. ШАПКА С ЗЕМЛЕЙ И ТРАВОЙ */
+        /* 1. ШАПКА - ПАРЯЩИЙ ОСТРОВ */
         header {
             position: relative;
-            height: 160px; 
-            background: #0b0d10;
+            height: 180px; /* Увеличили высоту */
+            background: linear-gradient(180deg, #0b0d10 0%, #161a22 100%);
             overflow: visible;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            border-bottom: 3px solid #2f3136;
         }
 
-        /* Линия из блоков травы (повторяется по горизонтали) */
-        .mc-grass-line {
+        /* Объемный изометрический блок травы (повторяется) */
+        .mc-grass-island {
             position: absolute;
-            bottom: 0;
+            bottom: -32px; /* Половина блока вылезает снизу */
             left: 0;
             width: 100%;
-            height: 64px; /* Высота блока на экране */
-            background: url('https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/1.20/assets/minecraft/textures/block/grass_block_side.png') repeat-x;
-            background-size: 64px 64px; /* Размер одного блока */
+            height: 64px;
+            background: url('https://w7.pngwing.com/pngs/423/913/png-transparent-minecraft-pe-minecraft-pocket-edition-isometric-block-crafting-table-minecraft-minecraft-pocket-edition-isometric-block.png') repeat-x;
+            background-size: 64px 64px;
             z-index: 5;
-            image-rendering: pixelated; /* Делает пиксели четкими */
+            image-rendering: pixelated;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.7)); /* Красивая тень под островом */
         }
 
-        /* Контейнер для мобов и блоков */
-        .mc-decor-container {
+        /* Заголовок (парит над островом) */
+        header h1 { 
+            position: relative;
+            z-index: 20; 
+            font-size: 26px; 
+            letter-spacing: 3px; 
+            text-transform: uppercase; 
+            margin-top: 35px;
+            text-align: center;
+            color: #fff;
+            text-shadow: 2px 2px 0px #000, 4px 4px 0px rgba(114, 137, 218, 0.4);
+        }
+
+        /* КОНТЕЙНЕР ДЛЯ ПОПРАВЛЕННОГО ДЕКОРА */
+        .mc-decor-fix {
             position: absolute;
-            bottom: 50px; /* Сажаем их прямо на траву */
+            bottom: 0;
             left: 0;
             width: 100%;
             height: 100px;
             z-index: 10;
             display: flex;
             justify-content: space-between;
-            padding: 0 40px;
+            padding: 0 20px; /* Уменьшили отступы */
             align-items: flex-end;
         }
 
-        /* Овечка слева */
+        /* Овечка (надежный источник) */
         .mc-sheep {
-            height: 70px;
+            height: 60px; /* Чуть поменьше */
             width: auto;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            transform: translateY(10px); /* Слегка вдавили в траву */
         }
 
-        /* Алмазный блок справа */
+        /* Алмазный блок (надежный источник) */
         .mc-diamond {
-            height: 55px;
+            height: 60px; /* Чуть поменьше */
             width: auto;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            transform: translateY(10px); /* Слегка вдавили в траву */
         }
 
-        /* Объемный заголовок в стиле игры */
-        header h1 { 
-            position: relative;
-            z-index: 20; 
-            font-size: 28px; 
-            letter-spacing: 2px; 
-            text-transform: uppercase; 
-            padding-top: 25px;
-            text-align: center;
-            color: #fff;
-            /* Тройная тень для эффекта объема */
-            text-shadow: 2px 2px 0px #000, 4px 4px 0px #2f3136;
-        }
-
-        /* 2. МАЛЕНЬКОЕ ОПИСАНИЕ */
+        /* ... Остальное описание и подвал без изменений ... */
         .description-section {
             text-align: center;
             padding: 5px 20px;
             max-width: 800px;
             margin: 0 auto 15px auto;
         }
-        .description-section p { 
-            font-size: 15px; 
-            color: #b9bbbe; 
-            line-height: 1.4; 
-        }
-
-        /* 3. ОГРОМНОЕ МЕСТО ДЛЯ БЛЮМАП */
-        .map-container {
-            flex: 1; 
-            margin: 0 20px 20px 20px;
-            background: #16191f;
-            border: 2px solid #2f3136;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* 4. ПОДВАЛ */
-        footer {
-            background: #111214;
-            border-top: 2px solid #2f3136;
-            padding: 25px 20px;
-            text-align: center;
-        }
+        .description-section p { font-size: 14px; color: #b9bbbe; line-height: 1.4; }
+        .map-container { flex: 1; margin: 0 20px 20px 20px; background: #16191f; border: 2px solid #2f3136; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .map-container iframe { width: 100%; height: 100%; border: none; }
+        footer { background: #111214; border-top: 2px solid #2f3136; padding: 25px 20px; text-align: center; }
         .footer-content h3 { font-size: 16px; margin-bottom: 12px; color: #fff; }
         .feedback-links { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
         .feedback-link { color: #7289da; text-decoration: none; font-weight: bold; font-size: 15px; transition: color 0.2s, transform 0.2s; }
@@ -132,18 +108,18 @@
 <body>
 
     <header>
-        <div class="mc-grass-line"></div>
+        <div class="mc-grass-island"></div>
         
-        <div class="mc-decor-container">
-            <img src="https://minecraft.wiki/images/Sheep_JE3_BE2.png" alt="Овечка" class="mc-sheep">
-            <img src="https://minecraft.wiki/images/Block_of_Diamond_JE5_BE3.png" alt="Алмазный блок" class="mc-diamond">
+        <div class="mc-decor-fix">
+            <img src="https://minecraft-pe-wiki.ru/uploads/posts/2014-06/1402868019_skachat-tekstury-kot-v-minecraft-0.9.0-3.png" alt="Овечка" class="mc-sheep">
+            <img src="https://minecraft-wiki.ru/w/images/1/1a/Block_of_Diamond_%28texture%29.png" alt="Алмазный блок" class="mc-diamond">
         </div>
 
         <h1>MINECRAFT SERVER</h1>
     </header>
 
     <div class="description-section">
-        <p>Приватный ванильный сервер для друзей. Играем в удовольствие, строим города и создаем свою историю. Присоединяйся к нам!</p>
+        <p>Приватный ванильный сервер для друзей. Играем в удовольствие, строим города и создаем свою историю.</p>
     </div>
 
     <div class="map-container">

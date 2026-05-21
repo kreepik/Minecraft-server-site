@@ -144,7 +144,7 @@
             color: #fff;
         }
 
-        /* Ползунок mute */
+        /* Увеличенный и более детальный ползунок */
         .mute-widget {
             position: fixed;
             bottom: 20px;
@@ -152,15 +152,15 @@
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background: #2d2d2d;
             border: 3px solid #000;
-            padding: 6px 12px;
+            padding: 8px 14px;
             box-shadow: 2px 2px 0 #000;
         }
 
         .mute-label {
-            font-size: 14px;
+            font-size: 16px;
             color: #a5d6a7;
             text-shadow: 1px 1px 0 #000;
             letter-spacing: 1px;
@@ -168,18 +168,19 @@
 
         .mute-switch {
             position: relative;
-            width: 44px;
-            height: 22px;
+            width: 56px;
+            height: 28px;
             background: #f44336;
             border: 2px solid #000;
+            border-radius: 6px !important;
             cursor: pointer;
             transition: background 0.2s;
-            box-shadow: inset -1px -1px 0 #4a0000, inset 1px 1px 0 #ff8888;
+            box-shadow: inset -1px -1px 0 #4a0000, inset 1px 1px 0 #ff8888, 1px 1px 0 #000;
         }
 
         .mute-switch.active {
             background: #4caf50;
-            box-shadow: inset -1px -1px 0 #1b5e20, inset 1px 1px 0 #81c784;
+            box-shadow: inset -1px -1px 0 #1b5e20, inset 1px 1px 0 #81c784, 1px 1px 0 #000;
         }
 
         .mute-switch::after {
@@ -188,15 +189,17 @@
             top: 50%;
             transform: translateY(-50%);
             left: 2px;
-            width: 16px;
-            height: 14px;
-            background: #fff;
+            width: 24px;
+            height: 20px;
+            background: #f5f5f5;
             border: 2px solid #000;
+            border-radius: 4px !important;
             transition: left 0.2s;
+            box-shadow: inset -1px -1px 0 #aaa, inset 1px 1px 0 #fff, 1px 1px 0 #000;
         }
 
         .mute-switch.active::after {
-            left: 24px;
+            left: 28px;
         }
 
         @media (max-width: 768px) {
@@ -204,6 +207,9 @@
             .donate-description { font-size: 14px; }
             .donate-button { font-size: 18px; padding: 12px 25px; }
             .mute-widget { bottom: 10px; right: 10px; }
+            .mute-switch { width: 48px; height: 24px; }
+            .mute-switch::after { width: 20px; height: 16px; }
+            .mute-switch.active::after { left: 24px; }
         }
     </style>
 </head>
@@ -221,7 +227,6 @@
         <a href="index.html" class="back-link">← Вернуться на главную</a>
     </div>
 
-    <!-- Звуковые элементы -->
     <audio id="sound-click" preload="none">
         <source src="click.ogg" type="audio/ogg">
         <source src="click.mp3" type="audio/mpeg">
@@ -231,7 +236,6 @@
         <source src="exp.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Ползунок mute -->
     <div class="mute-widget">
         <span class="mute-label">ЗВУК</span>
         <div id="mute-toggle" class="mute-switch" title="Вкл/выкл звук"></div>
@@ -240,7 +244,6 @@
     <script src="https://widget.cloudtips.ru/bundle.js" async></script>
 
     <script>
-        // Частицы
         (function() {
             const container = document.getElementById('particles-container');
             if (!container) return;
@@ -254,7 +257,6 @@
             }
         })();
 
-        // Звуки и mute
         const soundClick = document.getElementById('sound-click');
         const soundExp = document.getElementById('sound-exp');
         const muteSwitch = document.getElementById('mute-toggle');
@@ -268,7 +270,6 @@
             audio.play().catch(() => {});
         }
 
-        // Кнопка доната — открыть виджет
         window.addEventListener('load', function() {
             const donateBtn = document.getElementById('donate-btn');
 
@@ -298,16 +299,11 @@
             }
         });
 
-        // Mute switch — со звуком клика при переключении
         muteSwitch.addEventListener('click', () => {
             muted = !muted;
             localStorage.setItem('muted', muted);
             updateMuteSwitch();
-            if (!muted) {
-                playSound(soundClick); // звук при включении
-            } else {
-                playSound(soundClick); // и при выключении тоже (по желанию)
-            }
+            playSound(soundClick);
         });
 
         function updateMuteSwitch() {

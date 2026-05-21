@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAKURA REALM — Игровой портал</title>
+    <title>MINECRAFT SERVER — Игровой портал</title>
     <style>
         @font-face {
             font-family: 'MinecraftTitleCyrillic';
@@ -96,7 +96,6 @@
             box-shadow: 0 0 12px #4caf50;
         }
 
-        /* УВЕЛИЧЕННЫЕ КНОПКИ */
         .nav-vertical-left {
             display: flex;
             flex-direction: column;
@@ -107,7 +106,7 @@
             display: flex;
             align-items: center;
             position: relative;
-            height: 72px; /* было 60 */
+            height: 72px;
         }
 
         .nav-icon-block {
@@ -117,21 +116,21 @@
             background: #545454;
             border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 3px 3px 0 #7a7a7a;
-            width: 72px;  /* увеличено */
+            width: 72px;
             height: 72px;
-            padding: 12px; /* больше отступ */
+            padding: 12px;
             z-index: 3;
             transition: transform 0.1s ease, box-shadow 0.1s;
             cursor: pointer;
         }
 
         .nav-icon {
-            width: 40px;  /* было 34 */
+            width: 40px;
             height: 40px;
             flex-shrink: 0;
             transition: transform 0.1s;
             filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5));
-            object-fit: contain; /* для картинок */
+            object-fit: contain;
         }
 
         .nav-item-wrapper:hover .nav-icon-block {
@@ -144,7 +143,7 @@
 
         .mc-nav-drawer-btn {
             position: absolute;
-            left: 68px; /* подогнано под новую ширину иконки (72px - 4px border?) фактически от края иконки */
+            left: 68px;
             height: 72px;
             width: 0;
             background: #545454;
@@ -161,14 +160,14 @@
         }
 
         .nav-item-wrapper:hover .mc-nav-drawer-btn {
-            width: 210px; /* чуть шире под крупный текст */
+            width: 210px;
             opacity: 1;
         }
 
         .mc-nav-drawer-btn:hover { background: #6b6b6b; }
 
         .nav-text {
-            font-size: 20px; /* крупнее */
+            font-size: 20px;
             color: #fff;
             position: absolute;
             left: 22px;
@@ -194,32 +193,43 @@
         }
         .btn-donate-drawer:hover { background: #388e3c; }
 
+        /* НОВЫЙ ЗАГОЛОВОК В ДВЕ СТРОКИ */
         .server-title-clean {
-            font-size: 50px;
             font-weight: normal;
             color: #ffffff;
-            letter-spacing: 4px;
             text-transform: uppercase;
             text-shadow: 3px 3px 0 #000000, 0 0 20px rgba(76, 175, 80, 0.7), 0 0 40px rgba(76, 175, 80, 0.3);
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.1;
         }
 
-        .server-title-clean::after {
-            content: "⛏";
-            position: absolute;
-            bottom: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 22px;
-            color: #4caf50;
-            text-shadow: 0 0 15px #4caf50;
+        .title-line {
+            display: block;
+            letter-spacing: 4px;
+        }
+        .title-line:first-child {
+            font-size: 48px;
+        }
+        .title-line:last-child {
+            font-size: 36px;
+        }
+
+        /* Иконка под заголовком (замена кирки) */
+        .title-icon {
+            width: 36px;
+            height: 36px;
+            margin-top: 12px;
+            filter: drop-shadow(0 0 12px #4caf50);
             animation: pickaxeSwing 2.5s ease-in-out infinite;
+            object-fit: contain;
         }
 
         @keyframes pickaxeSwing {
-            0%, 100% { transform: translateX(-50%) rotate(0deg); }
-            25% { transform: translateX(-50%) rotate(20deg); }
-            75% { transform: translateX(-50%) rotate(-15deg); }
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            75% { transform: rotate(-15deg); }
         }
 
         .main-content {
@@ -354,16 +364,15 @@
             gap: 10px;
         }
 
-        /* ===== МОБИЛЬНАЯ ВЕРСИЯ — КНОПКИ СТОЛБИКОМ, БЕЗ НАЛОЖЕНИЙ ===== */
+        /* МОБИЛЬНАЯ ВЕРСИЯ */
         @media (max-width: 768px) {
             .header-premium {
                 flex-direction: column;
                 gap: 20px;
                 padding: 20px;
-                align-items: flex-start; /* выравнивание по левому краю */
+                align-items: flex-start;
             }
 
-            /* Возвращаем столбик */
             .nav-vertical-left {
                 flex-direction: column;
                 gap: 14px;
@@ -371,39 +380,28 @@
                 width: 100%;
             }
 
-            .nav-item-wrapper {
-                height: 60px; /* чуть уменьшим, но не слишком */
-            }
-
-            .nav-icon-block {
-                width: 60px;
-                height: 60px;
-                padding: 10px;
-            }
-
-            .nav-icon {
-                width: 34px;
-                height: 34px;
-            }
-
-            .mc-nav-drawer-btn {
-                height: 60px;
-                left: 56px;
-                /* на мобильных выезжающая панель будет немного уже */
-            }
-
-            .nav-item-wrapper:hover .mc-nav-drawer-btn {
-                width: 170px; /* подогнал под ширину экрана */
-            }
-
-            .nav-text {
-                font-size: 18px;
-                left: 16px;
-            }
+            .nav-item-wrapper { height: 60px; }
+            .nav-icon-block { width: 60px; height: 60px; padding: 10px; }
+            .nav-icon { width: 34px; height: 34px; }
+            .mc-nav-drawer-btn { height: 60px; left: 56px; }
+            .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; }
+            .nav-text { font-size: 18px; left: 16px; }
 
             .server-title-clean {
-                font-size: 32px;
-                align-self: center; /* заголовок по центру */
+                align-self: center;
+            }
+            .title-line:first-child {
+                font-size: 28px;
+                letter-spacing: 2px;
+            }
+            .title-line:last-child {
+                font-size: 22px;
+                letter-spacing: 2px;
+            }
+            .title-icon {
+                width: 24px;
+                height: 24px;
+                margin-top: 8px;
             }
 
             .map-container-clean { height: 55vh; }
@@ -415,24 +413,18 @@
 
     <header class="header-premium">
         <nav class="nav-vertical-left" aria-label="Основная навигация">
-            <!-- ГЛАВНАЯ -->
             <div class="nav-item-wrapper">
                 <div class="nav-icon-block" aria-hidden="true">
-                    <!-- Замени на свою картинку: map1.png -->
                     <img src="map1.png" alt="Главная" class="nav-icon">
                 </div>
                 <a href="index.html" class="mc-nav-drawer-btn"><span class="nav-text">ГЛАВНАЯ</span></a>
             </div>
-
-            <!-- ГАЛЕРЕЯ -->
             <div class="nav-item-wrapper">
                 <div class="nav-icon-block" aria-hidden="true">
                     <img src="galleryicon.png" alt="Галерея" class="nav-icon">
                 </div>
                 <a href="gallery.html" class="mc-nav-drawer-btn"><span class="nav-text">ГАЛЕРЕЯ</span></a>
             </div>
-
-            <!-- ДОНАТ -->
             <div class="nav-item-wrapper wrapper-donate">
                 <div class="nav-icon-block" aria-hidden="true">
                     <img src="donate.png" alt="Донат" class="nav-icon">
@@ -440,7 +432,12 @@
                 <a href="#" class="mc-nav-drawer-btn btn-donate-drawer"><span class="nav-text">ДОНАТ</span></a>
             </div>
         </nav>
-        <h1 class="server-title-clean">SAKURA REALM</h1>
+        <h1 class="server-title-clean">
+            <span class="title-line">MINECRAFT</span>
+            <span class="title-line">SERVER</span>
+            <!-- Замени pickaxe.png на свою иконку -->
+            <img src="pickaxe.png" alt="" class="title-icon">
+        </h1>
     </header>
 
     <main class="main-content">
@@ -448,7 +445,7 @@
             <div class="map-top-bar">❖ ИНТЕРАКТИВНАЯ КАРТА ❖</div>
             <div class="map-iframe-holder">
                 <iframe src="https://bluecolo.red/map/#world:21:0:0:1500:0:0:0:0:perspective"
-                        title="Карта сервера Sakura Realm"
+                        title="Карта сервера Minecraft Server"
                         loading="lazy"
                         allowfullscreen></iframe>
             </div>
@@ -459,7 +456,7 @@
         <div class="footer-grid">
             <div class="footer-col">
                 <h3>❖ О МИРЕ</h3>
-                <p>Sakura Realm — приватный технический сервер без вайпов. Взрослое комьюнити, масштабные постройки и ламповая атмосфера.</p>
+                <p>Minecraft Server — приватный технический сервер без вайпов. Взрослое комьюнити, масштабные постройки и ламповая атмосфера.</p>
             </div>
             <div class="footer-col">
                 <h3>❖ НАВИГАЦИЯ</h3>
@@ -479,7 +476,7 @@
             </div>
         </div>
         <div class="footer-bottom-bar">
-            <span>© 2026 SAKURA REALM</span>
+            <span>© 2026 MINECRAFT SERVER</span>
             <span>NOT AN OFFICIAL MINECRAFT PRODUCT</span>
         </div>
     </footer>

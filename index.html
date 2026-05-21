@@ -23,7 +23,6 @@
             image-rendering: pixelated;
         }
 
-        /* Центральный фон – глубокий, с радиальным затемнением и лёгкой текстурой */
         body {
             background-color: #1e1e1e;
             background-image:
@@ -75,7 +74,6 @@
             100% { transform: translateY(105vh) translateX(-5px) scale(0.5); opacity: 0; }
         }
 
-        /* Шапка с пиксельной текстурой под камень */
         .header-premium {
             background-color: #2d2d2d;
             background-image:
@@ -325,7 +323,6 @@
             background: #1a1a1a;
         }
 
-        /* Подвал с пиксельной текстурой */
         .footer-premium {
             background-color: #2d2d2d;
             background-image:
@@ -418,6 +415,32 @@
             letter-spacing: 1px;
             flex-wrap: wrap;
             gap: 10px;
+        }
+
+        /* Кнопка mute */
+        .mute-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: #2d2d2d;
+            border: 3px solid #4caf50;
+            color: #4caf50;
+            font-size: 22px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 2px 2px 0 #000;
+            transition: background 0.2s;
+        }
+        .mute-button:hover {
+            background: #3d3d3d;
+        }
+        .mute-button.muted {
+            color: #ff5555;
         }
 
         @media (max-width: 768px) {
@@ -521,27 +544,27 @@
             </div>
         </div>
         <div class="footer-bottom-bar">
-<div>&copy; 2026 MINECRAFT SERVER. Все права защищены.</div>
+            <div>&copy; 2026 MINECRAFT SERVER. Все права защищены.</div>
             <div>Разработано для любимого комьюнити</div>
         </div>
     </footer>
 
-    <script>
-        function copyServerIPAddress() {
-            const ipText = document.getElementById('ip-target-text').innerText;
-            navigator.clipboard.writeText(ipText).then(() => {
-                const hint = document.getElementById('ip-status-hint');
-                const oldText = hint.innerText;
-                hint.innerText = "СКОПИРОВАНО!";
-                hint.style.color = "#55FF55";
-                setTimeout(() => {
-                    hint.innerText = oldText;
-                    hint.style.color = "#7a7a7a";
-                }, 2000);
-            }).catch(err => console.error('Ошибка копирования: ', err));
-        }
+    <!-- Звуковые элементы -->
+    <audio id="sound-click" preload="none">
+        <source src="click.ogg" type="audio/ogg">
+        <source src="click.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sound-exp" preload="none">
+        <source src="exp.ogg" type="audio/ogg">
+        <source src="exp.mp3" type="audio/mpeg">
+    </audio>
 
-        function createParticles() {
+    <!-- Кнопка mute -->
+        <button id="mute-toggle" class="mute-button" title="Вкл/выкл звук">🔊</button>
+
+    <script>
+        // Частицы
+        (function() {
             const container = document.getElementById('particles-container');
             if (!container) return;
             for (let i = 0; i < 20; i++) {
@@ -552,8 +575,57 @@
                 p.style.animationDelay = Math.random() * 3 + 's';
                 container.appendChild(p);
             }
+        })();
+
+        // Звуки
+        const soundClick = document.getElementById('sound-click');
+        const soundExp = document.getElementById('sound-exp');
+        const muteBtn = document.getElementById('mute-toggle');
+
+        let muted = localStorage.getItem('muted') === 'true';
+        updateMuteButton();
+
+        function playSound(audio) {
+            if (!audio || muted) return;
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
         }
-        window.addEventListener('DOMContentLoaded', createParticles);
+
+        function copyServerIPAddress() {
+            const ipText = document.getElementById('ip-target-text').innerText;
+            navigator.clipboard.writeText(ipText).then(() => {
+                const hint = document.getElementById('ip-status-hint');
+                const oldText = hint.innerText;
+                hint.innerText = "СКОПИРОВАНО!";
+                hint.style.color = "#55FF55";
+                playSound(soundExp);
+                setTimeout(() => {
+                    hint.innerText = oldText;
+                    hint.style.color = "#7a7a7a";
+                }, 2000);
+            }).catch(err => console.error('Ошибка копирования: ', err));
+        }
+
+        // Звук клика на все кнопки навигации
+        document.querySelectorAll('.mc-nav-drawer-btn, .nav-icon-block').forEach(el => {
+            el.addEventListener('click', () => playSound(soundClick));
+        });
+
+        muteBtn.addEventListener('click', () => {
+            muted = !muted;
+            localStorage.setItem('muted', muted);
+            updateMuteButton();
+        });
+
+        function updateMuteButton() {
+            if (muted) {
+                muteBtn.textContent = '🔇';
+                muteBtn.classList.add('muted');
+            } else {
+                muteBtn.textContent = '🔊';
+                muteBtn.classList.remove('muted');
+            }
+        }
     </script>
 </body>
 </html>

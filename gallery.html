@@ -115,7 +115,14 @@
         }
 
         .nav-icon { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; }
-        .nav-item-wrapper:hover .nav-icon-block { transform: scale(0.96); background: #6b6b6b; }
+
+        /* Увеличение иконки */
+        .nav-item-wrapper:hover .nav-icon-block {
+            transform: scale(1.08);
+            background: #6b6b6b;
+            box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a, 0 3px 0 #000;
+        }
+        .nav-item-wrapper:hover .nav-icon { transform: scale(1.05); }
 
         .mc-nav-drawer-btn {
             position: absolute; left: 68px; top: 0; height: 72px; width: 0;
@@ -140,7 +147,11 @@
         }
 
         .wrapper-donate .nav-icon-block { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a; }
-        .wrapper-donate:hover .nav-icon-block { background: #388e3c; transform: scale(0.96); }
+        .wrapper-donate:hover .nav-icon-block {
+            background: #388e3c;
+            transform: scale(1.08);
+            box-shadow: inset -2px -2px 0 #1b5e20, inset 2px 2px 0 #81c784, 0 3px 0 #000;
+        }
         .btn-donate-drawer { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a; }
 
         .server-title-clean {
@@ -249,7 +260,7 @@
             font-size: 14px; color: #7a7a7a; letter-spacing: 1px; flex-wrap: wrap; gap: 10px;
         }
 
-        /* Увеличенный и более детальный ползунок */
+        /* Ползунок mute */
         .mute-widget {
             position: fixed;
             bottom: 20px;
@@ -363,7 +374,7 @@
 
     <main class="main-content">
         <div class="gallery-wrapper">
-            <h2 class="gallery-title">❖ ГАЛЕРЕЯ ЛУЧШИХ МОМЕНТОВ ❖</h2>
+            <h2 class="gallery-title">❖ ГАЛЕРЕЯ НАШЕГО МИРА ❖</h2>
             <div class="gallery-grid">
                 <div class="gallery-card">
                     <div class="lock-icon-wrapper">
@@ -412,7 +423,7 @@
                 <p>Minecraft Server — приватный сервер без вайпов. Крутое ещкере комьюнити, хайповые постройки и ламповая атмосфера.</p>
             </div>
             <div class="footer-col">
-                <h3>❖ СВЯЗЬ</h3>
+               <h3>❖ СВЯЗЬ</h3>
                 <ul class="footer-links-list">
                     <li>
                         <a href="https://discord.com/users/kreepik#9722" target="_blank" rel="noopener noreferrer" class="footer-url">

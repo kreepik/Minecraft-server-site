@@ -249,6 +249,27 @@
             font-size: 14px; color: #7a7a7a; letter-spacing: 1px; flex-wrap: wrap; gap: 10px;
         }
 
+        .mute-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: #2d2d2d;
+            border: 3px solid #4caf50;
+            color: #4caf50;
+            font-size: 22px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 2px 2px 0 #000;
+            transition: background 0.2s;
+        }
+        .mute-button:hover { background: #3d3d3d; }
+        .mute-button.muted { color: #ff5555; }
+
         @media (max-width: 768px) {
             .header-premium { flex-direction: column; gap: 20px; padding: 20px; align-items: flex-start; }
             .nav-vertical-left { flex-direction: column; gap: 14px; width: 100%; }
@@ -369,12 +390,23 @@
         </div>
         <div class="footer-bottom-bar">
             <div>&copy; 2026 MINECRAFT SERVER. Все права защищены.</div>
-<div>Разработано для любимого комьюнити</div>
+                  <div>Разработано для любимого комьюнити</div>
         </div>
     </footer>
 
+    <audio id="sound-click" preload="none">
+        <source src="click.ogg" type="audio/ogg">
+        <source src="click.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sound-exp" preload="none">
+        <source src="exp.ogg" type="audio/ogg">
+        <source src="exp.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="mute-toggle" class="mute-button" title="Вкл/выкл звук">🔊</button>
+
     <script>
-        function createParticles() {
+        (function() {
             const container = document.getElementById('particles-container');
             if (!container) return;
             for (let i = 0; i < 20; i++) {
@@ -385,8 +417,40 @@
                 p.style.animationDelay = Math.random() * 3 + 's';
                 container.appendChild(p);
             }
+        })();
+
+        const soundClick = document.getElementById('sound-click');
+        const soundExp = document.getElementById('sound-exp');
+        const muteBtn = document.getElementById('mute-toggle');
+
+        let muted = localStorage.getItem('muted') === 'true';
+        updateMuteButton();
+
+        function playSound(audio) {
+            if (!audio || muted) return;
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
         }
-        window.addEventListener('DOMContentLoaded', createParticles);
+
+        document.querySelectorAll('.mc-nav-drawer-btn, .nav-icon-block').forEach(el => {
+            el.addEventListener('click', () => playSound(soundClick));
+        });
+
+        muteBtn.addEventListener('click', () => {
+            muted = !muted;
+            localStorage.setItem('muted', muted);
+            updateMuteButton();
+        });
+
+        function updateMuteButton() {
+            if (muted) {
+                muteBtn.textContent = '🔇';
+                muteBtn.classList.add('muted');
+            } else {
+                muteBtn.textContent = '🔊';
+                muteBtn.classList.remove('muted');
+            }
+        }
     </script>
 </body>
 </html>

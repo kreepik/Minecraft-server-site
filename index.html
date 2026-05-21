@@ -417,30 +417,58 @@
             gap: 10px;
         }
 
-        /* Кнопка mute */
-        .mute-button {
+        /* Ползунок mute */
+        .mute-widget {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1000;
-            background: #2d2d2d;
-            border: 3px solid #4caf50;
-            color: #4caf50;
-            font-size: 22px;
-            width: 44px;
-            height: 44px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            gap: 10px;
+            background: #2d2d2d;
+            border: 3px solid #000;
+            padding: 6px 12px;
             box-shadow: 2px 2px 0 #000;
+        }
+
+        .mute-label {
+            font-size: 14px;
+            color: #a5d6a7;
+            text-shadow: 1px 1px 0 #000;
+            letter-spacing: 1px;
+        }
+
+        .mute-switch {
+            position: relative;
+            width: 44px;
+            height: 22px;
+            background: #f44336;
+            border: 2px solid #000;
+            cursor: pointer;
             transition: background 0.2s;
+            box-shadow: inset -1px -1px 0 #4a0000, inset 1px 1px 0 #ff8888;
         }
-        .mute-button:hover {
-            background: #3d3d3d;
+
+        .mute-switch.active {
+            background: #4caf50;
+            box-shadow: inset -1px -1px 0 #1b5e20, inset 1px 1px 0 #81c784;
         }
-        .mute-button.muted {
-            color: #ff5555;
+
+        .mute-switch::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 14px;
+            background: #fff;
+            border: 2px solid #000;
+            transition: left 0.2s;
+        }
+
+        .mute-switch.active::after {
+            left: 24px;
         }
 
         @media (max-width: 768px) {
@@ -468,6 +496,7 @@
             .status-title-text { font-size: 16px; }
             .players-online-count { font-size: 14px; }
             .ip-address-string { font-size: 15px; }
+            .mute-widget { bottom: 10px; right: 10px; }
         }
     </style>
 </head>
@@ -531,7 +560,7 @@
                     <li>
                         <a href="https://discord.com/users/kreepik#9722" target="_blank" rel="noopener noreferrer" class="footer-url">
                             <svg class="footer-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.533 0c-.164-.385-.399-.874-.608-1.25a.074.074 0 0 0-.079-.037 19.736 19.736 0 0 0-4.884 1.515.069.069 0 0 0-.032.027C.533 9.045-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.195.373.289a.075.075 0 0 1-.006.127 12.298 12.298 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-                            Discord
+                            Discord.
                         </a>
                     </li>
                     <li>
@@ -549,7 +578,6 @@
         </div>
     </footer>
 
-    <!-- Звуковые элементы -->
     <audio id="sound-click" preload="none">
         <source src="click.ogg" type="audio/ogg">
         <source src="click.mp3" type="audio/mpeg">
@@ -559,11 +587,12 @@
         <source src="exp.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Кнопка mute -->
-        <button id="mute-toggle" class="mute-button" title="Вкл/выкл звук">🔊</button>
+    <div class="mute-widget">
+        <span class="mute-label">ЗВУК</span>
+        <div id="mute-toggle" class="mute-switch" title="Вкл/выкл звук"></div>
+    </div>
 
     <script>
-        // Частицы
         (function() {
             const container = document.getElementById('particles-container');
             if (!container) return;
@@ -577,13 +606,12 @@
             }
         })();
 
-        // Звуки
         const soundClick = document.getElementById('sound-click');
         const soundExp = document.getElementById('sound-exp');
-        const muteBtn = document.getElementById('mute-toggle');
+        const muteSwitch = document.getElementById('mute-toggle');
 
         let muted = localStorage.getItem('muted') === 'true';
-        updateMuteButton();
+        updateMuteSwitch();
 
         function playSound(audio) {
             if (!audio || muted) return;
@@ -606,24 +634,21 @@
             }).catch(err => console.error('Ошибка копирования: ', err));
         }
 
-        // Звук клика на все кнопки навигации
         document.querySelectorAll('.mc-nav-drawer-btn, .nav-icon-block').forEach(el => {
             el.addEventListener('click', () => playSound(soundClick));
         });
 
-        muteBtn.addEventListener('click', () => {
+        muteSwitch.addEventListener('click', () => {
             muted = !muted;
             localStorage.setItem('muted', muted);
-            updateMuteButton();
+            updateMuteSwitch();
         });
 
-        function updateMuteButton() {
+        function updateMuteSwitch() {
             if (muted) {
-                muteBtn.textContent = '🔇';
-                muteBtn.classList.add('muted');
+                muteSwitch.classList.remove('active');
             } else {
-                muteBtn.textContent = '🔊';
-                muteBtn.classList.remove('muted');
+                muteSwitch.classList.add('active');
             }
         }
     </script>

@@ -249,26 +249,59 @@
             font-size: 14px; color: #7a7a7a; letter-spacing: 1px; flex-wrap: wrap; gap: 10px;
         }
 
-        .mute-button {
+        /* Ползунок mute */
+        .mute-widget {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1000;
-            background: #2d2d2d;
-            border: 3px solid #4caf50;
-            color: #4caf50;
-            font-size: 22px;
-            width: 44px;
-            height: 44px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            gap: 10px;
+            background: #2d2d2d;
+            border: 3px solid #000;
+            padding: 6px 12px;
             box-shadow: 2px 2px 0 #000;
-            transition: background 0.2s;
         }
-        .mute-button:hover { background: #3d3d3d; }
-        .mute-button.muted { color: #ff5555; }
+
+        .mute-label {
+            font-size: 14px;
+            color: #a5d6a7;
+            text-shadow: 1px 1px 0 #000;
+            letter-spacing: 1px;
+        }
+
+        .mute-switch {
+            position: relative;
+            width: 44px;
+            height: 22px;
+            background: #f44336;
+            border: 2px solid #000;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: inset -1px -1px 0 #4a0000, inset 1px 1px 0 #ff8888;
+        }
+
+        .mute-switch.active {
+            background: #4caf50;
+            box-shadow: inset -1px -1px 0 #1b5e20, inset 1px 1px 0 #81c784;
+        }
+
+        .mute-switch::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 14px;
+            background: #fff;
+            border: 2px solid #000;
+            transition: left 0.2s;
+        }
+
+        .mute-switch.active::after {
+            left: 24px;
+        }
 
         @media (max-width: 768px) {
             .header-premium { flex-direction: column; gap: 20px; padding: 20px; align-items: flex-start; }
@@ -284,6 +317,7 @@
             .title-minecraft, .title-server { font-size: 28px; }
             .title-icon { width: 24px; height: 24px; }
             .gallery-title { font-size: 24px; }
+            .mute-widget { bottom: 10px; right: 10px; }
         }
     </style>
 </head>
@@ -390,7 +424,7 @@
         </div>
         <div class="footer-bottom-bar">
             <div>&copy; 2026 MINECRAFT SERVER. Все права защищены.</div>
-                  <div>Разработано для любимого комьюнити</div>
+            <div>Разработано для любимого комьюнити</div>
         </div>
     </footer>
 
@@ -403,7 +437,10 @@
         <source src="exp.mp3" type="audio/mpeg">
     </audio>
 
-    <button id="mute-toggle" class="mute-button" title="Вкл/выкл звук">🔊</button>
+    <div class="mute-widget">
+        <span class="mute-label">ЗВУК</span>
+        <div id="mute-toggle" class="mute-switch" title="Вкл/выкл звук"></div>
+    </div>
 
     <script>
         (function() {
@@ -421,10 +458,10 @@
 
         const soundClick = document.getElementById('sound-click');
         const soundExp = document.getElementById('sound-exp');
-        const muteBtn = document.getElementById('mute-toggle');
+        const muteSwitch = document.getElementById('mute-toggle');
 
         let muted = localStorage.getItem('muted') === 'true';
-        updateMuteButton();
+        updateMuteSwitch();
 
         function playSound(audio) {
             if (!audio || muted) return;
@@ -436,19 +473,17 @@
             el.addEventListener('click', () => playSound(soundClick));
         });
 
-        muteBtn.addEventListener('click', () => {
+        muteSwitch.addEventListener('click', () => {
             muted = !muted;
             localStorage.setItem('muted', muted);
-            updateMuteButton();
+            updateMuteSwitch();
         });
 
-        function updateMuteButton() {
+        function updateMuteSwitch() {
             if (muted) {
-                muteBtn.textContent = '🔇';
-                muteBtn.classList.add('muted');
+                muteSwitch.classList.remove('active');
             } else {
-                muteBtn.textContent = '🔊';
-                muteBtn.classList.remove('muted');
+                muteSwitch.classList.add('active');
             }
         }
     </script>

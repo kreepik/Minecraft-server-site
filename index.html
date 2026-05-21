@@ -5,413 +5,473 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAKURA REALM — Игровой портал</title>
     <style>
-        /* ПОДКЛЮЧЕНИЕ ШРИФТА (Файл должен называться minecraft.ttf) */
+        /* ===== ШРИФТ ===== */
         @font-face {
             font-family: 'MinecraftTitleCyrillic';
             src: url('minecraft.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
+            font-display: swap;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'MinecraftTitleCyrillic', sans-serif;
+            font-family: 'MinecraftTitleCyrillic', 'Courier New', monospace;
             border-radius: 0 !important;
             image-rendering: pixelated;
         }
 
         body {
-            background-color: #222225;
+            background-color: #1e1e1e;
+            background-image:
+                linear-gradient(45deg, rgba(60, 60, 60, 0.15) 2px, transparent 2px),
+                linear-gradient(-45deg, rgba(60, 60, 60, 0.15) 2px, transparent 2px),
+                linear-gradient(0deg, rgba(40, 40, 40, 0.3) 1px, transparent 1px),
+                radial-gradient(circle at 50% 0%, rgba(76, 175, 80, 0.08) 0%, transparent 60%);
+            background-size: 32px 32px, 32px 32px, 8px 8px, 100% 100%;
+            background-attachment: fixed;
             color: #E0E0E0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
             position: relative;
+            box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.8);
         }
 
-        /* ЛЕПЕСТКИ САКУРЫ НА ФОНЕ */
-        .sakura-particles {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+        /* ЧАСТИЦЫ ОПЫТА */
+        .particles-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 1;
             overflow: hidden;
         }
 
-        .sakura-petal {
+        .particle {
             position: absolute;
-            background-color: #FFB7C5;
-            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
-            opacity: 0.5;
-            animation: fall linear infinite;
+            top: -10px;
+            width: 8px; height: 8px;
+            background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32);
+            box-shadow: 0 0 8px #4caf50, 0 0 12px rgba(76, 175, 80, 0.5);
+            border-radius: 50% !important;
+            opacity: 0;
+            animation: floatParticle linear infinite;
+            will-change: transform;
         }
 
-        @keyframes fall {
-            0% { transform: translateY(-20px) translateX(0) rotate(0deg); }
-            50% { transform: translateY(50vh) translateX(35px) rotate(180deg); }
-            100% { transform: translateY(105vh) translateX(-15px) rotate(360deg); }
+        @keyframes floatParticle {
+            0% { transform: translateY(-20px) translateX(0px) scale(0.8); opacity: 0; }
+            10% { opacity: 0.9; }
+            30% { transform: translateY(30vh) translateX(15px) scale(1.2); opacity: 0.8; }
+            60% { transform: translateY(65vh) translateX(-20px) scale(0.9); opacity: 0.5; }
+            85% { transform: translateY(85vh) translateX(10px) scale(0.7); opacity: 0.2; }
+            100% { transform: translateY(105vh) translateX(-5px) scale(0.5); opacity: 0; }
         }
 
-        /* --- ШАПКА --- */
+        /* ШАПКА */
         .header-premium {
-            background-color: #2D2D32; 
-            border-bottom: 5px solid #18181A;
-            padding: 35px 50px; 
+            background: #2d2d2d;
+            border-bottom: 5px solid #4caf50;
+            padding: 28px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
             position: relative;
             z-index: 100;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,0,0,0.15) 20px, rgba(0,0,0,0.15) 21px);
         }
 
-        /* КОНТЕЙНЕР ДЛЯ СТОЛБИКА НАВИГАЦИИ */
+        .header-premium::after {
+            content: "";
+            position: absolute;
+            bottom: -7px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #4caf50, #81c784, #4caf50);
+            z-index: 101;
+            pointer-events: none;
+            box-shadow: 0 0 12px #4caf50;
+        }
+
+        /* НАВИГАЦИЯ */
         .nav-vertical-left {
             display: flex;
             flex-direction: column;
-            gap: 16px; /* Чуть увеличили зазор для 3D анимации подъема */
+            gap: 14px;
         }
 
-        /* ОБЩАЯ ОБЕРТКА КАЖДОГО ПУНКТА */
         .nav-item-wrapper {
             display: flex;
             align-items: center;
             position: relative;
-            height: 54px;
+            height: 60px;
         }
 
-        /* БЛОК ИКОНКИ (МЕХАНИЗМ-ВЫТАЛКИВАТЕЛЬ, НЕ ССЫЛКА) */
         .nav-icon-block {
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #4A4A4A;
-            border: 3px solid #000000;
-            box-shadow: inset -3px -3px 0 #2D2D32, inset 3px 3px 0 #777777;
-            width: 54px;
-            height: 54px;
-            padding: 8px;
-            z-index: 3; /* Поверх выезжающей панели */
-            transition: transform 0.2s cubic-bezier(0.1, 0.8, 0.3, 1), background-color 0.15s, box-shadow 0.2s;
+            background: #545454;
+            border: 4px solid #000000;
+            box-shadow: inset -3px -3px 0 #2a2a2a, inset 3px 3px 0 #7a7a7a;
+            width: 60px; height: 60px;
+            padding: 10px;
+            z-index: 3;
+            transition: transform 0.1s ease, box-shadow 0.1s;
+            cursor: pointer;
         }
 
         .nav-icon {
-            width: 32px;
-            height: 32px;
+            width: 34px; height: 34px;
             flex-shrink: 0;
-            transition: transform 0.2s ease;
+            transition: transform 0.1s;
+            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5));
         }
 
-        /* --- ДРУГАЯ АНИМАЦИЯ ДЛЯ ИКОНКИ ПРИ НАВЕДЕНИИ НА ОБЕРТКУ --- */
         .nav-item-wrapper:hover .nav-icon-block {
-            background-color: #5C5C5C;
-            transform: translateY(-4px); /* Иконка красиво взлетает вверх */
-            /* Снизу добавляется темная 3D-граница под выросший блок */
-            box-shadow: inset -3px -3px 0 #2D2D32, inset 3px 3px 0 #777777, 0 4px 0 #000000; 
+            transform: scale(0.94);
+            box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a, 0 3px 0 #000;
         }
 
-        /* Сама картинка внутри иконки прикольно наклоняется */
         .nav-item-wrapper:hover .nav-icon {
-            transform: scale(1.1) rotate(8deg);
+            transform: scale(0.94);
         }
 
-
-        /* --- ВЫЕЗЖАЮЩАЯ КНОПКА (ТЕПЕРЬ ЭТО ССЫЛКА С КЛИКОМ) --- */
         .mc-nav-drawer-btn {
             position: absolute;
-            left: 51px; /* Стыковка с иконкой */
-            height: 54px;
-            background-color: #4A4A4A;
-            border: 3px solid #000000;
-            border-left: none; /* Убираем двойную рамку на стыке */
-            box-shadow: inset -3px -3px 0 #2D2D32, inset 0px 3px 0 #777777;
+            left: 56px;
+            height: 60px;
+            width: 0;
+            background: #545454;
+            border: 4px solid #000000;
+            border-left: none;
+            box-shadow: inset -3px -3px 0 #2a2a2a, inset 0px 3px 0 #7a7a7a;
             display: flex;
             align-items: center;
-            width: 0; /* Скрыта по умолчанию */
-            opacity: 0;
             overflow: hidden;
             z-index: 2;
             text-decoration: none;
-            /* Выезжает плавно вправо */
-            transition: width 0.25s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.15s, background-color 0.15s;
+            opacity: 0;
+            transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1) 0.06s, opacity 0.2s 0.06s;
         }
 
-        /* Активация выезда плашки */
         .nav-item-wrapper:hover .mc-nav-drawer-btn {
-            width: 200px;
+            width: 220px;
             opacity: 1;
         }
 
-        /* Подсветка выехавшей кнопки при наведении на неё */
-        .mc-nav-drawer-btn:hover {
-            background-color: #5C5C5C;
-        }
+        .mc-nav-drawer-btn:hover { background: #6b6b6b; }
 
         .nav-text {
-            font-size: 14px;
-            color: #FFFFFF;
+            font-size: 18px;
+            color: #fff;
             position: absolute;
             left: 20px;
             white-space: nowrap;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 0 #000;
             transition: transform 0.05s;
         }
 
-        /* СТАБИЛЬНЫЙ КЛИК: НАЖИМАЕТСЯ ТОЛЬКО ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ */
         .mc-nav-drawer-btn:active {
-            box-shadow: inset 0px 4px 0 #000000, inset -2px -2px 0 #555555;
-            background-color: #3F3F3F;
+            box-shadow: inset 4px 4px 0 #000, inset -2px -2px 0 #2a2a2a;
+            background: #3e3e3e;
         }
-        /* Текст проседает внутрь при клике */
-        .mc-nav-drawer-btn:active .nav-text {
-            transform: translate(2px, 2px);
-        }
+        .mc-nav-drawer-btn:active .nav-text { transform: translate(2px, 2px); }
 
-
-        /* --- ХАРАКТЕРИСТИКИ ДЛЯ ИЗУМРУДНОГО ДОНАТА --- */
+        /* Донат */
         .wrapper-donate .nav-icon-block {
-            background-color: #2E7D32;
-            box-shadow: inset -3px -3px 0 #1B5E20, inset 3px 3px 0 #4CAF50;
+            background: #2e7d32;
+            box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a;
         }
-        .wrapper-donate:hover .nav-icon-block {
-            background-color: #388E3C;
-            box-shadow: inset -3px -3px 0 #1B5E20, inset 3px 3px 0 #4CAF50, 0 4px 0 #000000;
-        }
-
         .btn-donate-drawer {
-            background-color: #2E7D32;
-            box-shadow: inset -3px -3px 0 #1B5E20, inset 0px 3px 0 #4CAF50;
+            background: #2e7d32;
+            box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a;
         }
-        .btn-donate-drawer:hover {
-            background-color: #388E3C;
-        }
-        .btn-donate-drawer:active {
-            box-shadow: inset 0px 4px 0 #000000, inset -2px -2px 0 #2E7D32;
-            background-color: #256328;
-        }
+        .btn-donate-drawer:hover { background: #388e3c; }
 
-
-        /* --- НАЗВАНИЕ СЕРВЕРА --- */
+        /* ЗАГОЛОВОК */
         .server-title-clean {
-            font-size: 36px;
+            font-size: 50px;
             font-weight: normal;
-            color: #FFFFFF;
-            letter-spacing: 2px;
+            color: #ffffff;
+            letter-spacing: 4px;
             text-transform: uppercase;
+            text-shadow: 3px 3px 0 #000000, 0 0 20px rgba(76, 175, 80, 0.7), 0 0 40px rgba(76, 175, 80, 0.3);
+            position: relative;
         }
 
-        /* --- КОНТЕЙНЕР КАРТЫ --- */
+        .server-title-clean::after {
+            content: "⛏";
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 22px;
+            color: #4caf50;
+            text-shadow: 0 0 15px #4caf50;
+            animation: pickaxeSwing 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pickaxeSwing {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-50%) rotate(20deg); }
+            75% { transform: translateX(-50%) rotate(-15deg); }
+        }
+
+        /* КОНТЕНТ */
         .main-content {
             flex-grow: 1;
-            padding: 40px 20px;
+            padding: 40px 20px 50px;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 5;
+            position: relative;
         }
 
+        /* КАРТА-ПОРТАЛ */
         .map-container-clean {
             width: 100%;
             max-width: 1150px;
             height: 72vh;
-            background-color: #2D2D32;
-            border: 5px solid #000000;
-            box-shadow: inset -4px -4px 0 #18181A, inset 4px 4px 0 #55555A, 0 15px 35px rgba(0,0,0,0.4);
+            background-color: #1e1e1e; /* замени на текстуру обсидиана/дерева */
+            border: 6px solid #000;
+            box-shadow:
+                inset 0 0 30px rgba(76, 175, 80, 0.25),
+                0 0 0 5px #2d2d2d,
+                0 0 0 11px #000,
+                0 20px 50px rgba(0,0,0,0.8),
+                0 0 80px rgba(76, 175, 80, 0.35);
             padding: 8px;
             display: flex;
             flex-direction: column;
+            animation: portalGlow 3s infinite alternate;
+        }
+
+        @keyframes portalGlow {
+            0% { box-shadow: inset 0 0 30px rgba(76, 175, 80, 0.25), 0 0 0 5px #2d2d2d, 0 0 0 11px #000, 0 20px 50px rgba(0,0,0,0.8), 0 0 80px rgba(76, 175, 80, 0.35); }
+            100% { box-shadow: inset 0 0 45px rgba(76, 175, 80, 0.4), 0 0 0 5px #3a3a3a, 0 0 0 11px #000, 0 20px 50px rgba(0,0,0,0.8), 0 0 110px rgba(76, 175, 80, 0.55); }
         }
 
         .map-top-bar {
-            background-color: #18181A;
-            padding: 14px;
+            background: #2d2d2d;
+            padding: 16px;
             text-align: center;
-            font-size: 16px;
-            color: #FFFFFF;
-            border: 3px solid #000000;
+            font-size: 20px;
+            color: #fff;
+            border: 4px solid #000;
             margin-bottom: 8px;
-            letter-spacing: 1px;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 0 #000;
+            box-shadow: inset -3px -3px 0 #1a1a1a, inset 3px 3px 0 #5a5a5a;
         }
 
         .map-iframe-holder {
             flex-grow: 1;
-            background-color: #000000;
-            border: 3px solid #000000;
+            background: #000;
+            border: 4px solid #000;
         }
 
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            display: block;
         }
 
-        /* --- ПОДВАЛ --- */
+        /* ПОДВАЛ */
         .footer-premium {
-            background-color: #18181A;
-            border-top: 5px solid #000000;
-            padding: 50px 60px 30px 60px;
+            background: #2d2d2d;
+            border-top: 5px solid #4caf50;
+            padding: 45px 60px 30px;
             position: relative;
             z-index: 10;
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+        }
+
+        .footer-premium::before {
+            content: "";
+            position: absolute;
+            top: -5px; left: 0;
+            width: 100%; height: 2px;
+            background: #81c784;
+            box-shadow: 0 0 12px #4caf50;
         }
 
         .footer-grid {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 50px;
-            border-bottom: 3px solid #2D2D32;
-            padding-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 45px;
+            border-bottom: 3px solid #1e1e1e;
+            padding-bottom: 35px;
         }
 
         .footer-col h3 {
-            font-size: 18px;
-            color: #FFFFFF; 
+            font-size: 22px;
+            color: #81c784;
             margin-bottom: 18px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #000;
         }
 
         .footer-col p {
-            font-size: 14px;
-            color: #88FFFF; 
+            font-size: 16px;
+            color: #c0c0c0;
             line-height: 1.8;
         }
 
-        .footer-links-list {
-            list-style: none;
-        }
-
-        .footer-links-list li {
-            margin-bottom: 12px;
-        }
+        .footer-links-list { list-style: none; }
+        .footer-links-list li { margin-bottom: 12px; }
 
         .footer-url {
-            font-size: 16px;
-            color: #88FFFF; 
+            font-size: 18px;
+            color: #a5d6a7;
             text-decoration: none;
             display: inline-block;
-            transition: transform 0.15s;
+            transition: transform 0.15s, color 0.15s;
+            text-shadow: 1px 1px 0 #000;
         }
 
         .footer-url:hover {
-            color: #FFFFFF;
-            transform: translateX(4px);
+            color: #fff;
+            transform: translateX(8px);
+            text-shadow: 0 0 8px #4caf50;
         }
 
         .footer-bottom-bar {
             max-width: 1200px;
-            margin: 25px auto 0 auto;
+            margin: 22px auto 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
-            color: #55555A;
+            font-size: 14px;
+            color: #7a7a7a;
+            letter-spacing: 1px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header-premium {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+            .nav-vertical-left {
+                flex-direction: row;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-item-wrapper { height: 50px; }
+            .nav-icon-block { width: 50px; height: 50px; padding: 8px; }
+            .nav-icon { width: 28px; height: 28px; }
+            .mc-nav-drawer-btn { height: 50px; left: 46px; }
+            .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; }
+            .nav-text { font-size: 16px; left: 14px; }
+            .server-title-clean { font-size: 32px; }
+            .map-container-clean { height: 55vh; }
         }
     </style>
 </head>
 <body>
-
-    <div class="sakura-particles" id="sakura-container"></div>
+    <div class="particles-container" id="particles-container" aria-hidden="true"></div>
 
     <header class="header-premium">
-        
-        <nav class="nav-vertical-left">
-            
+        <nav class="nav-vertical-left" aria-label="Основная навигация">
             <div class="nav-item-wrapper">
-                <div class="nav-icon-block">
+                <div class="nav-icon-block" aria-hidden="true">
                     <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg>
                 </div>
-                <a href="#" class="mc-nav-drawer-btn">
-                    <span class="nav-text">ГЛАВНАЯ</span>
-                </a>
+                <a href="index.html" class="mc-nav-drawer-btn"><span class="nav-text">ГЛАВНАЯ</span></a>
             </div>
-
             <div class="nav-item-wrapper">
-                <div class="nav-icon-block">
+                <div class="nav-icon-block" aria-hidden="true">
                     <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/><rect fill="#FF8888" x="7" y="7" width="10" height="10"/></svg>
                 </div>
-                <a href="#" class="mc-nav-drawer-btn">
-                    <span class="nav-text">ГАЛЕРЕЯ МИРА</span>
-                </a>
+                <a href="gallery.html" class="mc-nav-drawer-btn"><span class="nav-text">ГАЛЕРЕЯ МИРА</span></a>
             </div>
-
             <div class="nav-item-wrapper wrapper-donate">
-                <div class="nav-icon-block">
+                <div class="nav-icon-block" aria-hidden="true">
                     <svg class="nav-icon" viewBox="0 0 24 24"><path fill="#FFF" d="M14 6V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/><rect fill="#FFCC00" x="6" y="9" width="12" height="9"/></svg>
                 </div>
-                <a href="#" class="mc-nav-drawer-btn btn-donate-drawer">
-                    <span class="nav-text">ДОНАТ ПОРТАЛ</span>
-                </a>
+                <a href="#" class="mc-nav-drawer-btn btn-donate-drawer"><span class="nav-text">ДОНАТ ПОРТАЛ</span></a>
             </div>
-
         </nav>
-
-        <div class="server-title-clean">SAKURA REALM</div>
+        <h1 class="server-title-clean">SAKURA REALM</h1>
     </header>
 
     <main class="main-content">
-        <div class="map-container-clean">
-            <div class="map-top-bar">❖ СЕТЕВАЯ ОНЛАЙН-КАРТА МИРА ❖</div>
+        <section class="map-container-clean" aria-label="Интерактивная карта мира">
+            <div class="map-top-bar">❖ ИНТЕРАКТИВНАЯ КАРТА ❖</div>
             <div class="map-iframe-holder">
-                <iframe src="https://bluecolo.red/map/#world:21:0:0:1500:0:0:0:0:perspective" title="BlueMap"></iframe>
+                <iframe src="https://bluecolo.red/map/#world:21:0:0:1500:0:0:0:0:perspective"
+                        title="Карта сервера Sakura Realm"
+                        loading="lazy"
+                        allowfullscreen></iframe>
             </div>
-        </div>
+        </section>
     </main>
 
     <footer class="footer-premium">
         <div class="footer-grid">
             <div class="footer-col">
-                <h3>❖ О НАШЕМ МИРЕ</h3>
-                <p>Sakura Realm — это приватный технический сервер без вайпов и ограничений. Мы объединяем взрослых игроков для создания масштабных построек, автоматизированных ферм и уютной атмосферы.</p>
+                <h3>❖ О МИРЕ</h3>
+                <p>Sakura Realm — приватный технический сервер без вайпов. Взрослое комьюнити, масштабные постройки и ламповая атмосфера.</p>
             </div>
             <div class="footer-col">
                 <h3>❖ НАВИГАЦИЯ</h3>
                 <ul class="footer-links-list">
-                    <li><a href="#" class="footer-url">Правила сервера</a></li>
-                    <li><a href="#" class="footer-url">Инструкция по входу</a></li>
-                    <li><a href="#" class="footer-url">Галерея миров</a></li>
+                    <li><a href="#" class="footer-url">Правила</a></li>
+                    <li><a href="#" class="footer-url">Как зайти</a></li>
+                    <li><a href="gallery.html" class="footer-url">Галерея</a></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h3>❖ СООБЩЕСТВО</h3>
+                <h3>❖ СВЯЗЬ</h3>
                 <ul class="footer-links-list">
-                    <li><a href="#" class="footer-url">Наш Discord</a></li>
-                    <li><a href="#" class="footer-url">Группа ВКонтакте</a></li>
-                    <li><a href="#" class="footer-url">Связаться с админом</a></li>
+                    <li><a href="#" class="footer-url">Discord</a></li>
+                    <li><a href="#" class="footer-url">ВКонтакте</a></li>
+                    <li><a href="#" class="footer-url">Поддержка</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom-bar">
-            <div>© 2026 SAKURA REALM. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</div>
-            <div>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG.</div>
+            <span>© 2026 SAKURA REALM</span>
+            <span>NOT AN OFFICIAL MINECRAFT PRODUCT</span>
         </div>
     </footer>
 
     <script>
-        function createPetal() {
-            const container = document.getElementById('sakura-container');
+        (function() {
+            const container = document.getElementById('particles-container');
             if (!container) return;
-
-            const petal = document.createElement('div');
-            petal.classList.add('sakura-petal');
-
-            const size = Math.random() < 0.6 ? 6 : 10;
-            petal.style.width = `${size}px`;
-            petal.style.height = `${size}px`;
-            petal.style.left = `${Math.random() * 100}vw`;
-            
-            const duration = Math.random() * 5 + 5;
-            petal.style.animationDuration = `${duration}s`;
-
-            container.appendChild(petal);
-
-            setTimeout(() => { petal.remove(); }, duration * 1000);
-        }
-        setInterval(createPetal, 600);
+            const COUNT = 30;
+            const colors = ['#4caf50', '#66bb6a', '#81c784', '#a5d6a7'];
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < COUNT; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                const size = Math.random() * 6 + 4;
+                p.style.width = `${size}px`;
+                p.style.height = `${size}px`;
+                p.style.left = `${Math.random() * 100}vw`;
+                p.style.background = `radial-gradient(circle at 30% 30%, ${colors[Math.floor(Math.random() * colors.length)]}, #1b5e20)`;
+                p.style.animationDuration = `${Math.random() * 8 + 12}s`;
+                p.style.animationDelay = `${Math.random() * 12}s`;
+                fragment.appendChild(p);
+            }
+            container.appendChild(fragment);
+        })();
     </script>
 </body>
 </html>
-

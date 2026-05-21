@@ -200,6 +200,7 @@
         }
         .btn-donate-drawer:hover { background: #388e3c; }
 
+        /* Заголовок сервера — в одну строку */
         .server-title-clean {
             font-weight: normal;
             color: #ffffff;
@@ -211,12 +212,23 @@
             line-height: 1.1;
         }
 
-        .title-line { display: block; letter-spacing: 4px; }
-        .title-line:first-child { font-size: 48px; }
-        .title-line:last-child { font-size: 36px; }
+        .title-text-row {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 12px;
+            letter-spacing: 4px;
+        }
+        .title-minecraft {
+            font-size: 48px;
+        }
+        .title-server {
+            font-size: 36px;
+        }
 
         .title-icon {
-            width: 36px; height: 36px;
+            width: 36px;
+            height: 36px;
             margin-top: 12px;
             filter: drop-shadow(0 0 12px #4caf50);
             animation: pickaxeSwing 2.5s ease-in-out infinite;
@@ -279,7 +291,8 @@
         }
 
         .lock-icon {
-            width: 48px; height: 48px;
+            width: 48px;
+            height: 48px;
             margin-bottom: 12px;
             filter: drop-shadow(2px 2px 0 #000);
         }
@@ -393,14 +406,14 @@
             .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; }
             .nav-text { font-size: 18px; left: 16px; }
             .server-title-clean { align-self: center; }
-            .title-line:first-child { font-size: 28px; letter-spacing: 2px; }
-            .title-line:last-child { font-size: 22px; letter-spacing: 2px; }
-            .title-icon { width: 24px; height: 24px; margin-top: 8px; }
-            .main-content {
+            .title-text-row {
                 flex-direction: column;
                 align-items: center;
-                gap: 20px;
+                gap: 4px;
             }
+            .title-minecraft { font-size: 28px; }
+            .title-server { font-size: 22px; }
+            .title-icon { width: 24px; height: 24px; margin-top: 8px; }
             .gallery-title { font-size: 24px; }
         }
     </style>
@@ -430,8 +443,10 @@
             </div>
         </nav>
         <h1 class="server-title-clean">
-            <span class="title-line">MINECRAFT</span>
-            <span class="title-line">SERVER</span>
+            <div class="title-text-row">
+                <span class="title-minecraft">MINECRAFT</span>
+                <span class="title-server">SERVER</span>
+            </div>
             <img src="pickaxe.png" alt="" class="title-icon">
         </h1>
     </header>
@@ -485,4 +500,4 @@
                     </li>
                     <li>
                         <a href="https://t.me/kreepik" target="_blank" class="footer-url">
-                            <svg class="footer-icon" viewBox="0 0 24 24" fill="#a5d6a7"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.41-.88.03-.24.37-.49 1.02-.74 3.98-1.73 6.63-2.87 7.97-3.43 3.79-1.58 4.58-1.85 5.09-1.86.11 0 .37.03.54.
+                            <svg class="footer-icon" viewBox="0 0 24 24" fill="#a5d6a7"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-

@@ -9,13 +9,18 @@
         @font-face {
             font-family: 'MinecraftTitleCyrillic';
             src: url('minecraft.ttf') format('truetype');
-            font-weight: normal; font-style: normal; font-display: swap;
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
         }
 
         * {
-            margin: 0; padding: 0; box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'MinecraftTitleCyrillic', 'Courier New', monospace;
-            border-radius: 0 !important; image-rendering: pixelated;
+            border-radius: 0 !important;
+            image-rendering: pixelated;
         }
 
         body {
@@ -26,22 +31,38 @@
                 linear-gradient(0deg, rgba(40, 40, 40, 0.3) 1px, transparent 1px),
                 radial-gradient(circle at 50% 0%, rgba(76, 175, 80, 0.08) 0%, transparent 60%);
             background-size: 32px 32px, 32px 32px, 8px 8px, 100% 100%;
-            background-attachment: fixed; color: #E0E0E0; min-height: 100vh;
-            display: flex; flex-direction: column; overflow-x: hidden; position: relative;
+            background-attachment: fixed;
+            color: #E0E0E0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
             box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.8);
         }
 
         .particles-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1; overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
         }
 
         .particle {
-            position: absolute; top: -10px; width: 8px; height: 8px;
+            position: absolute;
+            top: -10px;
+            width: 8px;
+            height: 8px;
             background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32);
             box-shadow: 0 0 8px #4caf50, 0 0 12px rgba(76, 175, 80, 0.5);
-            border-radius: 50% !important; opacity: 0;
-            animation: floatParticle linear infinite; will-change: transform;
+            border-radius: 50% !important;
+            opacity: 0;
+            animation: floatParticle linear infinite;
+            will-change: transform;
         }
 
         @keyframes floatParticle {
@@ -53,82 +74,227 @@
             100% { transform: translateY(105vh) translateX(-5px) scale(0.5); opacity: 0; }
         }
 
+        /* Шапка с зелёным оттенком и текстурой (как на главной) */
         .header-premium {
-            background: linear-gradient(180deg, #383838 0%, #2d2d2d 100%);
-            border-bottom: 5px solid #4caf50; padding: 28px 50px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7); position: relative; z-index: 100;
+            background: linear-gradient(180deg, #1e3b1e 0%, #2a2d2a 100%);
+            background-image:
+                linear-gradient(45deg, rgba(0,0,0,0.2) 2px, transparent 2px),
+                linear-gradient(-45deg, rgba(0,0,0,0.15) 2px, transparent 2px);
+            background-size: 16px 16px, 16px 16px;
+            border-bottom: 5px solid #4caf50;
+            padding: 28px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 100;
         }
 
         .header-premium::after {
-            content: ""; position: absolute; bottom: -7px; left: 0; width: 100%; height: 4px;
+            content: "";
+            position: absolute;
+            bottom: -7px;
+            left: 0;
+            width: 100%;
+            height: 4px;
             background: linear-gradient(90deg, #4caf50, #81c784, #4caf50);
-            z-index: 101; pointer-events: none; box-shadow: 0 0 12px #4caf50;
+            z-index: 101;
+            pointer-events: none;
+            box-shadow: 0 0 12px #4caf50;
         }
 
-        .nav-vertical-left { display: flex; flex-direction: column; gap: 20px; }
-        .nav-item-wrapper { display: flex; align-items: center; position: relative; height: 72px; }
+        .nav-vertical-left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .nav-item-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+            height: 72px;
+        }
 
         .nav-icon-block {
-            display: flex; align-items: center; justify-content: center;
-            background: #545454; border: 4px solid #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #545454;
+            border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 3px 3px 0 #7a7a7a;
-            width: 72px; height: 72px; padding: 12px; z-index: 3;
-            transition: transform 0.2s ease, background 0.2s; cursor: pointer;
+            width: 72px;
+            height: 72px;
+            padding: 12px;
+            z-index: 3;
+            transition: transform 0.2s ease, background 0.2s;
+            cursor: pointer;
         }
 
-        .nav-icon { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; }
-        .nav-item-wrapper:hover .nav-icon-block { transform: scale(0.96); background: #6b6b6b; }
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
 
+        .nav-item-wrapper:hover .nav-icon-block {
+            transform: scale(0.96);
+            background: #6b6b6b;
+        }
+
+        /* Выезжающая панель – без сдвига, как на главной */
         .mc-nav-drawer-btn {
-            position: absolute; top: 0; left: 20px; height: 72px; width: 0;
-            background: #545454; border: 4px solid transparent; border-left: none;
-            display: flex; align-items: center; overflow: hidden; z-index: 2;
-            text-decoration: none; opacity: 0;
-            transition: width 0.4s cubic-bezier(0.25, 1, 0.35, 1), left 0.4s cubic-bezier(0.25, 1, 0.35, 1), opacity 0.3s ease, border-color 0.2s;
+            position: absolute;
+            left: 72px;
+            top: 0;
+            height: 72px;
+            width: 0;
+            background: #545454;
+            border: 4px solid transparent;
+            border-left: none;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            z-index: 2;
+            text-decoration: none;
+            opacity: 0;
+            transition: width 0.35s cubic-bezier(0.25, 1, 0.35, 1) 0.08s,
+                        opacity 0.25s ease 0.08s,
+                        border-color 0.2s,
+                        box-shadow 0.2s;
         }
 
         .nav-item-wrapper:hover .mc-nav-drawer-btn {
-            width: 210px; left: 68px; opacity: 1; border-color: #000000;
+            width: 210px;
+            opacity: 1;
+            border-color: #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 0px 3px 0 #7a7a7a;
         }
 
-        .nav-text { font-size: 20px; color: #fff; position: absolute; left: 22px; white-space: nowrap; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
+        .nav-text {
+            font-size: 20px;
+            color: #fff;
+            position: absolute;
+            left: 22px;
+            white-space: nowrap;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #000;
+        }
 
+        /* Активная кнопка (Галерея) */
         .nav-item-wrapper.active .nav-icon-block {
-            background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784;
+            background: #4caf50;
+            box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784;
         }
         .nav-item-wrapper.active .mc-nav-drawer-btn {
-            background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784; border-color: #000000;
+            background: #4caf50;
+            box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784;
+            border-color: #000000;
         }
 
-        .wrapper-donate .nav-icon-block { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a; }
-        .wrapper-donate:hover .nav-icon-block { background: #388e3c; transform: scale(0.96); }
-        .btn-donate-drawer { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a; }
+        /* Донат-кнопка */
+        .wrapper-donate .nav-icon-block {
+            background: #2e7d32;
+            box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a;
+        }
+        .wrapper-donate:hover .nav-icon-block {
+            background: #388e3c;
+            transform: scale(0.96);
+        }
+        .btn-donate-drawer {
+            background: #2e7d32;
+            box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a;
+        }
 
         .server-title-clean {
-            font-weight: normal; color: #ffffff; text-transform: uppercase;
+            font-weight: normal;
+            color: #ffffff;
+            text-transform: uppercase;
             text-shadow: 3px 3px 0 #000000, 0 0 20px rgba(76, 175, 80, 0.7);
-            display: flex; flex-direction: column; align-items: center; line-height: 1.1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.1;
         }
 
-        .title-text-row { display: flex; flex-direction: row; align-items: baseline; gap: 12px; letter-spacing: 4px; }
-        .title-minecraft, .title-server { font-size: 42px; }
-        .title-icon { width: 36px; height: 36px; margin-top: 12px; animation: pickaxeSwing 2.5s ease-in-out infinite; object-fit: contain; }
+        .title-text-row {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 12px;
+            letter-spacing: 4px;
+        }
+        .title-minecraft,
+        .title-server {
+            font-size: 42px;
+        }
+        .title-icon {
+            width: 36px;
+            height: 36px;
+            margin-top: 12px;
+            animation: pickaxeSwing 2.5s ease-in-out infinite;
+            object-fit: contain;
+        }
 
-        @keyframes pickaxeSwing { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(20deg); } 75% { transform: rotate(-15deg); } }
+        @keyframes pickaxeSwing {
+            0%,
+            100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            75% { transform: rotate(-15deg); }
+        }
 
-        .main-content { flex-grow: 1; padding: 40px 20px 60px; display: flex; flex-direction: column; align-items: center; z-index: 5; position: relative; }
-        .gallery-wrapper { width: 100%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; gap: 40px; }
-        .gallery-title { font-size: 36px; color: #fff; text-shadow: 3px 3px 0 #000; letter-spacing: 3px; text-align: center; border-bottom: 4px dashed #4caf50; padding-bottom: 15px; width: 100%; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; width: 100%; }
+        .main-content {
+            flex-grow: 1;
+            padding: 40px 20px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 5;
+            position: relative;
+        }
+
+        .gallery-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .gallery-title {
+            font-size: 36px;
+            color: #fff;
+            text-shadow: 3px 3px 0 #000;
+            letter-spacing: 3px;
+            text-align: center;
+            border-bottom: 4px dashed #4caf50;
+            padding-bottom: 15px;
+            width: 100%;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+        }
 
         .gallery-card {
             background: #2d2d2d;
             border: 5px solid #000;
             box-shadow: inset -3px -3px 0 #1a1a1a, inset 3px 3px 0 #4caf50, 0 10px 20px rgba(0,0,0,0.6);
-            height: 240px; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: not-allowed; position: relative;
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: not-allowed;
+            position: relative;
         }
 
         .gallery-card:hover {
@@ -136,50 +302,173 @@
             box-shadow: inset -3px -3px 0 #1a1a1a, inset 3px 3px 0 #81c784, 0 12px 25px rgba(0,0,0,0.8);
         }
 
-        .mc-lock-icon { width: 72px; height: 72px; margin-bottom: 20px; filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.5)); }
-        .gallery-card-text { color: #FF5555; font-size: 20px; text-shadow: 2px 2px 0 #3f0000; letter-spacing: 2px; }
-
-        .footer-premium {
-            background: #2d2d2d; border-top: 5px solid #4caf50; padding: 45px 60px 30px;
-            position: relative; z-index: 10; box-shadow: 0 -10px 25px rgba(0,0,0,0.5); width: 100%;
+        .mc-lock-icon {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 20px;
+            filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.5));
         }
 
-        .footer-premium::before { content: ""; position: absolute; top: -5px; left: 0; width: 100%; height: 2px; background: #81c784; box-shadow: 0 0 12px #4caf50; }
-        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 45px; border-bottom: 3px solid #1e1e1e; padding-bottom: 35px; }
-        .footer-col h3 { font-size: 22px; color: #81c784; margin-bottom: 18px; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
-        .footer-col p { font-size: 16px; color: #a5d6a7; line-height: 1.8; }
-        .footer-links-list { list-style: none; }
-        .footer-links-list li { margin-bottom: 12px; }
+        .gallery-card-text {
+            color: #FF5555;
+            font-size: 20px;
+            text-shadow: 2px 2px 0 #3f0000;
+            letter-spacing: 2px;
+        }
+
+        /* Подвал с зелёным оттенком (как на главной) */
+        .footer-premium {
+            background: linear-gradient(180deg, #1e2b1e 0%, #232623 100%);
+            background-image:
+                linear-gradient(45deg, rgba(0,0,0,0.15) 2px, transparent 2px),
+                linear-gradient(-45deg, rgba(0,0,0,0.1) 2px, transparent 2px);
+            background-size: 16px 16px, 16px 16px;
+            border-top: 5px solid #4caf50;
+            padding: 45px 60px 30px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+            width: 100%;
+        }
+
+        .footer-premium::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #81c784;
+            box-shadow: 0 0 12px #4caf50;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 45px;
+            border-bottom: 3px solid #1e1e1e;
+            padding-bottom: 35px;
+        }
+
+        .footer-col h3 {
+            font-size: 22px;
+            color: #81c784;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .footer-col p {
+            font-size: 16px;
+            color: #a5d6a7;
+            line-height: 1.8;
+        }
+
+        .footer-links-list {
+            list-style: none;
+        }
+
+        .footer-links-list li {
+            margin-bottom: 12px;
+        }
 
         .footer-url {
-            font-size: 18px; color: #a5d6a7; text-decoration: none; display: inline-flex; align-items: center; gap: 12px;
-            transition: transform 0.2s, color 0.2s; text-shadow: 1px 1px 0 #000;
+            font-size: 18px;
+            color: #a5d6a7;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.2s, color 0.2s;
+            text-shadow: 1px 1px 0 #000;
         }
-        .footer-url:hover { color: #fff; transform: translateX(8px); }
-        .footer-icon { width: 22px; height: 22px; fill: #a5d6a7; }
-        .footer-url:hover .footer-icon { fill: #fff; }
+
+        .footer-url:hover {
+            color: #fff;
+            transform: translateX(8px);
+        }
+
+        .footer-icon {
+            width: 22px;
+            height: 22px;
+            fill: #a5d6a7;
+        }
+
+        .footer-url:hover .footer-icon {
+            fill: #fff;
+        }
 
         .footer-bottom-bar {
-            max-width: 1200px; margin: 22px auto 0; display: flex; justify-content: space-between; align-items: center;
-            font-size: 14px; color: #7a7a7a; letter-spacing: 1px; flex-wrap: wrap; gap: 10px;
+            max-width: 1200px;
+            margin: 22px auto 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #7a7a7a;
+            letter-spacing: 1px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
+        /* Адаптив */
         @media (max-width: 768px) {
-            .header-premium { flex-direction: column; gap: 20px; padding: 20px; align-items: flex-start; }
-            .nav-vertical-left { flex-direction: column; gap: 14px; width: 100%; }
-            .nav-item-wrapper { height: 60px; }
-            .nav-icon-block { width: 60px; height: 60px; padding: 10px; }
-            .nav-icon { width: 34px; height: 34px; }
-            
-            .mc-nav-drawer-btn { height: 60px; top: 0; left: 20px; }
-            .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; left: 56px; }
-            .nav-text { font-size: 18px; left: 16px; }
-            
-            .server-title-clean { align-self: center; }
-            .title-text-row { flex-direction: column; align-items: center; gap: 4px; }
-            .title-minecraft, .title-server { font-size: 28px; }
-            .title-icon { width: 24px; height: 24px; }
-            .gallery-title { font-size: 24px; }
+            .header-premium {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+                align-items: flex-start;
+            }
+            .nav-vertical-left {
+                flex-direction: column;
+                gap: 14px;
+                width: 100%;
+            }
+            .nav-item-wrapper {
+                height: 60px;
+            }
+            .nav-icon-block {
+                width: 60px;
+                height: 60px;
+                padding: 10px;
+            }
+            .nav-icon {
+                width: 34px;
+                height: 34px;
+            }
+            .mc-nav-drawer-btn {
+                height: 60px;
+                left: 64px;
+                top: 0;
+            }
+            .nav-item-wrapper:hover .mc-nav-drawer-btn {
+                width: 170px;
+            }
+            .nav-text {
+                font-size: 18px;
+                left: 16px;
+            }
+            .server-title-clean {
+                align-self: center;
+            }
+            .title-text-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+            }
+            .title-minecraft,
+            .title-server {
+                font-size: 28px;
+            }
+            .title-icon {
+                width: 24px;
+                height: 24px;
+            }
+            .gallery-title {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
@@ -220,7 +509,7 @@
         <div class="gallery-wrapper">
             <h2 class="gallery-title">❖ ГАЛЕРЕЯ НАШЕГО МИРА ❖</h2>
             <div class="gallery-grid">
-                
+
                 <div class="gallery-card">
                     <svg class="mc-lock-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                         <path fill="#000" d="M4 2h8v5h-2V4H6v3H4z"/>
@@ -342,19 +631,19 @@
     <script>
         function createParticles() {
             const container = document.getElementById('particles-container');
-            if(!container) return;
+            if (!container) return;
             for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const p = document.createElement('div'); p.classList.add('particle');
-                    p.style.left = Math.random() * 100 + '%';
-                    p.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                    p.style.animationDelay = Math.random() * 2 + 's';
-                    container.appendChild(p);
-                    p.addEventListener('animationiteration', () => { p.style.left = Math.random() * 100 + '%'; });
-                }, i * 300);
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                p.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(p);
             }
         }
         window.addEventListener('DOMContentLoaded', createParticles);
     </script>
 </body>
-                            </html>
+</html>
+
+                     

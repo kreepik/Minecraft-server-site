@@ -144,7 +144,7 @@
             color: #fff;
         }
 
-        /* Ползунок mute (как на других страницах) */
+        /* Ползунок mute */
         .mute-widget {
             position: fixed;
             bottom: 20px;
@@ -185,7 +185,8 @@
         .mute-switch::after {
             content: "";
             position: absolute;
-            top: 2px;
+            top: 50%;
+            transform: translateY(-50%);
             left: 2px;
             width: 16px;
             height: 14px;
@@ -253,7 +254,7 @@
             }
         })();
 
-        // Звуки
+        // Звуки и mute
         const soundClick = document.getElementById('sound-click');
         const soundExp = document.getElementById('sound-exp');
         const muteSwitch = document.getElementById('mute-toggle');
@@ -267,13 +268,13 @@
             audio.play().catch(() => {});
         }
 
-        // Кнопка доната — открыть виджет и проиграть звук клика
+        // Кнопка доната — открыть виджет
         window.addEventListener('load', function() {
             const donateBtn = document.getElementById('donate-btn');
 
             if (donateBtn) {
                 donateBtn.addEventListener('click', function() {
-                    playSound(soundClick); // звук клика
+                    playSound(soundClick);
 
                     if (typeof ctips !== 'undefined' && ctips.CloudTipsSiteWidget) {
                         const widget = new ctips.CloudTipsSiteWidget();
@@ -282,7 +283,7 @@
                         }, {
                             onSuccess: (data) => {
                                 console.log('Донат прошел успешно!', data);
-                                playSound(soundExp); // звук опыта при успехе
+                                playSound(soundExp);
                                 alert('Спасибо за поддержку! Вы помогаете серверу стать лучше!');
                             },
                             onFail: (data) => {
@@ -297,11 +298,16 @@
             }
         });
 
-        // Mute switch
+        // Mute switch — со звуком клика при переключении
         muteSwitch.addEventListener('click', () => {
             muted = !muted;
             localStorage.setItem('muted', muted);
             updateMuteSwitch();
+            if (!muted) {
+                playSound(soundClick); // звук при включении
+            } else {
+                playSound(soundClick); // и при выключении тоже (по желанию)
+            }
         });
 
         function updateMuteSwitch() {

@@ -249,7 +249,7 @@
             font-size: 14px; color: #7a7a7a; letter-spacing: 1px; flex-wrap: wrap; gap: 10px;
         }
 
-        /* Ползунок mute */
+        /* Увеличенный и более детальный ползунок */
         .mute-widget {
             position: fixed;
             bottom: 20px;
@@ -257,15 +257,15 @@
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background: #2d2d2d;
             border: 3px solid #000;
-            padding: 6px 12px;
+            padding: 8px 14px;
             box-shadow: 2px 2px 0 #000;
         }
 
         .mute-label {
-            font-size: 14px;
+            font-size: 16px;
             color: #a5d6a7;
             text-shadow: 1px 1px 0 #000;
             letter-spacing: 1px;
@@ -273,34 +273,38 @@
 
         .mute-switch {
             position: relative;
-            width: 44px;
-            height: 22px;
+            width: 56px;
+            height: 28px;
             background: #f44336;
             border: 2px solid #000;
+            border-radius: 6px !important;
             cursor: pointer;
             transition: background 0.2s;
-            box-shadow: inset -1px -1px 0 #4a0000, inset 1px 1px 0 #ff8888;
+            box-shadow: inset -1px -1px 0 #4a0000, inset 1px 1px 0 #ff8888, 1px 1px 0 #000;
         }
 
         .mute-switch.active {
             background: #4caf50;
-            box-shadow: inset -1px -1px 0 #1b5e20, inset 1px 1px 0 #81c784;
+            box-shadow: inset -1px -1px 0 #1b5e20, inset 1px 1px 0 #81c784, 1px 1px 0 #000;
         }
 
         .mute-switch::after {
             content: "";
             position: absolute;
-            top: 2px;
+            top: 50%;
+            transform: translateY(-50%);
             left: 2px;
-            width: 16px;
-            height: 14px;
-            background: #fff;
+            width: 24px;
+            height: 20px;
+            background: #f5f5f5;
             border: 2px solid #000;
+            border-radius: 4px !important;
             transition: left 0.2s;
+            box-shadow: inset -1px -1px 0 #aaa, inset 1px 1px 0 #fff, 1px 1px 0 #000;
         }
 
         .mute-switch.active::after {
-            left: 24px;
+            left: 28px;
         }
 
         @media (max-width: 768px) {
@@ -318,6 +322,9 @@
             .title-icon { width: 24px; height: 24px; }
             .gallery-title { font-size: 24px; }
             .mute-widget { bottom: 10px; right: 10px; }
+            .mute-switch { width: 48px; height: 24px; }
+            .mute-switch::after { width: 20px; height: 16px; }
+            .mute-switch.active::after { left: 24px; }
         }
     </style>
 </head>
@@ -356,7 +363,7 @@
 
     <main class="main-content">
         <div class="gallery-wrapper">
-            <h2 class="gallery-title">❖ ГАЛЕРЕЯ НАШЕГО МИРА ❖</h2>
+            <h2 class="gallery-title">❖ ГАЛЕРЕЯ ЛУЧШИХ МОМЕНТОВ ❖</h2>
             <div class="gallery-grid">
                 <div class="gallery-card">
                     <div class="lock-icon-wrapper">
@@ -477,6 +484,7 @@
             muted = !muted;
             localStorage.setItem('muted', muted);
             updateMuteSwitch();
+            playSound(soundClick);
         });
 
         function updateMuteSwitch() {

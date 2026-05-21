@@ -417,7 +417,7 @@
             gap: 10px;
         }
 
-        /* Ползунок mute */
+        /* Увеличенный и более детальный ползунок */
         .mute-widget {
             position: fixed;
             bottom: 20px;
@@ -425,15 +425,15 @@
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background: #2d2d2d;
             border: 3px solid #000;
-            padding: 6px 12px;
+            padding: 8px 14px;
             box-shadow: 2px 2px 0 #000;
         }
 
         .mute-label {
-            font-size: 14px;
+            font-size: 16px;
             color: #a5d6a7;
             text-shadow: 1px 1px 0 #000;
             letter-spacing: 1px;
@@ -441,34 +441,38 @@
 
         .mute-switch {
             position: relative;
-            width: 44px;
-            height: 22px;
+            width: 56px;
+            height: 28px;
             background: #f44336;
             border: 2px solid #000;
+            border-radius: 6px !important;
             cursor: pointer;
             transition: background 0.2s;
-            box-shadow: inset -1px -1px 0 #4a0000, inset 1px 1px 0 #ff8888;
+            box-shadow: inset -1px -1px 0 #4a0000, inset 1px 1px 0 #ff8888, 1px 1px 0 #000;
         }
 
         .mute-switch.active {
             background: #4caf50;
-            box-shadow: inset -1px -1px 0 #1b5e20, inset 1px 1px 0 #81c784;
+            box-shadow: inset -1px -1px 0 #1b5e20, inset 1px 1px 0 #81c784, 1px 1px 0 #000;
         }
 
         .mute-switch::after {
             content: "";
             position: absolute;
-            top: 2px;
+            top: 50%;
+            transform: translateY(-50%);
             left: 2px;
-            width: 16px;
-            height: 14px;
-            background: #fff;
+            width: 24px;
+            height: 20px;
+            background: #f5f5f5;
             border: 2px solid #000;
+            border-radius: 4px !important;
             transition: left 0.2s;
+            box-shadow: inset -1px -1px 0 #aaa, inset 1px 1px 0 #fff, 1px 1px 0 #000;
         }
 
         .mute-switch.active::after {
-            left: 24px;
+            left: 28px;
         }
 
         @media (max-width: 768px) {
@@ -497,6 +501,9 @@
             .players-online-count { font-size: 14px; }
             .ip-address-string { font-size: 15px; }
             .mute-widget { bottom: 10px; right: 10px; }
+            .mute-switch { width: 48px; height: 24px; }
+            .mute-switch::after { width: 20px; height: 16px; }
+            .mute-switch.active::after { left: 24px; }
         }
     </style>
 </head>
@@ -560,7 +567,7 @@
                     <li>
                         <a href="https://discord.com/users/kreepik#9722" target="_blank" rel="noopener noreferrer" class="footer-url">
                             <svg class="footer-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.533 0c-.164-.385-.399-.874-.608-1.25a.074.074 0 0 0-.079-.037 19.736 19.736 0 0 0-4.884 1.515.069.069 0 0 0-.032.027C.533 9.045-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.195.373.289a.075.075 0 0 1-.006.127 12.298 12.298 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-                            Discord.
+                            Discord
                         </a>
                     </li>
                     <li>
@@ -642,6 +649,7 @@
             muted = !muted;
             localStorage.setItem('muted', muted);
             updateMuteSwitch();
+            playSound(soundClick);
         });
 
         function updateMuteSwitch() {

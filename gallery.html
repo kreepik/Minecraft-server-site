@@ -26,11 +26,11 @@
         body {
             background-color: #1e1e1e;
             background-image:
-                linear-gradient(45deg, rgba(100, 100, 100, 0.08) 2px, transparent 2px),
-                linear-gradient(-45deg, rgba(100, 100, 100, 0.08) 2px, transparent 2px),
-                linear-gradient(0deg, rgba(70, 70, 70, 0.25) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(70, 70, 70, 0.15) 1px, transparent 1px);
-            background-size: 32px 32px, 32px 32px, 8px 8px, 8px 8px;
+                linear-gradient(45deg, rgba(60, 60, 60, 0.15) 2px, transparent 2px),
+                linear-gradient(-45deg, rgba(60, 60, 60, 0.15) 2px, transparent 2px),
+                linear-gradient(0deg, rgba(40, 40, 40, 0.3) 1px, transparent 1px),
+                radial-gradient(circle at 50% 0%, rgba(76, 175, 80, 0.08) 0%, transparent 60%);
+            background-size: 32px 32px, 32px 32px, 8px 8px, 100% 100%;
             background-attachment: fixed;
             color: #E0E0E0;
             min-height: 100vh;
@@ -75,7 +75,11 @@
         }
 
         .header-premium {
-            background: #2d2d2d;
+            background-color: #2d2d2d;
+            background-image:
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.25) 2px, transparent 4px),
+                repeating-linear-gradient(-45deg, rgba(0,0,0,0.15) 2px, transparent 4px);
+            background-size: 12px 12px, 12px 12px;
             border-bottom: 5px solid #4caf50;
             padding: 28px 50px;
             display: flex;
@@ -206,7 +210,11 @@
         }
 
         .footer-premium {
-            background: #2d2d2d;
+            background-color: #2d2d2d;
+            background-image:
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.25) 2px, transparent 4px),
+                repeating-linear-gradient(-45deg, rgba(0,0,0,0.15) 2px, transparent 4px);
+            background-size: 12px 12px, 12px 12px;
             border-top: 5px solid #4caf50;
             padding: 45px 60px 30px;
             position: relative;
@@ -361,7 +369,7 @@
         </div>
         <div class="footer-bottom-bar">
             <div>&copy; 2026 MINECRAFT SERVER. Все права защищены.</div>
-            <div>Разработано для любимого комьюнити</div>
+<div>Разработано для любимого комьюнити</div>
         </div>
     </footer>
 
@@ -381,4 +389,4 @@
         window.addEventListener('DOMContentLoaded', createParticles);
     </script>
 </body>
-                            </html>
+</html>

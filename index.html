@@ -43,8 +43,10 @@
 
         .particles-container {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
             z-index: 1;
             overflow: hidden;
@@ -53,7 +55,8 @@
         .particle {
             position: absolute;
             top: -10px;
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32);
             box-shadow: 0 0 8px #4caf50, 0 0 12px rgba(76, 175, 80, 0.5);
             border-radius: 50% !important;
@@ -71,8 +74,13 @@
             100% { transform: translateY(105vh) translateX(-5px) scale(0.5); opacity: 0; }
         }
 
+        /* Шапка с зелёным оттенком и текстурой */
         .header-premium {
-            background: linear-gradient(180deg, #383838 0%, #2d2d2d 100%);
+            background: linear-gradient(180deg, #1e3b1e 0%, #2a2d2a 100%);
+            background-image:
+                linear-gradient(45deg, rgba(0,0,0,0.2) 2px, transparent 2px),
+                linear-gradient(-45deg, rgba(0,0,0,0.15) 2px, transparent 2px);
+            background-size: 16px 16px, 16px 16px;
             border-bottom: 5px solid #4caf50;
             padding: 28px 50px;
             display: flex;
@@ -86,9 +94,14 @@
         .header-premium::after {
             content: "";
             position: absolute;
-            bottom: -7px; left: 0; width: 100%; height: 4px;
+            bottom: -7px;
+            left: 0;
+            width: 100%;
+            height: 4px;
             background: linear-gradient(90deg, #4caf50, #81c784, #4caf50);
-            z-index: 101; pointer-events: none; box-shadow: 0 0 12px #4caf50;
+            z-index: 101;
+            pointer-events: none;
+            box-shadow: 0 0 12px #4caf50;
         }
 
         .nav-vertical-left {
@@ -111,7 +124,8 @@
             background: #545454;
             border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 3px 3px 0 #7a7a7a;
-            width: 72px; height: 72px;
+            width: 72px;
+            height: 72px;
             padding: 12px;
             z-index: 3;
             transition: transform 0.2s ease, background 0.2s, box-shadow 0.2s;
@@ -119,7 +133,8 @@
         }
 
         .nav-icon {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             flex-shrink: 0;
             transition: transform 0.2s;
             filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5));
@@ -132,10 +147,11 @@
             box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a, 0 3px 0 #000;
         }
 
+        /* Выезжающая панель – плавно, без сдвига по вертикали */
         .mc-nav-drawer-btn {
             position: absolute;
+            left: 72px;
             top: 0;
-            left: 20px;
             height: 72px;
             width: 0;
             background: #545454;
@@ -149,18 +165,22 @@
             text-decoration: none;
             opacity: 0;
             transform: translateZ(0);
-            transition: width 0.4s cubic-bezier(0.25, 1, 0.35, 1), left 0.4s cubic-bezier(0.25, 1, 0.35, 1), opacity 0.3s ease, border-color 0.2s;
+            transition: width 0.35s cubic-bezier(0.25, 1, 0.35, 1) 0.08s,
+                        opacity 0.25s ease 0.08s,
+                        border-color 0.2s,
+                        box-shadow 0.2s;
         }
 
         .nav-item-wrapper:hover .mc-nav-drawer-btn {
             width: 210px;
-            left: 68px;
             opacity: 1;
             border-color: #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 0px 3px 0 #7a7a7a;
         }
 
-        .mc-nav-drawer-btn:hover { background: #6b6b6b; }
+        .mc-nav-drawer-btn:hover {
+            background: #6b6b6b;
+        }
 
         .nav-text {
             font-size: 20px;
@@ -172,6 +192,7 @@
             text-shadow: 2px 2px 0 #000;
         }
 
+        /* Активная кнопка (Главная) */
         .nav-item-wrapper.active .nav-icon-block {
             background: #4caf50;
             box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784;
@@ -182,6 +203,7 @@
             border-color: #000000;
         }
 
+        /* Донат-кнопка */
         .wrapper-donate .nav-icon-block {
             background: #2e7d32;
             box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a;
@@ -196,6 +218,7 @@
             box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a;
         }
 
+        /* Заголовок сервера */
         .server-title-clean {
             font-weight: normal;
             color: #ffffff;
@@ -214,21 +237,28 @@
             gap: 12px;
             letter-spacing: 4px;
         }
-        .title-minecraft, .title-server { font-size: 42px; }
+        .title-minecraft,
+        .title-server {
+            font-size: 42px;
+        }
 
         .title-icon {
-            width: 36px; height: 36px; margin-top: 12px;
+            width: 36px;
+            height: 36px;
+            margin-top: 12px;
             filter: drop-shadow(0 0 12px #4caf50);
             animation: pickaxeSwing 2.5s ease-in-out infinite;
             object-fit: contain;
         }
 
         @keyframes pickaxeSwing {
-            0%, 100% { transform: rotate(0deg); }
+            0%,
+            100% { transform: rotate(0deg); }
             25% { transform: rotate(20deg); }
             75% { transform: rotate(-15deg); }
         }
 
+        /* Основной контент */
         .main-content {
             flex-grow: 1;
             padding: 40px 20px 50px;
@@ -241,6 +271,7 @@
             position: relative;
         }
 
+        /* Виджет сервера */
         .server-widget-block {
             background: #2d2d2d;
             border: 6px solid #000;
@@ -258,7 +289,6 @@
             text-shadow: 2px 2px 0 #000;
             margin-bottom: 6px;
         }
-
         .status-online-color { color: #55FF55; }
         .status-offline-color { color: #FF5555; }
 
@@ -270,6 +300,7 @@
             letter-spacing: 1px;
         }
 
+        /* IP-контейнер */
         .ip-click-container {
             background: #141414;
             border: 4px solid #000;
@@ -278,8 +309,9 @@
             cursor: pointer;
             transition: background 0.15s;
         }
-
-        .ip-click-container:hover { background: #1c1c1c; }
+        .ip-click-container:hover {
+            background: #1c1c1c;
+        }
 
         .ip-address-string {
             font-size: 18px;
@@ -298,8 +330,22 @@
             letter-spacing: 1px;
         }
 
+        /* Карта BlueMap */
+        .bluemap-container {
+            width: 100%;
+            max-width: 1000px;
+            border: 6px solid #000;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+            background: #1a1a1a;
+        }
+
+        /* Подвал с зелёным оттенком */
         .footer-premium {
-            background: #2d2d2d;
+            background: linear-gradient(180deg, #1e2b1e 0%, #232623 100%);
+            background-image:
+                linear-gradient(45deg, rgba(0,0,0,0.15) 2px, transparent 2px),
+                linear-gradient(-45deg, rgba(0,0,0,0.1) 2px, transparent 2px);
+            background-size: 16px 16px, 16px 16px;
             border-top: 5px solid #4caf50;
             padding: 45px 60px 30px;
             position: relative;
@@ -311,62 +357,147 @@
         .footer-premium::before {
             content: "";
             position: absolute;
-            top: -5px; left: 0; width: 100%; height: 2px;
-            background: #81c784; box-shadow: 0 0 12px #4caf50;
+            top: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #81c784;
+            box-shadow: 0 0 12px #4caf50;
         }
 
         .footer-grid {
-            max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 45px; border-bottom: 3px solid #1e1e1e; padding-bottom: 35px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 45px;
+            border-bottom: 3px solid #1e1e1e;
+            padding-bottom: 35px;
         }
 
         .footer-col h3 {
-            font-size: 22px; color: #81c784; margin-bottom: 18px;
-            letter-spacing: 2px; text-shadow: 2px 2px 0 #000;
+            font-size: 22px;
+            color: #81c784;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #000;
         }
 
-        .footer-col p { font-size: 16px; color: #a5d6a7; line-height: 1.8; }
-        .footer-links-list { list-style: none; }
-        .footer-links-list li { margin-bottom: 12px; }
+        .footer-col p {
+            font-size: 16px;
+            color: #a5d6a7;
+            line-height: 1.8;
+        }
+
+        .footer-links-list {
+            list-style: none;
+        }
+
+        .footer-links-list li {
+            margin-bottom: 12px;
+        }
 
         .footer-url {
-            font-size: 18px; color: #a5d6a7; text-decoration: none;
-            display: inline-flex; align-items: center; gap: 12px;
+            font-size: 18px;
+            color: #a5d6a7;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
             transition: transform 0.2s, color 0.2s;
             text-shadow: 1px 1px 0 #000;
         }
 
-        .footer-url:hover { color: #fff; transform: translateX(8px); }
-        .footer-icon { width: 22px; height: 22px; fill: #a5d6a7; }
-        .footer-url:hover .footer-icon { fill: #fff; }
-
-        .footer-bottom-bar {
-            max-width: 1200px; margin: 22px auto 0;
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 14px; color: #7a7a7a; letter-spacing: 1px;
-            flex-wrap: wrap; gap: 10px;
+        .footer-url:hover {
+            color: #fff;
+            transform: translateX(8px);
         }
 
-        @media (max-width: 768px) {
-            .header-premium { flex-direction: column; gap: 20px; padding: 20px; align-items: flex-start; }
-            .nav-vertical-left { flex-direction: column; gap: 14px; width: 100%; }
-            .nav-item-wrapper { height: 60px; }
-            .nav-icon-block { width: 60px; height: 60px; padding: 10px; }
-            .nav-icon { width: 34px; height: 34px; }
-            
-            .mc-nav-drawer-btn { height: 60px; top: 0; left: 20px; }
-            .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; left: 56px; }
-            .nav-text { font-size: 18px; left: 16px; }
-            
-            .server-title-clean { align-self: center; }
-            .title-text-row { flex-direction: column; align-items: center; gap: 4px; }
-            .title-minecraft, .title-server { font-size: 28px; }
-            .title-icon { width: 24px; height: 24px; }
+        .footer-icon {
+            width: 22px;
+            height: 22px;
+            fill: #a5d6a7;
+        }
 
-            .status-title-text { font-size: 16px; }
-            .players-online-count { font-size: 14px; }
-            .ip-address-string { font-size: 15px; }
+        .footer-url:hover .footer-icon {
+            fill: #fff;
+        }
+
+        .footer-bottom-bar {
+            max-width: 1200px;
+            margin: 22px auto 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #7a7a7a;
+            letter-spacing: 1px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .header-premium {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+                align-items: flex-start;
+            }
+            .nav-vertical-left {
+                flex-direction: column;
+                gap: 14px;
+                width: 100%;
+            }
+            .nav-item-wrapper {
+                height: 60px;
+            }
+            .nav-icon-block {
+                width: 60px;
+                height: 60px;
+                padding: 10px;
+            }
+            .nav-icon {
+                width: 34px;
+                height: 34px;
+            }
+            .mc-nav-drawer-btn {
+                height: 60px;
+                left: 64px;
+                top: 0;
+            }
+            .nav-item-wrapper:hover .mc-nav-drawer-btn {
+                width: 170px;
+            }
+            .nav-text {
+                font-size: 18px;
+                left: 16px;
+            }
+            .server-title-clean {
+                align-self: center;
+            }
+            .title-text-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+            }
+            .title-minecraft,
+            .title-server {
+                font-size: 28px;
+            }
+            .title-icon {
+                width: 24px;
+                height: 24px;
+            }
+            .status-title-text {
+                font-size: 16px;
+            }
+            .players-online-count {
+                font-size: 14px;
+            }
+            .ip-address-string {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
@@ -407,14 +538,14 @@
         <div class="server-widget-block">
             <div class="status-title-text status-offline-color" id="server-status-title">СТАТУС СЕРВЕРА: НЕ РАБОТАЕТ</div>
             <div class="players-online-count" id="server-players-text">ИГРОКОВ НА СЕРВЕРЕ: 0 / 20</div>
-            
+
             <div class="ip-click-container" onclick="copyServerIPAddress()">
                 <span class="ip-address-string" id="ip-target-text">PLAY.MYSERVER.RU</span>
                 <span class="ip-action-hint" id="ip-status-hint">Нажми, чтобы скопировать</span>
             </div>
         </div>
 
-        <div class="bluemap-container" style="width: 100%; max-width: 1000px; border: 6px solid #000; box-shadow: 0 12px 30px rgba(0,0,0,0.7); background: #1a1a1a;">
+        <div class="bluemap-container">
             <iframe src="about:blank" style="width:100%; height:550px; border:none; display:block;"></iframe>
         </div>
     </main>
@@ -444,7 +575,7 @@
             </div>
         </div>
         <div class="footer-bottom-bar">
-            <div>&copy; 2026 MINECRAFT SERVER. Все права защищены.</div>
+                        <div>&copy; 2026 MINECRAFT SERVER. Все права защищены.</div>
             <div>Разработано для любимого комьюнити</div>
         </div>
     </footer>
@@ -457,23 +588,23 @@
                 const oldText = hint.innerText;
                 hint.innerText = "СКОПИРОВАНО!";
                 hint.style.color = "#55FF55";
-                setTimeout(() => { hint.innerText = oldText; hint.style.color = "#7a7a7a"; }, 2000);
+                setTimeout(() => {
+                    hint.innerText = oldText;
+                    hint.style.color = "#7a7a7a";
+                }, 2000);
             }).catch(err => console.error('Ошибка копирования: ', err));
         }
 
         function createParticles() {
             const container = document.getElementById('particles-container');
-            if(!container) return;
+            if (!container) return;
             for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const p = document.createElement('div');
-                    p.classList.add('particle');
-                    p.style.left = Math.random() * 100 + '%';
-                    p.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                    p.style.animationDelay = Math.random() * 2 + 's';
-                    container.appendChild(p);
-                    p.addEventListener('animationiteration', () => { p.style.left = Math.random() * 100 + '%'; });
-                }, i * 300);
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                p.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(p);
             }
         }
         window.addEventListener('DOMContentLoaded', createParticles);

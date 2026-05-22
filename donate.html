@@ -96,15 +96,23 @@
             text-align: center;
         }
 
+        /* Чёткий заголовок без лишних теней */
         .donate-title {
-            font-size: 32px; color: #fff; text-transform: uppercase;
-            text-shadow: 3px 3px 0 #000, 0 0 20px rgba(76, 175, 80, 0.7);
-            margin-bottom: 20px; letter-spacing: 2px;
+            font-size: 32px;
+            color: #fff;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0 #000;   /* только одна тень, без размытия */
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            line-height: 1.2;
         }
 
         .donate-description {
-            font-size: 16px; color: #a5d6a7; margin-bottom: 30px;
-            text-shadow: 1px 1px 0 #000; line-height: 1.5;
+            font-size: 16px;
+            color: #a5d6a7;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 0 #000;
+            line-height: 1.5;
         }
 
         .donate-button {
@@ -136,9 +144,12 @@
         }
 
         .back-link {
-            color: #a5d6a7; font-size: 18px;
-            margin-top: 25px; display: inline-block;
-            text-shadow: 1px 1px 0 #000; transition: color 0.15s;
+            color: #a5d6a7;
+            font-size: 18px;
+            margin-top: 25px;
+            display: inline-block;
+            text-shadow: 1px 1px 0 #000;
+            transition: color 0.15s;
             cursor: pointer;
         }
         .back-link:hover { color: #fff; text-decoration: underline; }
@@ -168,7 +179,7 @@
     <div class="particles-container" id="particles-container"></div>
 
     <div class="donate-container">
-        <h1 class="donate-title">❖ ПОДДЕРЖАТЬ ПРОЕКТ ❖</h1>
+        <h1 class="donate-title">ПОДДЕРЖАТЬ<br>❖ ПРОЕКТ ❖</h1>
         <p class="donate-description">
             Твоя поддержка помогает серверу NOVATORI ESHKERE CRAFT становиться лучше! 
             Все собранные средства пойдут на развитие проекта и новые крутые фишки.

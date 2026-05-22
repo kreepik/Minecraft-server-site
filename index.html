@@ -23,6 +23,11 @@
             image-rendering: pixelated;
         }
 
+        html, body {
+            height: 100%;
+            overflow: hidden; /* убираем скролл всей страницы */
+        }
+
         body {
             background-color: #1e1e1e;
             background-image:
@@ -33,7 +38,6 @@
             background-size: 32px 32px, 32px 32px, 8px 8px, 100% 100%;
             background-attachment: fixed;
             color: #E0E0E0;
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
@@ -81,13 +85,14 @@
                 repeating-linear-gradient(-45deg, rgba(0,0,0,0.15) 2px, transparent 4px);
             background-size: 12px 12px, 12px 12px;
             border-bottom: 5px solid #4caf50;
-            padding: 28px 50px;
+            padding: 20px 50px; /* немного уменьшил паддинг */
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
             position: relative;
             z-index: 100;
+            flex-shrink: 0;
         }
 
         .header-premium::after {
@@ -109,16 +114,13 @@
             gap: 20px;
         }
 
-        /* 👇 ИСПРАВЛЕНИЕ: обрезаем всё, что вылезает за границы контейнера */
         .nav-item-wrapper {
             display: flex;
             align-items: center;
             position: relative;
             height: 72px;
-            overflow: hidden;              /* ← вот это главное */
         }
 
-        /* 👇 ИСПРАВЛЕНИЕ: отдельный слой и скрытая обратная сторона */
         .nav-icon-block {
             display: flex;
             align-items: center;
@@ -132,9 +134,9 @@
             z-index: 3;
             transition: transform 0.2s ease, background 0.2s;
             cursor: pointer;
-            backface-visibility: hidden;  /* ← новое */
-            transform: translateZ(0);     /* ← форсируем слой */
-            will-change: transform;       /* ← оптимизация */
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            will-change: transform;
         }
 
         .nav-icon {
@@ -262,32 +264,44 @@
 
         .main-content {
             flex-grow: 1;
-            padding: 30px 20px 40px;
+            padding: 15px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 25px;
+            gap: 15px;
             z-index: 5;
             position: relative;
+            min-height: 0; /* ключевое свойство для flex-сжатия */
         }
 
         .bluemap-container {
+            flex: 1;
+            min-height: 0;
             width: 100%;
             max-width: 1300px;
             border: 6px solid #000;
             box-shadow: 0 12px 30px rgba(0,0,0,0.7);
             background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bluemap-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
         }
 
         .server-widget-block {
             background: #2d2d2d;
             border: 6px solid #000;
             box-shadow: inset -3px -3px 0 #1a1a1a, inset 3px 3px 0 #5a5a5a, 0 10px 25px rgba(0,0,0,0.6);
-            padding: 24px;
+            padding: 20px;
             width: 100%;
             max-width: 500px;
             text-align: center;
-            order: 1;
+            flex-shrink: 0;
         }
 
         .status-title-text {
@@ -343,11 +357,12 @@
                 repeating-linear-gradient(-45deg, rgba(0,0,0,0.15) 2px, transparent 4px);
             background-size: 12px 12px, 12px 12px;
             border-top: 5px solid #4caf50;
-            padding: 45px 60px 30px;
+            padding: 20px 60px 25px;
             position: relative;
             z-index: 10;
             box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
             width: 100%;
+            flex-shrink: 0;
         }
 
         .footer-premium::before {
@@ -365,15 +380,15 @@
             width: 100%;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 45px;
+            gap: 30px;
             border-bottom: 3px solid #1e1e1e;
-            padding-bottom: 35px;
+            padding-bottom: 20px;
         }
 
         .footer-col h3 {
             font-size: 22px;
             color: #81c784;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
             letter-spacing: 2px;
             text-shadow: 2px 2px 0 #000;
         }
@@ -385,7 +400,7 @@
         }
 
         .footer-links-list { list-style: none; }
-        .footer-links-list li { margin-bottom: 12px; }
+        .footer-links-list li { margin-bottom: 8px; }
 
         .footer-url {
             font-size: 18px;
@@ -408,7 +423,7 @@
 
         .footer-bottom-bar {
             width: 100%;
-            margin: 22px 0 0;
+            margin: 15px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -474,7 +489,13 @@
             transform: translateX(0);
         }
 
+        /* 👇 медиа-запрос для мобильных: разрешаем скролл и адаптируем */
         @media (max-width: 768px) {
+            html, body {
+                overflow: auto;
+                height: auto;
+            }
+
             .header-premium {
                 flex-direction: column;
                 gap: 20px;
@@ -496,6 +517,14 @@
             .players-online-count { font-size: 14px; }
             .ip-address-string { font-size: 15px; }
             
+            .main-content {
+                padding: 15px;
+            }
+
+            .bluemap-container iframe {
+                height: 350px; /* на мобильном фиксированная высота */
+            }
+
             .mute-widget { 
                 bottom: 135px; 
                 right: 15px; 
@@ -545,7 +574,7 @@
 
     <main class="main-content">
         <div class="bluemap-container">
-            <iframe src="about:blank" style="width:100%; height:550px; border:none; display:block;"></iframe>
+            <iframe src="about:blank"></iframe>
         </div>
 
         <div class="server-widget-block">
@@ -590,7 +619,6 @@
         </div>
     </footer>
 
-    <!-- 👇 ЗАГРУЖАЕМ ЗВУКИ ЗАРАНЕЕ -->
     <audio id="sound-click" preload="auto">
         <source src="click.ogg" type="audio/ogg">
         <source src="click.mp3" type="audio/mpeg">
@@ -640,7 +668,6 @@
 
         function playSound(audio) {
             if (!audio || muted) return;
-            // 👇 Гарантированно останавливаем предыдущее воспроизведение
             audio.pause();
             audio.currentTime = 0;
             audio.play().catch(() => {});

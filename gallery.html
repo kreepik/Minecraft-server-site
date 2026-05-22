@@ -105,7 +105,6 @@
 
         .nav-vertical-left { display: flex; flex-direction: column; gap: 20px; }
 
-        /* убираем overflow: hidden, чтобы выезжающие ссылки работали */
         .nav-item-wrapper {
             display: flex;
             align-items: center;
@@ -126,7 +125,6 @@
 
         .nav-icon { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); }
 
-        /* hover для обычных (неактивных и не-донат) кнопок */
         .nav-item-wrapper:not(.active):not(.wrapper-donate):hover .nav-icon-block,
         .nav-item-wrapper:not(.active):not(.wrapper-donate) .nav-icon-block:active {
             transform: scale(1.08);
@@ -140,17 +138,14 @@
 
         .mc-nav-drawer-btn {
             position: absolute; left: 68px; top: 0; height: 72px; width: 0;
-            background: #545454; border: 4px solid #000000; border-left: none;
+            background: #545454; border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 0px 3px 0 #7a7a7a;
             display: flex; align-items: center; overflow: hidden; z-index: 2;
             text-decoration: none; opacity: 0;
             transition: width 0.35s cubic-bezier(0.25, 1, 0.35, 1) 0.08s, opacity 0.25s ease 0.08s;
         }
 
-        .nav-item-wrapper:hover .mc-nav-drawer-btn {
-            width: 210px; opacity: 1; border-left: none;
-        }
-
+        .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 210px; opacity: 1; }
         .mc-nav-drawer-btn:hover { background: #6b6b6b; }
 
         .nav-text { font-size: 20px; color: #fff; position: absolute; left: 22px; white-space: nowrap; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
@@ -162,7 +157,6 @@
             background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784;
         }
 
-        /* донат: hover/active не сереет */
         .wrapper-donate .nav-icon-block { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a; }
         .wrapper-donate:hover .nav-icon-block,
         .wrapper-donate .nav-icon-block:active {
@@ -171,7 +165,6 @@
             box-shadow: inset -2px -2px 0 #1b5e20, inset 2px 2px 0 #81c784, 0 3px 0 #000;
         }
         .btn-donate-drawer { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a; }
-
         .wrapper-donate .mc-nav-drawer-btn:hover,
         .btn-donate-drawer:hover {
             background: #388e3c;
@@ -188,21 +181,22 @@
             text-shadow: 3px 3px 0 #000000, 0 0 20px rgba(76, 175, 80, 0.7), 0 0 40px rgba(76, 175, 80, 0.3);
             display: flex; flex-direction: column; align-items: center; line-height: 1.1;
         }
-
-        .title-main-row {
-            display: flex; flex-direction: row; gap: 14px; letter-spacing: 4px; align-items: baseline; font-size: 56px;
-        }
-
-        .title-subtitle {
-            font-size: 26px; letter-spacing: 3px; margin-top: 4px; text-shadow: 2px 2px 0 #000, 0 0 10px rgba(76, 175, 80, 0.4);
-        }
-
+        .title-main-row { display: flex; flex-direction: row; gap: 14px; letter-spacing: 4px; align-items: baseline; font-size: 56px; }
+        .title-subtitle { font-size: 26px; letter-spacing: 3px; margin-top: 4px; text-shadow: 2px 2px 0 #000, 0 0 10px rgba(76, 175, 80, 0.4); }
         .title-icon { width: 36px; height: 36px; margin-top: 12px; filter: drop-shadow(0 0 12px #4caf50); animation: pickaxeSwing 2.5s ease-in-out infinite; object-fit: contain; }
 
         @keyframes pickaxeSwing { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(20deg); } 75% { transform: rotate(-15deg); } }
 
-        .main-content { flex-grow: 1; padding: 30px 20px 40px; display: flex; flex-direction: column; align-items: center; z-index: 5; position: relative; }
-        .gallery-wrapper { width: 100%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; gap: 40px; }
+        .main-content {
+            flex: 1 1 0;
+            padding: 30px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 5;
+            position: relative;
+        }
+        .gallery-wrapper { width: 100%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; gap: 40px; margin-top: 10px; /* отступ сверху */ }
         .gallery-title { font-size: 36px; color: #fff; text-shadow: 3px 3px 0 #000; letter-spacing: 3px; text-align: center; border-bottom: 4px dashed #4caf50; padding-bottom: 15px; width: 100%; }
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; width: 100%; }
 
@@ -294,44 +288,11 @@
             user-select: none;
         }
 
-        .mute-label {
-            font-size: 16px;
-            color: #a5d6a7;
-            text-shadow: 2px 2px 0 #000;
-            letter-spacing: 1px;
-        }
-
-        .mute-toggle-track {
-            width: 54px;
-            height: 30px;
-            background: #2e7d32;
-            border: 3px solid #000000;
-            box-shadow: inset 2px 2px 0 #1b5e20;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .mute-thumb {
-            width: 26px;
-            height: 28px;
-            background: #9c9c9c;
-            box-shadow: inset -2px -2px 0 #565656, inset 2px 2px 0 #e0e0e0;
-            position: absolute;
-            top: -2px;
-            left: 0;
-            transform: translateX(22px);
-            transition: transform 0.12s ease;
-            z-index: 5;
-        }
-
-        .mute-widget.muted .mute-toggle-track {
-            background: #a82626;
-            box-shadow: inset 2px 2px 0 #5e1414;
-        }
-
-        .mute-widget.muted .mute-thumb {
-            transform: translateX(0);
-        }
+        .mute-label { font-size: 16px; color: #a5d6a7; text-shadow: 2px 2px 0 #000; letter-spacing: 1px; }
+        .mute-toggle-track { width: 54px; height: 30px; background: #2e7d32; border: 3px solid #000000; box-shadow: inset 2px 2px 0 #1b5e20; position: relative; overflow: hidden; }
+        .mute-thumb { width: 26px; height: 28px; background: #9c9c9c; box-shadow: inset -2px -2px 0 #565656, inset 2px 2px 0 #e0e0e0; position: absolute; top: -2px; left: 0; transform: translateX(22px); transition: transform 0.12s ease; z-index: 5; }
+        .mute-widget.muted .mute-toggle-track { background: #a82626; box-shadow: inset 2px 2px 0 #5e1414; }
+        .mute-widget.muted .mute-thumb { transform: translateX(0); }
 
         @media (max-width: 768px) {
             .header-premium { flex-direction: column; gap: 20px; padding: 20px; align-items: flex-start; }
@@ -343,19 +304,11 @@
             .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; }
             .nav-text { font-size: 18px; left: 16px; }
             .server-title-clean { align-self: center; }
-
             .title-main-row { flex-direction: column; align-items: center; gap: 4px; font-size: 28px; }
             .title-subtitle { font-size: 16px; }
             .title-icon { width: 24px; height: 24px; }
-
             .gallery-title { font-size: 24px; }
-
-            .mute-widget {
-                bottom: 135px;
-                right: 15px;
-                padding: 8px 12px;
-                gap: 10px;
-            }
+            .mute-widget { bottom: 135px; right: 15px; padding: 8px 12px; gap: 10px; }
             .mute-label { font-size: 14px; }
         }
     </style>
@@ -446,19 +399,19 @@
                 <p>NOVATORI ESHKERE CRAFT — приватный сервер без вайпов. Крутое ещкере комьюнити, хайповые постройки и ламповая атмосфера.</p>
             </div>
             <div class="footer-col">
-               <h3>❖ СВЯЗЬ</h3>
+                <h3>❖ СВЯЗЬ</h3>
                 <ul class="footer-links-list">
                     <li>
                         <a href="https://discord.com/users/kreepik#9722" target="_blank" rel="noopener noreferrer" class="footer-url">
-                            <svg class="footer-icon" width="22" height="22" viewBox="0 0 24 24">
+                            <svg class="footer-icon" width="20" height="20" viewBox="0 0 24 24">
                                 <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.196.373.289a.077.077 0 0 1-.006.127 12.298 12.298 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z"/>
                             </svg>
                             Discord
                         </a>
                     </li>
                     <li>
-                        <a href="https://t.me/твой_канал" target="_blank" rel="noopener noreferrer" class="footer-url">
-                            <svg class="footer-icon" width="22" height="22" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/></svg>
+                        <a href="https://t.me/kreepik" target="_blank" rel="noopener noreferrer" class="footer-url">
+                            <svg class="footer-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/></svg>
                             Telegram
                         </a>
                     </li>
@@ -482,9 +435,7 @@
 
     <div class="mute-widget" id="mute-widget" role="button" aria-label="Переключить звук">
         <span class="mute-label">ЗВУК</span>
-        <div class="mute-toggle-track">
-            <div class="mute-thumb"></div>
-        </div>
+        <div class="mute-toggle-track"><div class="mute-thumb"></div></div>
     </div>
 
     <script>
@@ -508,26 +459,21 @@
         let muted = false;
         try { muted = localStorage.getItem('muted') === 'true'; } catch (e) {}
 
-        if (muted) {
-            muteWidget.classList.add('muted');
-        } else {
-            muteWidget.classList.remove('muted');
-        }
+        if (muted) muteWidget.classList.add('muted');
+        else muteWidget.classList.remove('muted');
 
         function playSound(audio) {
             if (!audio || muted) return;
-            audio.volume = 0.2;   // громкость 20%
+            audio.volume = 0.2;
             audio.pause();
             audio.currentTime = 0;
             audio.play().catch(() => {});
         }
 
-        // Звук на иконки
         document.querySelectorAll('.nav-icon-block').forEach(el => {
             el.addEventListener('click', () => playSound(soundClick));
         });
 
-        // Звук на выезжающие ссылки с задержкой перехода
         document.querySelectorAll('.mc-nav-drawer-btn').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -542,11 +488,7 @@
         if (muteWidget) {
             muteWidget.addEventListener('click', () => {
                 muted = !muted;
-                if (muted) {
-                    muteWidget.classList.add('muted');
-                } else {
-                    muteWidget.classList.remove('muted');
-                }
+                muteWidget.classList.toggle('muted', muted);
                 try { localStorage.setItem('muted', muted); } catch (e) {}
                 playSound(soundClick);
             });

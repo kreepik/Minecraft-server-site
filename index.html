@@ -132,7 +132,7 @@
         .nav-item-wrapper.active .nav-icon-block { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784; }
         .nav-item-wrapper.active .mc-nav-drawer-btn { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784; }
 
-        /* ДОНАТ: hover без тени */
+        /* ДОНАТ: hover без тени, сдвиг на 1px */
         .wrapper-donate .nav-icon-block { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a; }
         .wrapper-donate:hover .nav-icon-block,
         .wrapper-donate .nav-icon-block:active {
@@ -140,7 +140,11 @@
             transform: scale(1.08);
             box-shadow: inset -2px -2px 0 #1b5e20, inset 2px 2px 0 #81c784;
         }
-        .btn-donate-drawer { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a; }
+        .btn-donate-drawer {
+            background: #2e7d32;
+            box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a;
+            left: 67px;   /* <-- сдвиг на 1px ближе к иконке */
+        }
         .wrapper-donate .mc-nav-drawer-btn:hover,
         .btn-donate-drawer:hover {
             background: #388e3c;
@@ -281,6 +285,7 @@
             .mc-nav-drawer-btn { height: 60px; left: 56px; }
             .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; }
             .nav-text { font-size: 18px; left: 16px; }
+            .btn-donate-drawer { left: 55px; }   /* для мобильных – тоже сдвиг на 1px */
             .server-title-clean { align-self: center; }
             .title-main-row { flex-direction: column; align-items: center; gap: 4px; font-size: 28px; }
             .title-subtitle { font-size: 16px; }

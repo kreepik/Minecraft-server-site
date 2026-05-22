@@ -25,7 +25,7 @@
 
         html, body {
             height: 100%;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         body {
@@ -40,14 +40,12 @@
             color: #E0E0E0;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
+            min-height: 100vh;
             position: relative;
             box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.8);
         }
 
         .particles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
-
-        /* частица */
         .particle {
             position: absolute;
             top: -10px;
@@ -59,36 +57,17 @@
             opacity: 0;
             animation: floatParticle linear infinite;
             will-change: transform;
-            /* базовое случайное смещение задаётся через --base-x */
         }
 
         @keyframes floatParticle {
-            0% {
-                transform: translateY(-20px) translateX(calc(var(--base-x, 0px) + 0px)) scale(0.8);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.9;
-            }
-            30% {
-                transform: translateY(30vh) translateX(calc(var(--base-x, 0px) + 15px)) scale(1.2);
-                opacity: 0.8;
-            }
-            60% {
-                transform: translateY(65vh) translateX(calc(var(--base-x, 0px) - 20px)) scale(0.9);
-                opacity: 0.5;
-            }
-            85% {
-                transform: translateY(85vh) translateX(calc(var(--base-x, 0px) + 10px)) scale(0.7);
-                opacity: 0.2;
-            }
-            100% {
-                transform: translateY(105vh) translateX(calc(var(--base-x, 0px) - 5px)) scale(0.5);
-                opacity: 0;
-            }
+            0% { transform: translateY(-20px) translateX(calc(var(--base-x, 0px) + 0px)) scale(0.8); opacity: 0; }
+            10% { opacity: 0.9; }
+            30% { transform: translateY(30vh) translateX(calc(var(--base-x, 0px) + 15px)) scale(1.2); opacity: 0.8; }
+            60% { transform: translateY(65vh) translateX(calc(var(--base-x, 0px) - 20px)) scale(0.9); opacity: 0.5; }
+            85% { transform: translateY(85vh) translateX(calc(var(--base-x, 0px) + 10px)) scale(0.7); opacity: 0.2; }
+            100% { transform: translateY(105vh) translateX(calc(var(--base-x, 0px) - 5px)) scale(0.5); opacity: 0; }
         }
 
-        /* далее все остальные стили (шапка, навигация, карта и т.д.) без изменений */
         .header-premium {
             background-color: #2d2d2d;
             background-image:
@@ -103,7 +82,6 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
             position: relative;
             z-index: 100;
-            flex-shrink: 0;
         }
 
         .header-premium::after {
@@ -190,20 +168,23 @@
             box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #81c784;
         }
 
+        /* === ЗАГОЛОВОК БЕЗ СВЕЧЕНИЯ === */
         .server-title-clean {
             font-weight: normal; color: #ffffff; text-transform: uppercase;
-            text-shadow: 3px 3px 0 #000000, 0 0 20px rgba(76, 175, 80, 0.7), 0 0 40px rgba(76, 175, 80, 0.3);
+            text-shadow: 3px 3px 0 #000000;   /* только чёткая тень */
             display: flex; flex-direction: column; align-items: center; line-height: 1.1;
         }
         .title-main-row { display: flex; flex-direction: row; gap: 14px; letter-spacing: 4px; align-items: baseline; font-size: 56px; }
-        .title-subtitle { font-size: 26px; letter-spacing: 3px; margin-top: 4px; text-shadow: 2px 2px 0 #000, 0 0 10px rgba(76, 175, 80, 0.4); }
+        .title-subtitle {
+            font-size: 26px; letter-spacing: 3px; margin-top: 4px;
+            text-shadow: 2px 2px 0 #000;   /* убрано свечение */
+        }
         .title-icon { width: 36px; height: 36px; margin-top: 12px; filter: drop-shadow(0 0 12px #4caf50); animation: pickaxeSwing 2.5s ease-in-out infinite; object-fit: contain; }
 
         @keyframes pickaxeSwing { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(20deg); } 75% { transform: rotate(-15deg); } }
 
         .main-content {
-            flex: 1 1 0;
-            min-height: 0;
+            flex: 1 1 auto;
             padding: 8px;
             display: flex;
             flex-direction: column;
@@ -213,21 +194,68 @@
             position: relative;
         }
 
-        .bluemap-container {
-            flex: 1 1 0;
-            min-height: 0;
+        .bluemap-wrapper {
+            position: relative;
             width: 100%;
             max-width: 95%;
             margin: 10px auto 0 auto;
+        }
+
+        .bluemap-container {
+            width: 100%;
             aspect-ratio: 16 / 9;
+            max-height: 70vh;
             border: 6px solid #000;
             box-shadow: 0 12px 30px rgba(0,0,0,0.7);
             background: #1a1a1a;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .bluemap-container iframe { width: 100%; height: 100%; border: none; display: block; }
+
+        .fullscreen-toggle {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 36px;
+            height: 36px;
+            background: #2d2d2d;
+            border: 3px solid #000;
+            box-shadow: inset -2px -2px 0 #1a1a1a, inset 2px 2px 0 #5a5a5a;
+            color: #fff;
+            font-size: 20px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .fullscreen-toggle:hover { background: #4caf50; }
+
+        .bluemap-container.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            max-height: none;
+            max-width: none;
+            aspect-ratio: auto;
+            z-index: 9999;
+            margin: 0;
+            border: none;
+            box-shadow: none;
+        }
+        .bluemap-container.fullscreen .fullscreen-toggle {
+            top: 10px;
+            left: 10px;
+        }
 
         .server-widget-block {
             background: #2d2d2d;
@@ -280,7 +308,7 @@
             z-index: 10;
             box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
             width: 100%;
-            flex-shrink: 0;
+            margin-top: auto;
         }
 
         .footer-premium::before { content: ""; position: absolute; top: -5px; left: 0; width: 100%; height: 2px; background: #81c784; box-shadow: 0 0 12px #4caf50; }
@@ -298,7 +326,6 @@
         .footer-bottom-bar { width: 100%; margin: 12px 0 0; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #7a7a7a; letter-spacing: 1px; flex-wrap: wrap; gap: 10px; }
 
         @media (max-width: 768px) {
-            html, body { overflow: auto; height: auto; }
             .header-premium { flex-direction: column; gap: 20px; padding: 20px; align-items: flex-start; }
             .nav-vertical-left { flex-direction: column; gap: 14px; width: 100%; }
             .nav-item-wrapper { height: 60px; }
@@ -313,8 +340,7 @@
             .title-subtitle { font-size: 16px; }
             .title-icon { width: 24px; height: 24px; }
             .main-content { padding: 15px; }
-            .bluemap-container { aspect-ratio: auto; max-width: 100%; margin: 0 auto; }
-            .bluemap-container iframe { height: 350px; }
+            .bluemap-container { max-height: 50vh; }
             .mute-widget { bottom: 135px; right: 15px; padding: 8px 12px; gap: 10px; }
             .mute-label { font-size: 14px; }
         }
@@ -350,7 +376,12 @@
     </header>
 
     <main class="main-content">
-        <div class="bluemap-container"><iframe src="about:blank"></iframe></div>
+        <div class="bluemap-wrapper">
+            <div class="bluemap-container" id="bluemap-container">
+                <iframe src="about:blank" id="bluemap-iframe"></iframe>
+                <div class="fullscreen-toggle" id="fullscreen-toggle" title="На весь экран">⛶</div>
+            </div>
+        </div>
 
         <div class="server-widget-block">
             <div class="status-title-text status-offline-color" id="server-status-title">СТАТУС СЕРВЕРА: НЕ РАБОТАЕТ</div>
@@ -410,13 +441,11 @@
         (function() {
             const container = document.getElementById('particles-container');
             if (!container) return;
-            for (let i = 0; i < 25; i++) {   // увеличили до 25 частиц
+            for (let i = 0; i < 25; i++) {
                 const p = document.createElement('div');
                 p.classList.add('particle');
-                // случайное положение по горизонтали (немного выходит за края, чтобы точно покрывать всю ширину)
                 p.style.left = (Math.random() * 110 - 5) + '%';
-                // случайное базовое смещение для горизонтального дрейфа
-                const drift = (Math.random() * 40 - 20); // от -20px до +20px
+                const drift = (Math.random() * 40 - 20);
                 p.style.setProperty('--base-x', drift + 'px');
                 p.style.animationDuration = (Math.random() * 5 + 5) + 's';
                 p.style.animationDelay = Math.random() * 3 + 's';
@@ -480,6 +509,29 @@
                 playSound(soundClick);
             });
         }
+
+        // Полноэкранный режим
+        const mapContainer = document.getElementById('bluemap-container');
+        const toggleBtn = document.getElementById('fullscreen-toggle');
+
+        function toggleFullscreen() {
+            mapContainer.classList.toggle('fullscreen');
+            if (mapContainer.classList.contains('fullscreen')) {
+                toggleBtn.innerHTML = '✕';
+                document.body.style.overflow = 'hidden';
+            } else {
+                toggleBtn.innerHTML = '⛶';
+                document.body.style.overflow = '';
+            }
+        }
+
+        toggleBtn.addEventListener('click', toggleFullscreen);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && mapContainer.classList.contains('fullscreen')) {
+                toggleFullscreen();
+            }
+        });
     </script>
 </body>
 </html>

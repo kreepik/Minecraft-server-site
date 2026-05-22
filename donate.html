@@ -108,11 +108,10 @@
             text-shadow: 1px 1px 0 #000; line-height: 1.5;
         }
 
-        /* Кнопка ДОНАТА — Рамка через box-shadow, никаких border */
+        /* Кнопка ДОНАТА — размеры меняются без scale */
         .donate-button {
             background: #2e7d32;
-            border: none;                              /* убираем border */
-            /* Внутренний объём и чёрная рамка 4px */
+            border: none;
             box-shadow: 
                 inset -3px -3px 0 #1b5e20, 
                 inset 3px 3px 0 #66bb6a,
@@ -124,16 +123,17 @@
             cursor: pointer;
             letter-spacing: 2px;
             text-shadow: 2px 2px 0 #000;
-            transition: transform 0.1s ease, background 0.2s, box-shadow 0.1s ease;
+            transition: padding 0.15s ease, font-size 0.15s ease, background 0.2s, box-shadow 0.15s ease;
             display: inline-block;
             backface-visibility: hidden;
             transform: translateZ(0);
-            will-change: transform;
+            will-change: padding, font-size;
         }
 
         .donate-button:hover {
             background: #388e3c;
-            transform: scale(0.98) translateZ(0);
+            padding: 13px 26px;        /* уменьшаем поля */
+            font-size: 20px;           /* уменьшаем текст */
             box-shadow: 
                 inset -2px -2px 0 #1b5e20, 
                 inset 2px 2px 0 #81c784,
@@ -141,11 +141,14 @@
         }
 
         .donate-button:active {
-            transform: translate(2px, 2px) translateZ(0);
+            /* при клике ещё чуть сжимаемся */
+            padding: 11px 22px;
+            font-size: 18px;
             box-shadow: 
                 inset 4px 4px 0 #000, 
                 inset -2px -2px 0 #1b5e20,
                 0 0 0 4px #000;
+            transform: translateZ(0);  /* возвращаем translateZ, если нужно */
         }
 
         .back-link {
@@ -182,6 +185,8 @@
         @media (max-width: 768px) {
             .donate-title { font-size: 24px; }
             .donate-button { font-size: 18px; padding: 12px 25px; }
+            .donate-button:hover { padding: 10px 22px; font-size: 16px; }
+            .donate-button:active { padding: 8px 18px; font-size: 14px; }
             .mute-widget {
                 bottom: 135px;
                 right: 15px;

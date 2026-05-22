@@ -46,17 +46,49 @@
         }
 
         .particles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
-        .particle { position: absolute; top: -10px; width: 8px; height: 8px; background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32); box-shadow: 0 0 8px #4caf50, 0 0 12px rgba(76, 175, 80, 0.5); border-radius: 50% !important; opacity: 0; animation: floatParticle linear infinite; will-change: transform; }
 
-        @keyframes floatParticle {
-            0% { transform: translateY(-20px) translateX(0px) scale(0.8); opacity: 0; }
-            10% { opacity: 0.9; }
-            30% { transform: translateY(30vh) translateX(15px) scale(1.2); opacity: 0.8; }
-            60% { transform: translateY(65vh) translateX(-20px) scale(0.9); opacity: 0.5; }
-            85% { transform: translateY(85vh) translateX(10px) scale(0.7); opacity: 0.2; }
-            100% { transform: translateY(105vh) translateX(-5px) scale(0.5); opacity: 0; }
+        /* частица */
+        .particle {
+            position: absolute;
+            top: -10px;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32);
+            box-shadow: 0 0 8px #4caf50, 0 0 12px rgba(76, 175, 80, 0.5);
+            border-radius: 50% !important;
+            opacity: 0;
+            animation: floatParticle linear infinite;
+            will-change: transform;
+            /* базовое случайное смещение задаётся через --base-x */
         }
 
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(-20px) translateX(calc(var(--base-x, 0px) + 0px)) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.9;
+            }
+            30% {
+                transform: translateY(30vh) translateX(calc(var(--base-x, 0px) + 15px)) scale(1.2);
+                opacity: 0.8;
+            }
+            60% {
+                transform: translateY(65vh) translateX(calc(var(--base-x, 0px) - 20px)) scale(0.9);
+                opacity: 0.5;
+            }
+            85% {
+                transform: translateY(85vh) translateX(calc(var(--base-x, 0px) + 10px)) scale(0.7);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(105vh) translateX(calc(var(--base-x, 0px) - 5px)) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* далее все остальные стили (шапка, навигация, карта и т.д.) без изменений */
         .header-premium {
             background-color: #2d2d2d;
             background-image:
@@ -104,25 +136,19 @@
 
         .nav-icon { width: 40px; height: 40px; flex-shrink: 0; transition: transform 0.2s; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); object-fit: contain; }
 
-        /* hover: увеличение и подсветка (только для обычных) */
         .nav-item-wrapper:not(.active):not(.wrapper-donate):hover .nav-icon-block {
             transform: scale(1.08);
             background: #6b6b6b;
             box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a;
         }
 
-        /* active: эффект продавливания БЕЗ scale */
         .nav-item-wrapper:not(.active):not(.wrapper-donate) .nav-icon-block:active {
-            transform: translate(2px, 2px) translateZ(0);   /* сдвиг как у кнопки */
+            transform: translate(2px, 2px) translateZ(0);
             background: #5a5a5a;
             box-shadow: inset 4px 4px 0 #000, inset -2px -2px 0 #2a2a2a;
         }
 
-        /* иконка внутри активной кнопки – сдвиг на 1px */
-        .nav-item-wrapper.active .nav-icon {
-            position: relative;
-            left: 1px;
-        }
+        .nav-item-wrapper.active .nav-icon { position: relative; left: 1px; }
 
         .mc-nav-drawer-btn {
             position: absolute; left: 68px; top: 0; height: 72px; width: 0;
@@ -384,10 +410,14 @@
         (function() {
             const container = document.getElementById('particles-container');
             if (!container) return;
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 25; i++) {   // увеличили до 25 частиц
                 const p = document.createElement('div');
                 p.classList.add('particle');
-                p.style.left = Math.random() * 100 + '%';
+                // случайное положение по горизонтали (немного выходит за края, чтобы точно покрывать всю ширину)
+                p.style.left = (Math.random() * 110 - 5) + '%';
+                // случайное базовое смещение для горизонтального дрейфа
+                const drift = (Math.random() * 40 - 20); // от -20px до +20px
+                p.style.setProperty('--base-x', drift + 'px');
                 p.style.animationDuration = (Math.random() * 5 + 5) + 's';
                 p.style.animationDelay = Math.random() * 3 + 's';
                 container.appendChild(p);

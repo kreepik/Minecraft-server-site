@@ -95,7 +95,8 @@
             background: #545454; border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 3px 3px 0 #7a7a7a;
             width: 72px; height: 72px; padding: 12px; z-index: 3;
-            transition: transform 0.2s ease, background 0.2s; cursor: pointer;
+            transition: transform 0.15s ease, background 0.2s, box-shadow 0.15s;
+            cursor: pointer;
             backface-visibility: hidden;
             transform: translateZ(0);
             will-change: transform;
@@ -103,16 +104,24 @@
 
         .nav-icon { width: 40px; height: 40px; flex-shrink: 0; transition: transform 0.2s; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); object-fit: contain; }
 
-        /* hover для обычных (неактивных и не-донат) кнопок */
-        .nav-item-wrapper:not(.active):not(.wrapper-donate):hover .nav-icon-block,
-        .nav-item-wrapper:not(.active):not(.wrapper-donate) .nav-icon-block:active {
+        /* hover: увеличение и подсветка (только для обычных) */
+        .nav-item-wrapper:not(.active):not(.wrapper-donate):hover .nav-icon-block {
             transform: scale(1.08);
             background: #6b6b6b;
             box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a;
         }
-        .nav-item-wrapper:not(.active):not(.wrapper-donate):hover .nav-icon,
-        .nav-item-wrapper:not(.active):not(.wrapper-donate) .nav-icon-block:active .nav-icon {
-            transform: scale(1.05);
+
+        /* active: эффект продавливания БЕЗ scale */
+        .nav-item-wrapper:not(.active):not(.wrapper-donate) .nav-icon-block:active {
+            transform: translate(2px, 2px) translateZ(0);   /* сдвиг как у кнопки */
+            background: #5a5a5a;
+            box-shadow: inset 4px 4px 0 #000, inset -2px -2px 0 #2a2a2a;
+        }
+
+        /* иконка внутри активной кнопки – сдвиг на 1px */
+        .nav-item-wrapper.active .nav-icon {
+            position: relative;
+            left: 1px;
         }
 
         .mc-nav-drawer-btn {
@@ -132,7 +141,6 @@
         .nav-item-wrapper.active .nav-icon-block { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784; }
         .nav-item-wrapper.active .mc-nav-drawer-btn { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784; }
 
-        /* ДОНАТ: hover без тени, сдвиг на 1px */
         .wrapper-donate .nav-icon-block { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a; }
         .wrapper-donate:hover .nav-icon-block,
         .wrapper-donate .nav-icon-block:active {
@@ -143,7 +151,7 @@
         .btn-donate-drawer {
             background: #2e7d32;
             box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a;
-            left: 67px;   /* <-- сдвиг на 1px ближе к иконке */
+            left: 67px;
         }
         .wrapper-donate .mc-nav-drawer-btn:hover,
         .btn-donate-drawer:hover {
@@ -210,9 +218,7 @@
         .status-online-color { color: #55FF55; }
         .status-offline-color { color: #FF5555; }
 
-        .players-online-count {
-            font-size: 14px; color: #a5d6a7; text-shadow: 1px 1px 0 #000; margin-bottom: 12px; letter-spacing: 1px;
-        }
+        .players-online-count { font-size: 14px; color: #a5d6a7; text-shadow: 1px 1px 0 #000; margin-bottom: 12px; letter-spacing: 1px; }
 
         .ip-click-container {
             background: #141414; border: 4px solid #000;
@@ -220,26 +226,16 @@
             padding: 10px; cursor: pointer; transition: background 0.15s;
         }
         .ip-click-container:hover { background: #1c1c1c; }
-
         .ip-address-string { font-size: 16px; color: #fff; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; display: block; }
         .ip-action-hint { display: block; font-size: 11px; color: #7a7a7a; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
         .mute-widget {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: #2d2d2d;
-            border: 4px solid #000000;
+            position: fixed; bottom: 80px; right: 20px; z-index: 9999;
+            display: flex; align-items: center; gap: 14px;
+            background: #2d2d2d; border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #1a1a1a, inset 3px 3px 0 #5a5a5a, 3px 3px 0 #000;
-            padding: 10px 16px;
-            cursor: pointer;
-            user-select: none;
+            padding: 10px 16px; cursor: pointer; user-select: none;
         }
-
         .mute-label { font-size: 16px; color: #a5d6a7; text-shadow: 2px 2px 0 #000; letter-spacing: 1px; }
         .mute-toggle-track { width: 54px; height: 30px; background: #2e7d32; border: 3px solid #000000; box-shadow: inset 2px 2px 0 #1b5e20; position: relative; overflow: hidden; }
         .mute-thumb { width: 26px; height: 28px; background: #9c9c9c; box-shadow: inset -2px -2px 0 #565656, inset 2px 2px 0 #e0e0e0; position: absolute; top: -2px; left: 0; transform: translateX(22px); transition: transform 0.12s ease; z-index: 5; }
@@ -285,7 +281,7 @@
             .mc-nav-drawer-btn { height: 60px; left: 56px; }
             .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; }
             .nav-text { font-size: 18px; left: 16px; }
-            .btn-donate-drawer { left: 55px; }   /* для мобильных – тоже сдвиг на 1px */
+            .btn-donate-drawer { left: 55px; }
             .server-title-clean { align-self: center; }
             .title-main-row { flex-direction: column; align-items: center; gap: 4px; font-size: 28px; }
             .title-subtitle { font-size: 16px; }
@@ -314,6 +310,10 @@
             <div class="nav-item-wrapper wrapper-donate">
                 <div class="nav-icon-block" aria-hidden="true"><img src="donate.png" alt="Донат" class="nav-icon"></div>
                 <a href="donate.html" class="mc-nav-drawer-btn btn-donate-drawer"><span class="nav-text">ДОНАТ</span></a>
+            </div>
+            <div class="nav-item-wrapper">
+                <div class="nav-icon-block" aria-hidden="true"><img src="mods.png" alt="Моды" class="nav-icon"></div>
+                <a href="mods.html" class="mc-nav-drawer-btn"><span class="nav-text">МОДЫ</span></a>
             </div>
         </nav>
         <h1 class="server-title-clean">

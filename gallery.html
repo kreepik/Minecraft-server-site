@@ -42,17 +42,29 @@
         }
 
         .particles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
-        .particle { position: absolute; top: -10px; width: 8px; height: 8px; background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32); box-shadow: 0 0 8px #4caf50, 0 0 12px rgba(76, 175, 80, 0.5); border-radius: 50% !important; opacity: 0; animation: floatParticle linear infinite; will-change: transform; }
-
-        @keyframes floatParticle {
-            0% { transform: translateY(-20px) translateX(0px) scale(0.8); opacity: 0; }
-            10% { opacity: 0.9; }
-            30% { transform: translateY(30vh) translateX(15px) scale(1.2); opacity: 0.8; }
-            60% { transform: translateY(65vh) translateX(-20px) scale(0.9); opacity: 0.5; }
-            85% { transform: translateY(85vh) translateX(10px) scale(0.7); opacity: 0.2; }
-            100% { transform: translateY(105vh) translateX(-5px) scale(0.5); opacity: 0; }
+        .particle {
+            position: absolute;
+            top: -10px;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32);
+            box-shadow: 0 0 8px #4caf50, 0 0 12px rgba(76, 175, 80, 0.5);
+            border-radius: 50% !important;
+            opacity: 0;
+            animation: floatParticle linear infinite;
+            will-change: transform;
         }
 
+        @keyframes floatParticle {
+            0% { transform: translateY(-20px) translateX(calc(var(--base-x, 0px) + 0px)) scale(0.8); opacity: 0; }
+            10% { opacity: 0.9; }
+            30% { transform: translateY(30vh) translateX(calc(var(--base-x, 0px) + 15px)) scale(1.2); opacity: 0.8; }
+            60% { transform: translateY(65vh) translateX(calc(var(--base-x, 0px) - 20px)) scale(0.9); opacity: 0.5; }
+            85% { transform: translateY(85vh) translateX(calc(var(--base-x, 0px) + 10px)) scale(0.7); opacity: 0.2; }
+            100% { transform: translateY(105vh) translateX(calc(var(--base-x, 0px) - 5px)) scale(0.5); opacity: 0; }
+        }
+
+        /* (остальные стили галереи без изменений) */
         .header-premium {
             background-color: #2d2d2d;
             background-image:
@@ -99,14 +111,12 @@
 
         .nav-icon { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); }
 
-        /* hover: увеличение и подсветка (только для обычных) */
         .nav-item-wrapper:not(.active):not(.wrapper-donate):hover .nav-icon-block {
             transform: scale(1.08);
             background: #6b6b6b;
             box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a;
         }
 
-        /* active: эффект продавливания БЕЗ scale (как у кнопки "СКАЧАТЬ ВСЕ МОДЫ") */
         .nav-item-wrapper:not(.active):not(.wrapper-donate) .nav-icon-block:active {
             transform: translate(2px, 2px) translateZ(0);
             background: #5a5a5a;
@@ -137,21 +147,11 @@
             transform: scale(1.08);
             box-shadow: inset -2px -2px 0 #1b5e20, inset 2px 2px 0 #81c784;
         }
-        .btn-donate-drawer {
-            background: #2e7d32;
-            box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a;
-            left: 67px;
-        }
+        .btn-donate-drawer { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #66bb6a; left: 67px; }
         .wrapper-donate .mc-nav-drawer-btn:hover,
-        .btn-donate-drawer:hover {
-            background: #388e3c;
-            box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #81c784;
-        }
+        .btn-donate-drawer:hover { background: #388e3c; box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #81c784; }
         .wrapper-donate .mc-nav-drawer-btn:active,
-        .btn-donate-drawer:active {
-            background: #388e3c;
-            box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #81c784;
-        }
+        .btn-donate-drawer:active { background: #388e3c; box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #81c784; }
 
         .server-title-clean {
             font-weight: normal; color: #ffffff; text-transform: uppercase;
@@ -354,10 +354,12 @@
         (function() {
             const container = document.getElementById('particles-container');
             if (!container) return;
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 25; i++) {
                 const p = document.createElement('div');
                 p.classList.add('particle');
-                p.style.left = Math.random() * 100 + '%';
+                p.style.left = (Math.random() * 110 - 5) + '%';
+                const drift = (Math.random() * 40 - 20);
+                p.style.setProperty('--base-x', drift + 'px');
                 p.style.animationDuration = (Math.random() * 5 + 5) + 's';
                 p.style.animationDelay = Math.random() * 3 + 's';
                 container.appendChild(p);

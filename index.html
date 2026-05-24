@@ -256,7 +256,6 @@
         .ip-address-string { font-size: 16px; color: #fff; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; display: block; }
         .ip-action-hint { display: block; font-size: 11px; color: #7a7a7a; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* mute опущен ниже */
         .mute-widget {
             position: fixed; bottom: 60px; right: 20px; z-index: 9999;
             display: flex; align-items: center; gap: 14px;
@@ -309,7 +308,7 @@
             .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; }
             .nav-text { font-size: 18px; left: 16px; }
             .btn-donate-drawer { left: 55px; }
-            .server-title-clean { position: static; transform: none; align-self: center; } /* на мобилке возвращаем в поток */
+            .server-title-clean { position: static; transform: none; align-self: center; }
             .title-main-row { flex-direction: column; align-items: center; gap: 4px; font-size: 28px; }
             .title-subtitle { font-size: 16px; }
             .title-icon { width: 24px; height: 24px; }
@@ -357,8 +356,8 @@
         </div>
 
         <div class="server-widget-block">
-            <div class="status-title-text status-offline-color" id="server-status-title">СТАТУС СЕРВЕРА: НЕ РАБОТАЕТ</div>
-            <div class="players-online-count" id="server-players-text">ИГРОКОВ НА СЕРВЕРЕ: 0 / 20</div>
+            <div class="status-title-text status-offline-color" id="server-status-title">СТАТУС СЕРВЕРА: ЗАГРУЗКА...</div>
+            <div class="players-online-count" id="server-players-text">ИГРОКОВ НА СЕРВЕРЕ: -- / --</div>
             <div class="ip-click-container" onclick="copyServerIPAddress()">
                 <span class="ip-address-string" id="ip-target-text">PLAY.NOVATORI-ESHKERE-CRAFT.RU</span>
                 <span class="ip-action-hint" id="ip-status-hint">Нажми, чтобы скопировать</span>
@@ -411,6 +410,7 @@
     </div>
 
     <script>
+        // ---------- частицы ----------
         (function() {
             const container = document.getElementById('particles-container');
             if (!container) return;
@@ -426,13 +426,13 @@
             }
         })();
 
+        // ---------- звуки и мутирование ----------
         const soundClick = document.getElementById('sound-click');
         const soundExp = document.getElementById('sound-exp');
         const muteWidget = document.getElementById('mute-widget');
 
         let muted = false;
         try { muted = localStorage.getItem('muted') === 'true'; } catch (e) {}
-
         if (muted) muteWidget.classList.add('muted');
         else muteWidget.classList.remove('muted');
 
@@ -482,52 +482,50 @@
                 playSound(soundClick);
             });
         }
-    </script>
 
-    <!-- ========== ЖИВОЙ СТАТУС СЕРВЕРА (RAIKOU.ME) ========== -->
-    <script>
+        // ---------- СТАТУС СЕРВЕРА (mcsrvstat.us, кеш ~2 минуты) ----------
+        const SERVER_HOST = 'play.novatori-eshkere-craft.ru';
+        const SERVER_PORT = '25627';
+        const API_URL = `https://api.mcsrvstat.us/2/${SERVER_HOST}:${SERVER_PORT}`;
+        const TIMEOUT_MS = 10000;       // таймаут ответа от API 10 секунд
+        const UPDATE_INTERVAL_MS = 60000; // обновление каждые 60 секунд
+
+        const statusTitle = document.getElementById('server-status-title');
+        const playersText = document.getElementById('server-players-text');
+
         async function fetchServerStatus() {
-            const serverAddress = 'play.novatori-eshkere-craft.ru';
-            const port = '25627';
-
-            // Основной URL (может не работать из-за CORS — тогда скрипт сам переключится)
-            let apiUrl = `https://api.raikou.me/api/java/${serverAddress}:${port}`;
-
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
             try {
-                let response = await fetch(apiUrl);
-                
-                // Если CORS всё же заблокировал, пробуем через прокси
-                if (!response.ok && response.type === 'cors') {
-                    console.warn('CORS заблокирован, переключаюсь на прокси...');
-                    apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`;
-                    response = await fetch(apiUrl);
-                }
-
+                const response = await fetch(API_URL, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
 
-                const statusElement = document.getElementById('server-status-title');
-                const playersElement = document.getElementById('server-players-text');
-
                 if (data.online) {
-                    statusElement.textContent = 'СТАТУС СЕРВЕРА: РАБОТАЕТ';
-                    statusElement.classList.remove('status-offline-color');
-                    statusElement.classList.add('status-online-color');
-                    playersElement.textContent = `ИГРОКОВ НА СЕРВЕРЕ: ${data.players.online} / ${data.players.max}`;
+                    statusTitle.textContent = 'СТАТУС СЕРВЕРА: РАБОТАЕТ';
+                    statusTitle.classList.remove('status-offline-color');
+                    statusTitle.classList.add('status-online-color');
+                    const online = data.players?.online ?? 0;
+                    const max = data.players?.max ?? 0;
+                    playersText.textContent = `ИГРОКОВ НА СЕРВЕРЕ: ${online} / ${max}`;
                 } else {
-                    statusElement.textContent = 'СТАТУС СЕРВЕРА: НЕ РАБОТАЕТ';
-                    statusElement.classList.add('status-offline-color');
-                    playersElement.textContent = 'ИГРОКОВ НА СЕРВЕРЕ: 0 / 0';
+                    statusTitle.textContent = 'СТАТУС СЕРВЕРА: НЕ РАБОТАЕТ';
+                    statusTitle.classList.add('status-offline-color');
+                    playersText.textContent = 'ИГРОКОВ НА СЕРВЕРЕ: 0 / 0';
                 }
-
-            } catch (error) {
-                console.error('Не удалось получить статус сервера:', error);
-                document.getElementById('server-status-title').textContent = 'СТАТУС: НЕТ ДАННЫХ';
+            } catch (err) {
+                clearTimeout(timeoutId);
+                console.error('Ошибка получения статуса:', err);
+                statusTitle.textContent = 'СТАТУС: ОШИБКА';
+                statusTitle.classList.add('status-offline-color');
+                playersText.textContent = 'ИГРОКОВ НА СЕРВЕРЕ: -- / --';
             }
         }
 
-        // Первый запуск и далее каждые 10 секунд
+        // запускаем сразу и затем по интервалу
         fetchServerStatus();
-        setInterval(fetchServerStatus, 10000);
+        setInterval(fetchServerStatus, UPDATE_INTERVAL_MS);
     </script>
 </body>
 </html>

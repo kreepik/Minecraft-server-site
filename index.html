@@ -489,12 +489,12 @@
             });
         }
 
-        // ---------- СТАТУС СЕРВЕРА (mcsrvstat.us, кеш ~2 минуты) ----------
+        // ---------- СТАТУС СЕРВЕРА (mcstatus.snowdev.com.br, кеш ~30 секунд) ----------
         const SERVER_HOST = 'play.novatori-eshkere-craft.ru';
         const SERVER_PORT = '25627';
-        const API_URL = `https://api.mcsrvstat.us/2/${SERVER_HOST}:${SERVER_PORT}`;
+        const API_URL = `https://mcstatus.snowdev.com.br/api/query/v3/${SERVER_HOST}:${SERVER_PORT}`;
         const TIMEOUT_MS = 10000;       // таймаут ответа от API 10 секунд
-        const UPDATE_INTERVAL_MS = 60000; // обновление каждые 60 секунд
+        const UPDATE_INTERVAL_MS = 30000; // обновление каждые 30 секунд
 
         const statusTitle = document.getElementById('server-status-title');
         const playersText = document.getElementById('server-players-text');
@@ -503,7 +503,7 @@
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
             try {
-                const response = await fetch(API_URL, { signal: controller.signal });
+                const response = await fetch(API_URL, {signal: controller.signal,cache: 'no-store'});
                 clearTimeout(timeoutId);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();

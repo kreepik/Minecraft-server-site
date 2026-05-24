@@ -256,7 +256,6 @@
         .ip-address-string { font-size: 16px; color: #fff; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; display: block; }
         .ip-action-hint { display: block; font-size: 11px; color: #7a7a7a; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* mute опущен ниже */
         .mute-widget {
             position: fixed; bottom: 60px; right: 20px; z-index: 9999;
             display: flex; align-items: center; gap: 14px;
@@ -405,11 +404,6 @@
         <source src="exp.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="mute-widget" id="mute-widget" role="button" aria-label="Переключить звук">
-        <span class="mute-label">ЗВУК</span>
-        <div class="mute-toggle-track"><div class="mute-thumb"></div></div>
-    </div>
-
     <script>
         (function() {
             const container = document.getElementById('particles-container');
@@ -483,11 +477,13 @@
             });
         }
 
-        // --- БОДРОЕ ОБНОВЛЕНИЕ ДЛЯ GITHUB PAGES (Каждые 15 секунд) ---
+        // --- ОБНОВЛЕНИЕ С УЧЕТОМ ВЫДЕЛЕННОГО ПОРТА ---
         function updateServerStatus() {
             const serverIP = 'play.novatori-eshkere-craft.ru';
+            const serverPort = '25627'; // Твой порт из Bisquit.Host
             
-            fetch(`https://api.minetools.eu/ping/${serverIP}`)
+            // Передаем в API и IP, и порт через слэш
+            fetch(`https://api.minetools.eu/ping/${serverIP}/${serverPort}`)
                 .then(response => response.json())
                 .then(data => {
                     const statusTitle = document.getElementById('server-status-title');
@@ -511,12 +507,8 @@
                 });
         }
 
-        // Мгновенный запуск при открытии сайта
         updateServerStatus();
-        
-        // Опрашиваем API каждые 15 секунд
         setInterval(updateServerStatus, 15000);
-        // ------------------------------------------------------------
     </script>
 </body>
-</html>
+    </html>

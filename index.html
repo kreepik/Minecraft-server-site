@@ -256,6 +256,7 @@
         .ip-address-string { font-size: 16px; color: #fff; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; display: block; }
         .ip-action-hint { display: block; font-size: 11px; color: #7a7a7a; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
+        /* mute опущен ниже */
         .mute-widget {
             position: fixed; bottom: 60px; right: 20px; z-index: 9999;
             display: flex; align-items: center; gap: 14px;
@@ -308,7 +309,7 @@
             .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; }
             .nav-text { font-size: 18px; left: 16px; }
             .btn-donate-drawer { left: 55px; }
-            .server-title-clean { position: static; transform: none; align-self: center; }
+            .server-title-clean { position: static; transform: none; align-self: center; } /* на мобилке возвращаем в поток */
             .title-main-row { flex-direction: column; align-items: center; gap: 4px; font-size: 28px; }
             .title-subtitle { font-size: 16px; }
             .title-icon { width: 24px; height: 24px; }
@@ -351,7 +352,7 @@
     <main class="main-content">
         <div class="bluemap-wrapper">
             <div class="bluemap-container">
-                <iframe src="https://map.novatori-eshkere-craft.ru"></iframe>
+                <iframe src="about:blank"></iframe>
             </div>
         </div>
 
@@ -403,6 +404,11 @@
         <source src="exp.ogg" type="audio/ogg">
         <source src="exp.mp3" type="audio/mpeg">
     </audio>
+
+    <div class="mute-widget" id="mute-widget" role="button" aria-label="Переключить звук">
+        <span class="mute-label">ЗВУК</span>
+        <div class="mute-toggle-track"><div class="mute-thumb"></div></div>
+    </div>
 
     <script>
         (function() {
@@ -476,39 +482,52 @@
                 playSound(soundClick);
             });
         }
+    </script>
 
-        // --- ОБНОВЛЕНИЕ С УЧЕТОМ ВЫДЕЛЕННОГО ПОРТА ---
-        function updateServerStatus() {
-            const serverIP = 'play.novatori-eshkere-craft.ru';
-            const serverPort = '25627'; // Твой порт из Bisquit.Host
-            
-            // Передаем в API и IP, и порт через слэш
-            fetch(`https://api.minetools.eu/ping/${serverIP}/${serverPort}`)
-                .then(response => response.json())
-                .then(data => {
-                    const statusTitle = document.getElementById('server-status-title');
-                    const playersText = document.getElementById('server-players-text');
-                    
-                    if (data.error) {
-                        statusTitle.textContent = 'СТАТУС СЕРВЕРА: НЕ РАБОТАЕТ 🔴';
-                        statusTitle.classList.remove('status-online-color');
-                        statusTitle.classList.add('status-offline-color');
-                        playersText.textContent = 'ИГРОКОВ НА СЕРВЕРЕ: 0 / 0';
-                        return;
-                    }
+    <!-- ========== ЖИВОЙ СТАТУС СЕРВЕРА (RAIKOU.ME) ========== -->
+    <script>
+        async function fetchServerStatus() {
+            const serverAddress = 'play.novatori-eshkere-craft.ru';
+            const port = '25627';
 
-                    statusTitle.textContent = 'СТАТУС СЕРВЕРА: В СЕТИ 🟢';
-                    statusTitle.classList.remove('status-offline-color');
-                    statusTitle.classList.add('status-online-color');
-                    playersText.textContent = `ИГРОКОВ НА СЕРВЕРЕ: ${data.players.online} / ${data.players.max}`;
-                })
-                .catch(err => {
-                    console.error('Ошибка проверки онлайна:', err);
-                });
+            // Основной URL (может не работать из-за CORS — тогда скрипт сам переключится)
+            let apiUrl = `https://api.raikou.me/api/java/${serverAddress}:${port}`;
+
+            try {
+                let response = await fetch(apiUrl);
+                
+                // Если CORS всё же заблокировал, пробуем через прокси
+                if (!response.ok && response.type === 'cors') {
+                    console.warn('CORS заблокирован, переключаюсь на прокси...');
+                    apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`;
+                    response = await fetch(apiUrl);
+                }
+
+                const data = await response.json();
+
+                const statusElement = document.getElementById('server-status-title');
+                const playersElement = document.getElementById('server-players-text');
+
+                if (data.online) {
+                    statusElement.textContent = 'СТАТУС СЕРВЕРА: РАБОТАЕТ';
+                    statusElement.classList.remove('status-offline-color');
+                    statusElement.classList.add('status-online-color');
+                    playersElement.textContent = `ИГРОКОВ НА СЕРВЕРЕ: ${data.players.online} / ${data.players.max}`;
+                } else {
+                    statusElement.textContent = 'СТАТУС СЕРВЕРА: НЕ РАБОТАЕТ';
+                    statusElement.classList.add('status-offline-color');
+                    playersElement.textContent = 'ИГРОКОВ НА СЕРВЕРЕ: 0 / 0';
+                }
+
+            } catch (error) {
+                console.error('Не удалось получить статус сервера:', error);
+                document.getElementById('server-status-title').textContent = 'СТАТУС: НЕТ ДАННЫХ';
+            }
         }
 
-        updateServerStatus();
-        setInterval(updateServerStatus, 15000);
+        // Первый запуск и далее каждые 10 секунд
+        fetchServerStatus();
+        setInterval(fetchServerStatus, 10000);
     </script>
 </body>
-    </html>
+</html>

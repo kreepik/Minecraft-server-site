@@ -309,7 +309,7 @@
             .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 170px; }
             .nav-text { font-size: 18px; left: 16px; }
             .btn-donate-drawer { left: 55px; }
-            .server-title-clean { position: static; transform: none; align-self: center; } /* на мобилке возвращаем в поток */
+            .server-title-clean { position: static; transform: none; align-self: center; }
             .title-main-row { flex-direction: column; align-items: center; gap: 4px; font-size: 28px; }
             .title-subtitle { font-size: 16px; }
             .title-icon { width: 24px; height: 24px; }
@@ -352,7 +352,7 @@
     <main class="main-content">
         <div class="bluemap-wrapper">
             <div class="bluemap-container">
-                <iframe src="about:blank"></iframe>
+                <iframe src="https://map.novatori-eshkere-craft.ru"></iframe>
             </div>
         </div>
 
@@ -482,6 +482,41 @@
                 playSound(soundClick);
             });
         }
+
+        // --- БОДРОЕ ОБНОВЛЕНИЕ ДЛЯ GITHUB PAGES (Каждые 15 секунд) ---
+        function updateServerStatus() {
+            const serverIP = 'play.novatori-eshkere-craft.ru';
+            
+            fetch(`https://api.minetools.eu/ping/${serverIP}`)
+                .then(response => response.json())
+                .then(data => {
+                    const statusTitle = document.getElementById('server-status-title');
+                    const playersText = document.getElementById('server-players-text');
+                    
+                    if (data.error) {
+                        statusTitle.textContent = 'СТАТУС СЕРВЕРА: НЕ РАБОТАЕТ 🔴';
+                        statusTitle.classList.remove('status-online-color');
+                        statusTitle.classList.add('status-offline-color');
+                        playersText.textContent = 'ИГРОКОВ НА СЕРВЕРЕ: 0 / 0';
+                        return;
+                    }
+
+                    statusTitle.textContent = 'СТАТУС СЕРВЕРА: В СЕТИ 🟢';
+                    statusTitle.classList.remove('status-offline-color');
+                    statusTitle.classList.add('status-online-color');
+                    playersText.textContent = `ИГРОКОВ НА СЕРВЕРЕ: ${data.players.online} / ${data.players.max}`;
+                })
+                .catch(err => {
+                    console.error('Ошибка проверки онлайна:', err);
+                });
+        }
+
+        // Мгновенный запуск при открытии сайта
+        updateServerStatus();
+        
+        // Опрашиваем API каждые 15 секунд
+        setInterval(updateServerStatus, 15000);
+        // ------------------------------------------------------------
     </script>
 </body>
 </html>

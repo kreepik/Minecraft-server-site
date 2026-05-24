@@ -514,7 +514,7 @@
                     statusTitle.classList.add('status-online-color');
                     const online = data.players?.online ?? 0;
                     const max = data.players?.max ?? 0;
-                    playersText.textContent = `ИГРОКОВ НА СЕРВЕРЕ: ${online} / ${max}`;
+                    playersText.textContent = `ИГРОКОВ НА СЕРВЕРЕ: ${online} / ${5}`;
                 } else {
                     statusTitle.textContent = 'СТАТУС СЕРВЕРА: НЕ РАБОТАЕТ';
                     statusTitle.classList.add('status-offline-color');

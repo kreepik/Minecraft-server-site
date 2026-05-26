@@ -217,6 +217,7 @@
         }
 
         .bluemap-container {
+            position: relative;           /* ← нужно для абсолютного позиционирования оверлея */
             width: 100%;
             aspect-ratio: 16 / 9;
             max-height: 70vh;
@@ -229,6 +230,42 @@
         }
 
         .bluemap-container iframe { width: 100%; height: 100%; border: none; display: block; }
+
+        /* ---------- ОВЕРЛЕЙ С ЗАМКОМ ---------- */
+        .bluemap-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            backdrop-filter: blur(10px) brightness(0.4);  /* размытие и затемнение */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            pointer-events: none;  /* не мешает кликам, если нужно — можно убрать */
+            color: #fff;
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        .bluemap-overlay .lock-icon {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.7));
+            animation: gentlePulse 3s ease-in-out infinite;
+        }
+
+        .bluemap-overlay .soon-text {
+            font-size: 48px;
+            letter-spacing: 6px;
+            font-weight: normal;
+            text-transform: uppercase;
+        }
+
+        @keyframes gentlePulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
 
         .server-widget-block {
             background: #2d2d2d;
@@ -314,6 +351,8 @@
             .title-icon { width: 24px; height: 24px; }
             .main-content { padding: 15px; }
             .bluemap-container { max-height: 50vh; }
+            .bluemap-overlay .lock-icon { width: 80px; height: 80px; }
+            .bluemap-overlay .soon-text { font-size: 32px; }
             .mute-widget { bottom: 30px; right: 15px; padding: 8px 12px; gap: 10px; }
             .mute-label { font-size: 14px; }
         }
@@ -356,6 +395,23 @@
                         allowfullscreen
                         style="border:0; display:block;">
                 </iframe>
+
+                <!-- 🔒 Оверлей с замком и надписью СКОРО -->
+                <div class="bluemap-overlay">
+                    <svg class="lock-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Замок -->
+                        <rect x="35" y="50" width="30" height="35" rx="4" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="4"/>
+                        <circle cx="50" cy="67" r="5" fill="#4A4A4A"/>
+                        <rect x="47" y="67" width="6" height="10" rx="2" fill="#4A4A4A"/>
+                        <!-- Дужка замка -->
+                        <path d="M40 50V35C40 25 50 20 50 20C50 20 60 25 60 35V50" fill="none" stroke="#B0B0B0" stroke-width="8" stroke-linecap="round"/>
+                        <!-- Цепи слева -->
+                        <path d="M18 18L35 35M20 12L38 30" stroke="#6B6B6B" stroke-width="6" stroke-linecap="round"/>
+                        <!-- Цепи справа -->
+                        <path d="M82 18L65 35M80 12L62 30" stroke="#6B6B6B" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                    <div class="soon-text">СКОРО</div>
+                </div>
             </div>
         </div>
 
@@ -539,4 +595,4 @@
         setInterval(fetchServerStatus, UPDATE_INTERVAL_MS);
     </script>
 </body>
-                                </html>
+</html>

@@ -100,28 +100,35 @@
         .nav-vertical-left { display: flex; flex-direction: column; gap: 20px; }
         .nav-item-wrapper { display: flex; align-items: center; position: relative; height: 72px; }
 
-        /* Полный сброс всех обводок и теней для всех элементов навигации */
+        /* ===== ЯДЕРНЫЙ СБРОС ВСЕХ ВИДОВ ФОКУСА ДЛЯ НАВИГАЦИИ ===== */
         .nav-icon-block,
         .mc-nav-drawer-btn,
-        .nav-item-wrapper,
-        .nav-item-wrapper * {
-            outline: none !important;
-            -webkit-tap-highlight-color: transparent !important;
-        }
-
+        .nav-icon-block:hover,
+        .mc-nav-drawer-btn:hover,
         .nav-icon-block:focus,
         .mc-nav-drawer-btn:focus,
         .nav-icon-block:focus-visible,
         .mc-nav-drawer-btn:focus-visible,
         .nav-icon-block:active,
-        .mc-nav-drawer-btn:active {
+        .mc-nav-drawer-btn:active,
+        .nav-icon-block:target {
+            /* Убираем любые обводки */
             outline: none !important;
+            outline-offset: 0 !important;
+            /* Убираем зелёную браузерную тень */
             box-shadow: none !important;
+            /* Убираем возможную смену цвета границы */
+            border-color: #000000 !important;
+            /* На всякий случай сбрасываем Mozilla-специфичный outline */
+            -moz-outline-style: none !important;
+            /* Убираем подсветку при нажатии на мобильных */
+            -webkit-tap-highlight-color: transparent !important;
         }
 
         .nav-icon-block {
             display: flex; align-items: center; justify-content: center;
-            background: #545454; border: 4px solid #000000;
+            background: #545454;
+            border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 3px 3px 0 #7a7a7a;
             width: 72px; height: 72px; padding: 12px; z-index: 3;
             transition: transform 0.15s ease, background 0.2s, box-shadow 0.15s;
@@ -136,7 +143,8 @@
 
         .mc-nav-drawer-btn {
             position: absolute; left: 68px; top: 0; height: 72px; width: 0;
-            background: #545454; border: 4px solid #000000;
+            background: #545454;
+            border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 0px 3px 0 #7a7a7a;
             display: flex; align-items: center; overflow: hidden; z-index: 2;
             text-decoration: none; opacity: 0;

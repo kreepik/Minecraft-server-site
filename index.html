@@ -110,24 +110,16 @@
             backface-visibility: hidden;
             transform: translateZ(0);
             will-change: transform;
+
+            /* Убираем любые обводки и зеленые подсветки при клике */
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .nav-icon { width: 40px; height: 40px; flex-shrink: 0; transition: transform 0.2s; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); object-fit: contain; }
 
-        .nav-item-wrapper:not(.active):not(.wrapper-donate):hover .nav-icon-block {
-            transform: scale(1.08);
-            background: #6b6b6b;
-            box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a;
-        }
-
-        .nav-item-wrapper:not(.active):not(.wrapper-donate) .nav-icon-block:active {
-            transform: translate(2px, 2px) translateZ(0);
-            background: #5a5a5a;
-            box-shadow: inset 4px 4px 0 #000, inset -2px -2px 0 #2a2a2a;
-        }
-
-        .nav-item-wrapper.active .nav-icon { position: relative; left: 1px; }
-
+        /* Убираем outline для всех ссылок в навигации */
         .mc-nav-drawer-btn {
             position: absolute; left: 68px; top: 0; height: 72px; width: 0;
             background: #545454; border: 4px solid #000000;
@@ -135,12 +127,36 @@
             display: flex; align-items: center; overflow: hidden; z-index: 2;
             text-decoration: none; opacity: 0;
             transition: width 0.35s cubic-bezier(0.25, 1, 0.35, 1) 0.08s, opacity 0.25s ease 0.08s;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .nav-item-wrapper:hover .mc-nav-drawer-btn { width: 210px; opacity: 1; }
         .mc-nav-drawer-btn:hover { background: #6b6b6b; }
 
         .nav-text { font-size: 20px; color: #fff; position: absolute; left: 22px; white-space: nowrap; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
+
+        /* Общее поведение для неактивных и не-донат кнопок, ИСКЛЮЧАЯ те, что помечены как no-press (Галерея и Моды) */
+        .nav-item-wrapper:not(.active):not(.wrapper-donate):not(.no-press):hover .nav-icon-block {
+            transform: scale(1.08);
+            background: #6b6b6b;
+            box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a;
+        }
+
+        .nav-item-wrapper:not(.active):not(.wrapper-donate):not(.no-press) .nav-icon-block:active {
+            transform: translate(2px, 2px) translateZ(0);
+            background: #5a5a5a;
+            box-shadow: inset 4px 4px 0 #000, inset -2px -2px 0 #2a2a2a;
+        }
+
+        /* Для кнопок Галерея и Моды (no-press) только подсветка при наведении, без эффекта нажатия */
+        .nav-item-wrapper.no-press .nav-icon-block:hover {
+            transform: scale(1.08);
+            background: #6b6b6b;
+            box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a;
+        }
+
+        .nav-item-wrapper.active .nav-icon { position: relative; left: 1px; }
 
         .nav-item-wrapper.active .nav-icon-block { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784; }
         .nav-item-wrapper.active .mc-nav-drawer-btn { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784; }
@@ -226,25 +242,23 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            /* Гарантирует, что ни один пиксель не вылезет за край */
         }
 
         .bluemap-container iframe { width: 100%; height: 100%; border: none; display: block; }
 
-        /* ---------- ФИНАЛЬНЫЙ ОВЕРЛЕЙ (без цепей и замка) ---------- */
+        /* ФИНАЛЬНЫЙ ОВЕРЛЕЙ (без цепей и замка) */
         .bluemap-overlay {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            /* Мыльное размытие + затемнение */
-            backdrop-filter: blur(25px) brightness(0.3);
-            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(30px) brightness(0.2);
+            background: rgba(0, 0, 0, 0.75);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 10;
-            pointer-events: none; /* полностью исключает взаимодействие с картой */
-            /* Убираем любые возможные щели */
+            pointer-events: auto;
+            user-select: none;
             box-shadow: inset 0 0 0 2px rgba(0,0,0,0.9);
         }
 
@@ -358,7 +372,7 @@
                 <div class="nav-icon-block" aria-hidden="true"><img src="map1.png" alt="Главная" class="nav-icon"></div>
                 <a href="index.html" class="mc-nav-drawer-btn"><span class="nav-text">ГЛАВНАЯ</span></a>
             </div>
-            <div class="nav-item-wrapper">
+            <div class="nav-item-wrapper no-press">
                 <div class="nav-icon-block" aria-hidden="true"><img src="galleryicon.png" alt="Галерея" class="nav-icon"></div>
                 <a href="gallery.html" class="mc-nav-drawer-btn"><span class="nav-text">ГАЛЕРЕЯ</span></a>
             </div>
@@ -366,7 +380,7 @@
                 <div class="nav-icon-block" aria-hidden="true"><img src="donate.png" alt="Донат" class="nav-icon"></div>
                 <a href="donate.html" class="mc-nav-drawer-btn btn-donate-drawer"><span class="nav-text">ДОНАТ</span></a>
             </div>
-            <div class="nav-item-wrapper">
+            <div class="nav-item-wrapper no-press">
                 <div class="nav-icon-block" aria-hidden="true"><img src="mods.png" alt="Моды" class="nav-icon"></div>
                 <a href="mods.html" class="mc-nav-drawer-btn"><span class="nav-text">МОДЫ</span></a>
             </div>
@@ -387,7 +401,7 @@
                         style="border:0; display:block;">
                 </iframe>
 
-                <!-- 🧼 Мыльный оверлей — без замков и цепей -->
+                <!-- Мыльный оверлей — без замков и цепей -->
                 <div class="bluemap-overlay">
                     <div class="soon-text">СКОРО</div>
                 </div>
@@ -574,4 +588,4 @@
         setInterval(fetchServerStatus, UPDATE_INTERVAL_MS);
     </script>
 </body>
-    </html>
+</html>

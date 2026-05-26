@@ -226,59 +226,37 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            /* Гарантирует, что ни один пиксель не вылезет за край */
         }
 
         .bluemap-container iframe { width: 100%; height: 100%; border: none; display: block; }
 
-        /* ---------- ОБНОВЛЁННЫЙ ПИКСЕЛЬНЫЙ ОВЕРЛЕЙ С ЦЕПЯМИ ---------- */
+        /* ---------- ФИНАЛЬНЫЙ ОВЕРЛЕЙ (без цепей и замка) ---------- */
         .bluemap-overlay {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            backdrop-filter: blur(20px) brightness(0.22);
-            background: rgba(10, 10, 10, 0.75);
+            /* Мыльное размытие + затемнение */
+            backdrop-filter: blur(25px) brightness(0.3);
+            background: rgba(0, 0, 0, 0.55);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 10;
-            pointer-events: none;
-            color: #fff;
-        }
-
-        .bluemap-overlay .lock-wrapper {
-            position: relative;
-            width: 100%;
-            height: 65%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .bluemap-overlay .lock-svg-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0; left: 0;
-            filter: drop-shadow(6px 6px 0px rgba(0,0,0,0.8));
-            animation: pixelFloat 3s ease-in-out infinite;
+            pointer-events: none; /* полностью исключает взаимодействие с картой */
+            /* Убираем любые возможные щели */
+            box-shadow: inset 0 0 0 2px rgba(0,0,0,0.9);
         }
 
         .bluemap-overlay .soon-text {
             font-size: 56px;
-            letter-spacing: 6px;
-            font-weight: normal;
+            letter-spacing: 8px;
+            font-weight: bold;
             text-transform: uppercase;
-            color: #ff5555;
-            text-shadow: 4px 4px 0px #000;
-            z-index: 12;
-            margin-top: -15px;
-        }
-
-        @keyframes pixelFloat {
-            0%, 100 { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
+            color: #cc1111;
+            -webkit-text-stroke: 3px black;
+            text-stroke: 3px black;
+            text-shadow: 4px 4px 0 #000, 0 0 20px rgba(255,0,0,0.6);
         }
 
         .server-widget-block {
@@ -409,35 +387,8 @@
                         style="border:0; display:block;">
                 </iframe>
 
+                <!-- 🧼 Мыльный оверлей — без замков и цепей -->
                 <div class="bluemap-overlay">
-                    <div class="lock-wrapper">
-                        <svg class="lock-svg-container" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g shape-rendering="crispEdges">
-                                <path d="M 0,0 h 12 v 12 h 12 v 12 h 12 v 12 h 12 v 12 h 12 v 12" stroke="#141414" stroke-width="12" fill="none" />
-                                <path d="M 128,0 h -12 v 12 h -12 v 12 h -12 v 12 h -12 v 12 h -12 v 12" stroke="#141414" stroke-width="12" fill="none" />
-                                <path d="M 0,128 h 12 v -12 h 12 v -12 h 12 v -12 h 12 v -12 h 12 v -12" stroke="#141414" stroke-width="12" fill="none" />
-                                <path d="M 128,128 h -12 v -12 h -12 v -12 h -12 v -12 h -12 v -12 h -12 v -12" stroke="#141414" stroke-width="12" fill="none" />
-
-                                <path d="M 0,0 h 12 v 12 h 12 v 12 h 12 v 12 h 12 v 12 h 12 v 12" stroke="#8a8a8a" stroke-width="4" fill="none" />
-                                <path d="M 128,0 h -12 v 12 h -12 v 12 h -12 v 12 h -12 v 12 h -12 v 12" stroke="#8a8a8a" stroke-width="4" fill="none" />
-                                <path d="M 0,128 h 12 v -12 h 12 v -12 h 12 v -12 h 12 v -12 h 12 v -12" stroke="#8a8a8a" stroke-width="4" fill="none" />
-                                <path d="M 128,128 h -12 v -12 h -12 v -12 h -12 v -12 h -12 v -12 h -12 v -12" stroke="#8a8a8a" stroke-width="4" fill="none" />
-
-                                <path d="M 44,56 V 32 h 8 V 20 h 24 v 12 h 8 v 24" fill="none" stroke="#141414" stroke-width="12" />
-                                <path d="M 44,56 V 32 h 8 V 20 h 24 v 12 h 8 v 24" fill="none" stroke="#aaaaaa" stroke-width="4" />
-
-                                <rect x="32" y="52" width="64" height="52" fill="#141414" />
-                                <rect x="36" y="56" width="56" height="44" fill="#c48a1d" />
-                                <rect x="36" y="56" width="52" height="4" fill="#eec44a" />
-                                <rect x="36" y="60" width="4" height="36" fill="#eec44a" />
-                                <rect x="40" y="96" width="52" height="4" fill="#7a5208" />
-                                <rect x="88" y="60" width="4" height="36" fill="#7a5208" />
-
-                                <rect x="60" y="72" width="8" height="8" fill="#141414" />
-                                <rect x="62" y="80" width="4" height="12" fill="#141414" />
-                            </g>
-                        </svg>
-                    </div>
                     <div class="soon-text">СКОРО</div>
                 </div>
             </div>

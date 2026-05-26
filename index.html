@@ -45,7 +45,6 @@
             box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.8);
         }
 
-        /* --- стили частиц, заголовков, меню и пр. остаются без изменений --- */
         .particles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
         .particle {
             position: absolute;
@@ -231,46 +230,55 @@
 
         .bluemap-container iframe { width: 100%; height: 100%; border: none; display: block; }
 
-        /* ---------- ОБНОВЛЁННЫЙ ОВЕРЛЕЙ ---------- */
+        /* ---------- ОБНОВЛЁННЫЙ ПИКСЕЛЬНЫЙ ОВЕРЛЕЙ С ЦЕПЯМИ ---------- */
         .bluemap-overlay {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            /* Усиленное размытие и затемнение */
-            backdrop-filter: blur(25px) brightness(0.25);
-            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(20px) brightness(0.22);
+            background: rgba(10, 10, 10, 0.75);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 10;
-            pointer-events: none; /* полностью отключает взаимодействие с картой */
+            pointer-events: none;
             color: #fff;
         }
 
-        .bluemap-overlay .lock-icon {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 30px;
-            filter: drop-shadow(6px 6px 0 rgba(0,0,0,0.8));
-            animation: gentlePulse 3s ease-in-out infinite;
+        .bluemap-overlay .lock-wrapper {
+            position: relative;
+            width: 100%;
+            height: 65%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .bluemap-overlay .lock-svg-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0; left: 0;
+            filter: drop-shadow(6px 6px 0px rgba(0,0,0,0.8));
+            animation: pixelFloat 3s ease-in-out infinite;
         }
 
         .bluemap-overlay .soon-text {
             font-size: 56px;
-            letter-spacing: 8px;
-            font-weight: bold;
+            letter-spacing: 6px;
+            font-weight: normal;
             text-transform: uppercase;
-            color: #cc1111;
-            /* Обводка */
-            -webkit-text-stroke: 3px black;
-            text-stroke: 3px black;
-            text-shadow: 4px 4px 0 #000, 0 0 20px rgba(255,0,0,0.6);
+            color: #ff5555;
+            text-shadow: 4px 4px 0px #000;
+            z-index: 12;
+            margin-top: -15px;
         }
 
-        @keyframes gentlePulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.85; }
+        @keyframes pixelFloat {
+            0%, 100 { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
         }
 
         .server-widget-block {
@@ -357,7 +365,6 @@
             .title-icon { width: 24px; height: 24px; }
             .main-content { padding: 15px; }
             .bluemap-container { max-height: 50vh; }
-            .bluemap-overlay .lock-icon { width: 100px; height: 100px; }
             .bluemap-overlay .soon-text { font-size: 36px; }
             .mute-widget { bottom: 30px; right: 15px; padding: 8px 12px; gap: 10px; }
             .mute-label { font-size: 14px; }
@@ -402,33 +409,35 @@
                         style="border:0; display:block;">
                 </iframe>
 
-                <!-- 🔒 Новый оверлей с цепями от углов -->
                 <div class="bluemap-overlay">
-                    <!-- SVG с координатами 0..100, заполняет весь контейнер -->
-                    <svg class="lock-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Цепи от четырёх углов -->
-                        <!-- Верхний левый угол -->
-                        <path d="M5 5 L20 20 L32 32" stroke="#4A4A4A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="32" cy="32" r="2.5" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="1.5"/>
-                        <!-- Верхний правый угол -->
-                        <path d="M95 5 L80 20 L68 32" stroke="#4A4A4A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="68" cy="32" r="2.5" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="1.5"/>
-                        <!-- Нижний левый угол -->
-                        <path d="M5 95 L20 80 L32 68" stroke="#4A4A4A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="32" cy="68" r="2.5" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="1.5"/>
-                        <!-- Нижний правый угол -->
-                        <path d="M95 95 L80 80 L68 68" stroke="#4A4A4A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="68" cy="68" r="2.5" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="1.5"/>
+                    <div class="lock-wrapper">
+                        <svg class="lock-svg-container" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g shape-rendering="crispEdges">
+                                <path d="M 0,0 h 12 v 12 h 12 v 12 h 12 v 12 h 12 v 12 h 12 v 12" stroke="#141414" stroke-width="12" fill="none" />
+                                <path d="M 128,0 h -12 v 12 h -12 v 12 h -12 v 12 h -12 v 12 h -12 v 12" stroke="#141414" stroke-width="12" fill="none" />
+                                <path d="M 0,128 h 12 v -12 h 12 v -12 h 12 v -12 h 12 v -12 h 12 v -12" stroke="#141414" stroke-width="12" fill="none" />
+                                <path d="M 128,128 h -12 v -12 h -12 v -12 h -12 v -12 h -12 v -12 h -12 v -12" stroke="#141414" stroke-width="12" fill="none" />
 
-                        <!-- Замок (центр) -->
-                        <!-- Дужка замка -->
-                        <path d="M38 45V32C38 24 44 20 50 20C56 20 62 24 62 32V45" fill="none" stroke="#B0B0B0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <!-- Корпус замка -->
-                        <rect x="34" y="45" width="32" height="32" rx="4" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="3"/>
-                        <!-- Замочная скважина -->
-                        <circle cx="50" cy="60" r="4" fill="#1A1A1A"/>
-                        <rect x="47" y="60" width="6" height="8" rx="1.5" fill="#1A1A1A"/>
-                    </svg>
+                                <path d="M 0,0 h 12 v 12 h 12 v 12 h 12 v 12 h 12 v 12 h 12 v 12" stroke="#8a8a8a" stroke-width="4" fill="none" />
+                                <path d="M 128,0 h -12 v 12 h -12 v 12 h -12 v 12 h -12 v 12 h -12 v 12" stroke="#8a8a8a" stroke-width="4" fill="none" />
+                                <path d="M 0,128 h 12 v -12 h 12 v -12 h 12 v -12 h 12 v -12 h 12 v -12" stroke="#8a8a8a" stroke-width="4" fill="none" />
+                                <path d="M 128,128 h -12 v -12 h -12 v -12 h -12 v -12 h -12 v -12 h -12 v -12" stroke="#8a8a8a" stroke-width="4" fill="none" />
+
+                                <path d="M 44,56 V 32 h 8 V 20 h 24 v 12 h 8 v 24" fill="none" stroke="#141414" stroke-width="12" />
+                                <path d="M 44,56 V 32 h 8 V 20 h 24 v 12 h 8 v 24" fill="none" stroke="#aaaaaa" stroke-width="4" />
+
+                                <rect x="32" y="52" width="64" height="52" fill="#141414" />
+                                <rect x="36" y="56" width="56" height="44" fill="#c48a1d" />
+                                <rect x="36" y="56" width="52" height="4" fill="#eec44a" />
+                                <rect x="36" y="60" width="4" height="36" fill="#eec44a" />
+                                <rect x="40" y="96" width="52" height="4" fill="#7a5208" />
+                                <rect x="88" y="60" width="4" height="36" fill="#7a5208" />
+
+                                <rect x="60" y="72" width="8" height="8" fill="#141414" />
+                                <rect x="62" y="80" width="4" height="12" fill="#141414" />
+                            </g>
+                        </svg>
+                    </div>
                     <div class="soon-text">СКОРО</div>
                 </div>
             </div>
@@ -614,4 +623,4 @@
         setInterval(fetchServerStatus, UPDATE_INTERVAL_MS);
     </script>
 </body>
-</html>
+    </html>

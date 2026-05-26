@@ -45,6 +45,7 @@
             box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.8);
         }
 
+        /* --- стили частиц, заголовков, меню и пр. остаются без изменений --- */
         .particles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
         .particle {
             position: absolute;
@@ -168,7 +169,6 @@
             box-shadow: inset -3px -3px 0 #1b5e20, inset 0px 3px 0 #81c784;
         }
 
-        /* === ЗАГОЛОВОК ПО ЦЕНТРУ === */
         .server-title-clean {
             position: absolute;
             left: 50%;
@@ -217,7 +217,7 @@
         }
 
         .bluemap-container {
-            position: relative;  /* необходимо для оверлея */
+            position: relative;
             width: 100%;
             aspect-ratio: 16 / 9;
             max-height: 70vh;
@@ -231,42 +231,46 @@
 
         .bluemap-container iframe { width: 100%; height: 100%; border: none; display: block; }
 
-        /* ---------- ОВЕРЛЕЙ С РАЗМЫТИЕМ ---------- */
+        /* ---------- ОБНОВЛЁННЫЙ ОВЕРЛЕЙ ---------- */
         .bluemap-overlay {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            /* Размытие + лёгкое затемнение */
-            backdrop-filter: blur(12px) brightness(0.7);
-            background: rgba(0, 0, 0, 0.25); /* совсем немного затемняет */
+            /* Усиленное размытие и затемнение */
+            backdrop-filter: blur(25px) brightness(0.25);
+            background: rgba(0, 0, 0, 0.65);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 10;
-            pointer-events: none;
+            pointer-events: none; /* полностью отключает взаимодействие с картой */
             color: #fff;
-            text-shadow: 3px 3px 0 #000;
         }
 
         .bluemap-overlay .lock-icon {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 20px;
-            filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.7));
+            width: 150px;
+            height: 150px;
+            margin-bottom: 30px;
+            filter: drop-shadow(6px 6px 0 rgba(0,0,0,0.8));
             animation: gentlePulse 3s ease-in-out infinite;
         }
 
         .bluemap-overlay .soon-text {
-            font-size: 48px;
-            letter-spacing: 6px;
-            font-weight: normal;
+            font-size: 56px;
+            letter-spacing: 8px;
+            font-weight: bold;
             text-transform: uppercase;
+            color: #cc1111;
+            /* Обводка */
+            -webkit-text-stroke: 3px black;
+            text-stroke: 3px black;
+            text-shadow: 4px 4px 0 #000, 0 0 20px rgba(255,0,0,0.6);
         }
 
         @keyframes gentlePulse {
             0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 0.85; }
         }
 
         .server-widget-block {
@@ -353,8 +357,8 @@
             .title-icon { width: 24px; height: 24px; }
             .main-content { padding: 15px; }
             .bluemap-container { max-height: 50vh; }
-            .bluemap-overlay .lock-icon { width: 80px; height: 80px; }
-            .bluemap-overlay .soon-text { font-size: 32px; }
+            .bluemap-overlay .lock-icon { width: 100px; height: 100px; }
+            .bluemap-overlay .soon-text { font-size: 36px; }
             .mute-widget { bottom: 30px; right: 15px; padding: 8px 12px; gap: 10px; }
             .mute-label { font-size: 14px; }
         }
@@ -398,15 +402,32 @@
                         style="border:0; display:block;">
                 </iframe>
 
-                <!-- 🔒 Размытый оверлей с замком и надписью СКОРО -->
+                <!-- 🔒 Новый оверлей с цепями от углов -->
                 <div class="bluemap-overlay">
+                    <!-- SVG с координатами 0..100, заполняет весь контейнер -->
                     <svg class="lock-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="35" y="50" width="30" height="35" rx="4" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="4"/>
-                        <circle cx="50" cy="67" r="5" fill="#4A4A4A"/>
-                        <rect x="47" y="67" width="6" height="10" rx="2" fill="#4A4A4A"/>
-                        <path d="M40 50V35C40 25 50 20 50 20C50 20 60 25 60 35V50" fill="none" stroke="#B0B0B0" stroke-width="8" stroke-linecap="round"/>
-                        <path d="M18 18L35 35M20 12L38 30" stroke="#6B6B6B" stroke-width="6" stroke-linecap="round"/>
-                        <path d="M82 18L65 35M80 12L62 30" stroke="#6B6B6B" stroke-width="6" stroke-linecap="round"/>
+                        <!-- Цепи от четырёх углов -->
+                        <!-- Верхний левый угол -->
+                        <path d="M5 5 L20 20 L32 32" stroke="#4A4A4A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="32" cy="32" r="2.5" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="1.5"/>
+                        <!-- Верхний правый угол -->
+                        <path d="M95 5 L80 20 L68 32" stroke="#4A4A4A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="68" cy="32" r="2.5" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="1.5"/>
+                        <!-- Нижний левый угол -->
+                        <path d="M5 95 L20 80 L32 68" stroke="#4A4A4A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="32" cy="68" r="2.5" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="1.5"/>
+                        <!-- Нижний правый угол -->
+                        <path d="M95 95 L80 80 L68 68" stroke="#4A4A4A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="68" cy="68" r="2.5" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="1.5"/>
+
+                        <!-- Замок (центр) -->
+                        <!-- Дужка замка -->
+                        <path d="M38 45V32C38 24 44 20 50 20C56 20 62 24 62 32V45" fill="none" stroke="#B0B0B0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Корпус замка -->
+                        <rect x="34" y="45" width="32" height="32" rx="4" fill="#8B8B8B" stroke="#4A4A4A" stroke-width="3"/>
+                        <!-- Замочная скважина -->
+                        <circle cx="50" cy="60" r="4" fill="#1A1A1A"/>
+                        <rect x="47" y="60" width="6" height="8" rx="1.5" fill="#1A1A1A"/>
                     </svg>
                     <div class="soon-text">СКОРО</div>
                 </div>
@@ -468,7 +489,7 @@
     </div>
 
     <script>
-        // ---------- частицы ----------
+        // частицы
         (function() {
             const container = document.getElementById('particles-container');
             if (!container) return;
@@ -484,7 +505,7 @@
             }
         })();
 
-        // ---------- звуки и мутирование ----------
+        // звуки и мутирование
         const soundClick = document.getElementById('sound-click');
         const soundExp = document.getElementById('sound-exp');
         const muteWidget = document.getElementById('mute-widget');
@@ -543,7 +564,7 @@
             });
         }
 
-        // ---------- СТАТУС СЕРВЕРА (mcsrvstat.us) ----------
+        // статус сервера
         const SERVER_HOST = 'play.novatori-eshkere-craft.ru';
         const SERVER_PORT = '25627';
         const API_URL = `https://api.mcsrvstat.us/2/${SERVER_HOST}:${SERVER_PORT}`;

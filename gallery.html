@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ГАЛЕРЕЯ | NOVATORI ESHKERE CRAFT</title>
-    <link class="js-favicon" rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
     <style>
         @font-face {
             font-family: 'MinecraftTitleCyrillic';
@@ -96,35 +96,60 @@
         .nav-vertical-left { display: flex; flex-direction: column; gap: 20px; }
         .nav-item-wrapper { display: flex; align-items: center; position: relative; height: 72px; }
 
+        /* ===== ЕДИНЫЙ СТИЛЬ ДЛЯ ВСЕХ КНОПОК: только подсветка, без прожимания ===== */
+        .nav-icon-block,
+        .mc-nav-drawer-btn,
+        .nav-icon-block:hover,
+        .mc-nav-drawer-btn:hover,
+        .nav-icon-block:focus,
+        .mc-nav-drawer-btn:focus,
+        .nav-icon-block:focus-visible,
+        .mc-nav-drawer-btn:focus-visible,
+        .nav-icon-block:active,
+        .mc-nav-drawer-btn:active,
+        .nav-icon-block:target {
+            outline: none !important;
+            outline-offset: 0 !important;
+            box-shadow: none !important;
+            border-color: #000000 !important;
+            -moz-outline-style: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
         .nav-icon-block {
             display: flex; align-items: center; justify-content: center;
-            background: #545454; border: 4px solid #000000;
+            background: #545454;
+            border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 3px 3px 0 #7a7a7a;
             width: 72px; height: 72px; padding: 12px; z-index: 3;
-            transition: transform 0.15s ease, background 0.2s, box-shadow 0.15s;
+            transition: transform 0.15s ease, background 0.2s;
             cursor: pointer;
             backface-visibility: hidden;
             transform: translateZ(0);
             will-change: transform;
+            user-select: none;
         }
 
         .nav-icon { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); }
 
+        /* Подсветка при наведении для всех кнопок */
         .nav-item-wrapper:not(.active):not(.wrapper-donate):hover .nav-icon-block {
             transform: scale(1.08);
             background: #6b6b6b;
             box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a;
         }
 
+        /* Отключаем эффект нажатия (прожимания) полностью */
         .nav-item-wrapper:not(.active):not(.wrapper-donate) .nav-icon-block:active {
-            transform: translate(2px, 2px) translateZ(0);
-            background: #5a5a5a;
-            box-shadow: inset 4px 4px 0 #000, inset -2px -2px 0 #2a2a2a;
+            transform: scale(1.08);
+            background: #6b6b6b;
+            box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a;
         }
 
         .mc-nav-drawer-btn {
             position: absolute; left: 68px; top: 0; height: 72px; width: 0;
-            background: #545454; border: 4px solid #000000;
+            background: #545454;
+            border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 0px 3px 0 #7a7a7a;
             display: flex; align-items: center; overflow: hidden; z-index: 2;
             text-decoration: none; opacity: 0;
@@ -136,9 +161,18 @@
 
         .nav-text { font-size: 20px; color: #fff; position: absolute; left: 22px; white-space: nowrap; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
 
-        .nav-item-wrapper.active .nav-icon-block { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784; }
-        .nav-item-wrapper.active .mc-nav-drawer-btn { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784; }
+        /* Активная кнопка (Галерея) */
+        .nav-item-wrapper.active .nav-icon { position: relative; left: 1px; }
+        .nav-item-wrapper.active .nav-icon-block {
+            background: #4caf50;
+            box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784;
+        }
+        .nav-item-wrapper.active .mc-nav-drawer-btn {
+            background: #4caf50;
+            box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784;
+        }
 
+        /* Донат-кнопка */
         .wrapper-donate .nav-icon-block { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a; }
         .wrapper-donate:hover .nav-icon-block,
         .wrapper-donate .nav-icon-block:active {
@@ -198,7 +232,7 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: not-allowed;
+            cursor: default;
             position: relative;
             min-height: 280px;
         }
@@ -392,8 +426,10 @@
         let muted = false;
         try { muted = localStorage.getItem('muted') === 'true'; } catch (e) {}
 
-        if (muted) muteWidget.classList.add('muted');
-        else muteWidget.classList.remove('muted');
+        if (muteWidget) {
+            if (muted) muteWidget.classList.add('muted');
+            else muteWidget.classList.remove('muted');
+        }
 
         function playSound(audio) {
             if (!audio || muted) return;
@@ -428,4 +464,4 @@
         }
     </script>
 </body>
-</html>
+    </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МОДЫ | NOVATORI ESHKERE CRAFT</title>
-    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         @font-face {
             font-family: 'MinecraftTitleCyrillic';
@@ -23,6 +23,11 @@
             image-rendering: pixelated;
         }
 
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
         body {
             background-color: #1e1e1e;
             background-image:
@@ -33,7 +38,6 @@
             background-size: 32px 32px, 32px 32px, 8px 8px, 100% 100%;
             background-attachment: fixed;
             color: #E0E0E0;
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
@@ -41,7 +45,45 @@
             box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.8);
         }
 
-        .particles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
+        a, button {
+            outline: none;
+            text-decoration: none;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+
+        /* ===== ЯДЕРНЫЙ СБРОС ВСЕХ ВИДОВ ФОКУСА ДЛЯ НАВИГАЦИИ ===== */
+        .nav-icon-block,
+        .mc-nav-drawer-btn,
+        .nav-icon-block:hover,
+        .mc-nav-drawer-btn:hover,
+        .nav-icon-block:focus,
+        .mc-nav-drawer-btn:focus,
+        .nav-icon-block:focus-visible,
+        .mc-nav-drawer-btn:focus-visible,
+        .nav-icon-block:active,
+        .mc-nav-drawer-btn:active,
+        .nav-icon-block:target {
+            outline: none !important;
+            outline-offset: 0 !important;
+            box-shadow: none !important;
+            border-color: #000000 !important;
+            -moz-outline-style: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
         .particle {
             position: absolute;
             top: -10px;
@@ -64,6 +106,7 @@
             100% { transform: translateY(105vh) translateX(calc(var(--base-x, 0px) - 5px)) scale(0.5); opacity: 0; }
         }
 
+        /* === ШАПКА === */
         .header-premium {
             background-color: #2d2d2d;
             background-image:
@@ -78,6 +121,7 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
             position: relative;
             z-index: 100;
+            flex-shrink: 0;
         }
 
         .header-premium::after {
@@ -96,33 +140,12 @@
         .nav-vertical-left { display: flex; flex-direction: column; gap: 20px; }
         .nav-item-wrapper { display: flex; align-items: center; position: relative; height: 72px; }
 
-        /* ===== ЕДИНЫЙ СТИЛЬ ДЛЯ ВСЕХ КНОПОК: только подсветка, без прожимания ===== */
-        .nav-icon-block,
-        .mc-nav-drawer-btn,
-        .nav-icon-block:hover,
-        .mc-nav-drawer-btn:hover,
-        .nav-icon-block:focus,
-        .mc-nav-drawer-btn:focus,
-        .nav-icon-block:focus-visible,
-        .mc-nav-drawer-btn:focus-visible,
-        .nav-icon-block:active,
-        .mc-nav-drawer-btn:active,
-        .nav-icon-block:target {
-            outline: none !important;
-            outline-offset: 0 !important;
-            box-shadow: none !important;
-            border-color: #000000 !important;
-            -moz-outline-style: none !important;
-            -webkit-tap-highlight-color: transparent !important;
-        }
-
         .nav-icon-block {
             display: flex; align-items: center; justify-content: center;
-            background: #545454;
-            border: 4px solid #000000;
+            background: #545454; border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 3px 3px 0 #7a7a7a;
             width: 72px; height: 72px; padding: 12px; z-index: 3;
-            transition: transform 0.15s ease, background 0.2s;
+            transition: transform 0.15s ease, background 0.2s, box-shadow 0.15s;
             cursor: pointer;
             backface-visibility: hidden;
             transform: translateZ(0);
@@ -132,14 +155,13 @@
 
         .nav-icon { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); }
 
-        /* Подсветка при наведении для всех кнопок */
+        /* Единая анимация: только подсветка, без прожимания */
         .nav-item-wrapper:not(.active):not(.wrapper-donate):hover .nav-icon-block {
             transform: scale(1.08);
             background: #6b6b6b;
             box-shadow: inset -2px -2px 0 #2a2a2a, inset 2px 2px 0 #9a9a9a;
         }
 
-        /* Отключаем эффект нажатия (прожимания) полностью */
         .nav-item-wrapper:not(.active):not(.wrapper-donate) .nav-icon-block:active {
             transform: scale(1.08);
             background: #6b6b6b;
@@ -148,8 +170,7 @@
 
         .mc-nav-drawer-btn {
             position: absolute; left: 68px; top: 0; height: 72px; width: 0;
-            background: #545454;
-            border: 4px solid #000000;
+            background: #545454; border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #2a2a2a, inset 0px 3px 0 #7a7a7a;
             display: flex; align-items: center; overflow: hidden; z-index: 2;
             text-decoration: none; opacity: 0;
@@ -161,18 +182,9 @@
 
         .nav-text { font-size: 20px; color: #fff; position: absolute; left: 22px; white-space: nowrap; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
 
-        /* Активная кнопка (Моды) */
-        .nav-item-wrapper.active .nav-icon { position: relative; left: 1px; }
-        .nav-item-wrapper.active .nav-icon-block {
-            background: #4caf50;
-            box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784;
-        }
-        .nav-item-wrapper.active .mc-nav-drawer-btn {
-            background: #4caf50;
-            box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784;
-        }
+        .nav-item-wrapper.active .nav-icon-block { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 3px 3px 0 #81c784; }
+        .nav-item-wrapper.active .mc-nav-drawer-btn { background: #4caf50; box-shadow: inset -3px -3px 0 #2e7d32, inset 0px 3px 0 #81c784; }
 
-        /* Донат-кнопка */
         .wrapper-donate .nav-icon-block { background: #2e7d32; box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a; }
         .wrapper-donate:hover .nav-icon-block,
         .wrapper-donate .nav-icon-block:active {
@@ -217,81 +229,95 @@
 
         @keyframes pickaxeSwing { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(20deg); } 75% { transform: rotate(-15deg); } }
 
-        .main-content { flex: 1 1 0; padding: 30px 20px 40px; display: flex; flex-direction: column; align-items: center; z-index: 5; position: relative; }
-        .mods-wrapper { width: 100%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; gap: 40px; margin-top: 10px; }
-        .mods-title { font-size: 36px; color: #fff; text-shadow: 3px 3px 0 #000; letter-spacing: 3px; text-align: center; border-bottom: 4px dashed #4caf50; padding-bottom: 15px; width: 100%; }
-        .mods-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; width: 100%; }
-
-        .mod-card {
-            background: #3d3528;
-            border: 6px solid #5a4322;
-            box-shadow: inset -3px -3px 0 #2a1e0e, inset 3px 3px 0 #8a6e3e, 0 8px 16px rgba(0,0,0,0.6);
-            padding: 20px;
+        /* === ОСНОВНОЙ КОНТЕНТ === */
+        .main-content {
+            flex: 1 1 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: default;
-            position: relative;
-            min-height: 280px;
+            padding: 20px;
+            z-index: 5;
         }
 
-        .mod-card:hover {
-            transform: translateY(-4px);
-            box-shadow: inset -3px -3px 0 #2a1e0e, inset 3px 3px 0 #9a7e4e, 0 12px 24px rgba(0,0,0,0.8);
+        .mods-container {
+            background: #2d2d2d;
+            border: 6px solid #000;
+            box-shadow: inset -3px -3px 0 #1a1a1a, inset 3px 3px 0 #5a5a5a, 0 20px 40px rgba(0,0,0,0.8);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
         }
 
-        .lock-icon-wrapper {
-            width: 80px; height: 80px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;
-            background: #1a1a1a; border: 4px solid #4caf50; box-shadow: inset -2px -2px 0 #0a0a0a, inset 2px 2px 0 #3a3a3a;
+        .mods-title {
+            font-size: 28px;
+            color: #fff;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0 #000;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
         }
 
-        .lock-icon-svg { width: 48px; height: 48px; fill: #4caf50; }
-
-        .coming-soon-label {
-            font-size: 22px; color: #ffb7c5; text-shadow: 2px 2px 0 #4a0000; letter-spacing: 2px;
-            background: #1a1a1a; padding: 6px 18px; border: 3px solid #4caf50; box-shadow: inset -2px -2px 0 #0a0a0a, inset 2px 2px 0 #3a3a3a;
+        .mods-subtitle {
+            font-size: 28px;
+            color: #fff;
+            text-shadow: 3px 3px 0 #000;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
         }
 
-        .footer-premium {
-            background-color: #2d2d2d;
-            background-image:
-                repeating-linear-gradient(45deg, rgba(0,0,0,0.25) 2px, transparent 4px),
-                repeating-linear-gradient(-45deg, rgba(0,0,0,0.15) 2px, transparent 4px);
-            background-size: 12px 12px, 12px 12px;
-            border-top: 5px solid #4caf50;
-            padding: 15px 60px 20px;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
-            width: 100%;
-            margin-top: auto;
+        .mods-description {
+            font-size: 16px; color: #a5d6a7; margin-bottom: 30px;
+            text-shadow: 1px 1px 0 #000; line-height: 1.5;
         }
 
-        .footer-premium::before { content: ""; position: absolute; top: -5px; left: 0; width: 100%; height: 2px; background: #81c784; box-shadow: 0 0 12px #4caf50; }
-        .footer-grid { width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; border-bottom: 3px solid #1e1e1e; padding-bottom: 15px; }
-        .footer-col h3 { font-size: 20px; color: #81c784; margin-bottom: 10px; letter-spacing: 2px; text-shadow: 2px 2px 0 #000; }
-        .footer-col p { font-size: 14px; color: #a5d6a7; line-height: 1.6; }
-        .footer-links-list { list-style: none; }
-        .footer-links-list li { margin-bottom: 6px; }
+        .mods-download-btn {
+            background: #2e7d32;
+            border: none;
+            box-shadow: inset -3px -3px 0 #1b5e20, inset 3px 3px 0 #66bb6a, 0 0 0 4px #000;
+            color: #fff;
+            font-size: 22px;
+            text-transform: uppercase;
+            padding: 15px 30px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #000;
+            transition: background 0.2s, box-shadow 0.2s;
+            display: inline-block;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
 
-        .footer-url { font-size: 16px; color: #a5d6a7; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: transform 0.2s, color 0.2s; text-shadow: 1px 1px 0 #000; }
-        .footer-url:hover { color: #fff; transform: translateX(8px); }
-        .footer-icon { width: 20px; height: 20px; fill: #a5d6a7; }
-        .footer-url:hover .footer-icon { fill: #fff; }
+        .mods-download-btn:hover {
+            background: #388e3c;
+            box-shadow: inset -2px -2px 0 #1b5e20, inset 2px 2px 0 #81c784, 0 0 0 4px #000;
+        }
 
-        .footer-bottom-bar { width: 100%; margin: 12px 0 0; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #7a7a7a; letter-spacing: 1px; flex-wrap: wrap; gap: 10px; }
+        .mods-download-btn:focus,
+        .mods-download-btn:focus-visible {
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
 
+        .back-link {
+            color: #a5d6a7; font-size: 18px;
+            margin-top: 25px; display: inline-block;
+            text-shadow: 1px 1px 0 #000; transition: color 0.15s;
+            cursor: pointer;
+        }
+        .back-link:hover { color: #fff; text-decoration: underline; }
+        .back-link:focus { outline: none; -webkit-tap-highlight-color: transparent; }
+
+        /* mute widget */
         .mute-widget {
-            position: fixed; bottom: 60px; right: 20px; z-index: 9999;
+            position: fixed; bottom: 50px; right: 20px; z-index: 9999;
             display: flex; align-items: center; gap: 14px;
             background: #2d2d2d; border: 4px solid #000000;
             box-shadow: inset -3px -3px 0 #1a1a1a, inset 3px 3px 0 #5a5a5a, 3px 3px 0 #000;
             padding: 10px 16px; cursor: pointer; user-select: none;
         }
         .mute-label { font-size: 16px; color: #a5d6a7; text-shadow: 2px 2px 0 #000; letter-spacing: 1px; }
-        .mute-toggle-track { width: 54px; height: 30px; background: #2e7d32; border: 3px solid #000000; box-shadow: inset 2px 2px 0 #1b5e20; position: relative; overflow: hidden; }
+        .mute-toggle-track { width: 54px; height: 30px; background: #2e7d32; border: 3px solid #000; box-shadow: inset 2px 2px 0 #1b5e20; position: relative; overflow: hidden; }
         .mute-thumb { width: 26px; height: 28px; background: #9c9c9c; box-shadow: inset -2px -2px 0 #565656, inset 2px 2px 0 #e0e0e0; position: absolute; top: -2px; left: 0; transform: translateX(22px); transition: transform 0.12s ease; z-index: 5; }
         .mute-widget.muted .mute-toggle-track { background: #a82626; box-shadow: inset 2px 2px 0 #5e1414; }
         .mute-widget.muted .mute-thumb { transform: translateX(0); }
@@ -310,14 +336,16 @@
             .title-main-row { flex-direction: column; align-items: center; gap: 4px; font-size: 28px; }
             .title-subtitle { font-size: 16px; }
             .title-icon { width: 24px; height: 24px; }
-            .mods-title { font-size: 24px; }
+            .mods-title { font-size: 22px; }
+            .mods-subtitle { font-size: 22px; }
+            .mods-download-btn { font-size: 18px; padding: 12px 25px; }
             .mute-widget { bottom: 40px; right: 15px; padding: 8px 12px; gap: 10px; }
             .mute-label { font-size: 14px; }
         }
     </style>
 </head>
 <body>
-    <div class="particles-container" id="particles-container" aria-hidden="true"></div>
+    <div class="particles-container" id="particles-container"></div>
 
     <header class="header-premium">
         <nav class="nav-vertical-left" aria-label="Основная навигация">
@@ -346,48 +374,23 @@
     </header>
 
     <main class="main-content">
-        <div class="mods-wrapper">
-            <h2 class="mods-title">❖ МОДЫ СЕРВЕРА ❖</h2>
-            <div class="mods-grid">
-                <div class="mod-card"><div class="lock-icon-wrapper"><svg class="lock-icon-svg" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div><div class="coming-soon-label">СКОРО</div></div>
-                <div class="mod-card"><div class="lock-icon-wrapper"><svg class="lock-icon-svg" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div><div class="coming-soon-label">СКОРО</div></div>
-                <div class="mod-card"><div class="lock-icon-wrapper"><svg class="lock-icon-svg" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div><div class="coming-soon-label">СКОРО</div></div>
-                <div class="mod-card"><div class="lock-icon-wrapper"><svg class="lock-icon-svg" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div><div class="coming-soon-label">СКОРО</div></div>
-                <div class="mod-card"><div class="lock-icon-wrapper"><svg class="lock-icon-svg" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div><div class="coming-soon-label">СКОРО</div></div>
-                <div class="mod-card"><div class="lock-icon-wrapper"><svg class="lock-icon-svg" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div><div class="coming-soon-label">СКОРО</div></div>
-            </div>
+        <div class="mods-container">
+            <div class="mods-title">МОДЫ</div>
+            <div class="mods-subtitle">❖ СЕРВЕРА ❖</div>
+            <p class="mods-description">
+                Все необходимые моды упакованы в один удобный архив.<br>
+                Скачай, распакуй в папку <strong>.minecraft/mods</strong> и заходи на сервер!
+            </p>
+            <a href="https://github.com/твой-юзер/твой-репо/releases/download/v1.0/mods.zip" 
+               id="mods-download-btn" 
+               class="mods-download-btn"
+               download>
+                💾 СКАЧАТЬ ВСЕ МОДЫ 💾
+            </a>
+            <br>
+            <a href="index.html" class="back-link" id="back-btn">← Вернуться на главную</a>
         </div>
     </main>
-
-    <footer class="footer-premium">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h3>❖ О МИРЕ</h3>
-                <p>NOVATORI ESHKERE CRAFT — приватный сервер без вайпов. Крутое ещкере комьюнити, хайповые постройки и ламповая атмосфера.</p>
-            </div>
-            <div class="footer-col">
-                <h3>❖ СВЯЗЬ</h3>
-                <ul class="footer-links-list">
-                    <li>
-                        <a href="https://discord.com/users/kreepik#9722" target="_blank" rel="noopener noreferrer" class="footer-url">
-                            <svg class="footer-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.196.373.289a.077.077 0 0 1-.006.127 12.298 12.298 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z"/></svg>
-                            Discord
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://t.me/kreepik" target="_blank" rel="noopener noreferrer" class="footer-url">
-                            <svg class="footer-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/></svg>
-                            Telegram
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom-bar">
-            <div>&copy; 2026 NOVATORI ESHKERE CRAFT</div>
-            <div>Разработано для любимого комьюнити</div>
-        </div>
-    </footer>
 
     <audio id="sound-click" preload="auto">
         <source src="click.ogg" type="audio/ogg">
@@ -398,7 +401,7 @@
         <source src="exp.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="mute-widget" id="mute-widget" role="button" aria-label="Переключить звук">
+    <div class="mute-widget" id="mute-widget">
         <span class="mute-label">ЗВУК</span>
         <div class="mute-toggle-track"><div class="mute-thumb"></div></div>
     </div>
@@ -406,7 +409,6 @@
     <script>
         (function() {
             const container = document.getElementById('particles-container');
-            if (!container) return;
             for (let i = 0; i < 25; i++) {
                 const p = document.createElement('div');
                 p.classList.add('particle');
@@ -423,13 +425,8 @@
         const soundExp = document.getElementById('sound-exp');
         const muteWidget = document.getElementById('mute-widget');
 
-        let muted = false;
-        try { muted = localStorage.getItem('muted') === 'true'; } catch (e) {}
-
-        if (muteWidget) {
-            if (muted) muteWidget.classList.add('muted');
-            else muteWidget.classList.remove('muted');
-        }
+        let muted = localStorage.getItem('muted') === 'true';
+        if (muted) muteWidget.classList.add('muted');
 
         function playSound(audio) {
             if (!audio || muted) return;
@@ -438,6 +435,13 @@
             audio.currentTime = 0;
             audio.play().catch(() => {});
         }
+
+        muteWidget.addEventListener('click', () => {
+            muted = !muted;
+            localStorage.setItem('muted', muted);
+            muteWidget.classList.toggle('muted');
+            playSound(soundClick);
+        });
 
         document.querySelectorAll('.nav-icon-block').forEach(el => {
             el.addEventListener('click', () => playSound(soundClick));
@@ -454,14 +458,17 @@
             });
         });
 
-        if (muteWidget) {
-            muteWidget.addEventListener('click', () => {
-                muted = !muted;
-                muteWidget.classList.toggle('muted', muted);
-                try { localStorage.setItem('muted', muted); } catch (e) {}
-                playSound(soundClick);
-            });
-        }
+        document.getElementById('mods-download-btn').addEventListener('click', function() {
+            playSound(soundClick);
+        });
+
+        document.getElementById('back-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            playSound(soundClick);
+            setTimeout(() => {
+                window.location.href = this.getAttribute('href');
+            }, 150);
+        });
     </script>
 </body>
-</html>
+                </html>
